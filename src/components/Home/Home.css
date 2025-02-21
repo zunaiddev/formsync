@@ -1,0 +1,69 @@
+* {
+    color: #FFFFFF;
+}
+
+.home-page {
+    padding: 2% 1%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10vh;
+}
+
+.welcome {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 70%;
+}
+
+.welcome h1 {
+    font: 2.5em 'Oswald', sans-serif;
+}
+
+.welcome h3 {
+    font: bold 1.8em 'Open Sans', sans-serif;
+}
+
+.welcome p {
+    font: 1.2em 'Roboto', sans-serif;
+}
+
+.welcome h3, .welcome p {
+    margin-left: 2%;
+}
+
+.welcome .buttons {
+    display: flex;
+    justify-content: center;
+    padding: 0 20%;
+}
+
+.welcome .buttons button {
+    border: none;
+    background: var(--orange);
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.component {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.component h1 {
+    font: 2.5em 'Oswald', sans-serif;
+}
+
+.component li {
+    font: 1.2em 'Roboto', sans-serif;
+}
+
+.component ul {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2%;
+    gap: 10px;
+}

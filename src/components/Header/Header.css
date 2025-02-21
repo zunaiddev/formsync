@@ -1,0 +1,72 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.logo-container {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.nav {
+    color: #FFFFFF;
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    font: bold 14px/1.5 "Roboto", sans-serif;
+}
+
+.nav-item {
+    cursor: pointer;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 10px;
+}
+
+.button {
+    background: var(--orange);
+    color: #FFFFFF;
+    cursor: pointer;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.link {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+.dashboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+    height: 35px;
+    cursor: pointer;
+}
+
+.dashboard img {
+    height: 100%;
+    width: 100%;
+}
+
+a.active {
+    color: var(--orange);
+}
