@@ -1,9 +1,17 @@
-import NotFoundPage from "../components/NotFound/NotFoundPage.jsx";
-
 function NotFound() {
+    const styles = {
+        height: '100vh',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        font: 'bolder 2rem "open sans", sans-serif',
+        color: 'white',
+    }
+
     return (
-        <div className="root-container">
-            <NotFoundPage/>
+        <div style={styles}>
+            <h1>404 - Page not found</h1>
         </div>
     );
 }

@@ -1,9 +1,7 @@
-import LoginPage from "../components/LoginSignup/LoginPage.jsx";
+import LoginForm from "../components/LoginForm/LoginForm.jsx";
 
 function Login() {
-    return <div className='root-container'>
-        <LoginPage/>
-    </div>;
+    return <LoginForm/>;
 }
 
 export default Login;

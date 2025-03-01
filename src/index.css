@@ -10,9 +10,26 @@
 }
 
 body {
-    background: #161616;
+    background: var(--primary);
 }
 
 :root {
     --orange: #f46c38;
+    --primary: #04080F;
+    --text: #F8F9FA;
+    --text-secondary: #E9ECEF;
+    --button-background: #08229D;
+    --button-hover: #1E3FC2FF;
+    --blue: #023047;
+    --steel-blue: #407BA7;
+    --royal-blue: #002962;
+    --secondary: #212529;
+    --input-border: #CED4DA;
+    --input-background: #212529;
+    --input-error-border: #FF0000;
+    --social-btn: #343A40;
+
+    --roboto: 'Roboto', sans-serif;
+    --oswald: 'Oswald', sans-serif;
+    --open-sans: 'Open Sans', sans-serif;
 }

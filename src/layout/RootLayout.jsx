@@ -1,15 +1,23 @@
-import Header from "../components/Header/Header.jsx";
 import {Outlet} from "react-router-dom";
-import Footer from "../components/Footer/Footer.jsx";
+import {Toaster} from "react-hot-toast";
 
-const RootLayout = () => {
+function RootLayout() {
+
     return (
-        <>
-            <Header/>
+        <main>
+            <Toaster toastOptions={{
+                duration: 2500,
+                error: {
+                    style: {
+                        border: '1px solid red',
+                        background: '#f0d5d6',
+                        width: '100%',
+                    },
+                },
+            }}/>
             <Outlet/>
-            <Footer/>
-        </>
+        </main>
     );
-};
+}
 
 export default RootLayout;
