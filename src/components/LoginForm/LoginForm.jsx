@@ -21,7 +21,7 @@ function Login() {
         console.log(response);
 
         if (!response.success) {
-            // reset();
+            reset();
             toast.error(response.error,);
             return;
         }
@@ -33,8 +33,8 @@ function Login() {
         <div className={style.container}>
             <form className={style.form} onSubmit={handleSubmit(onSubmit)}>
                 <InputField
-                    label="Name"
-                    placeholder={"Full name"}
+                    label="Email"
+                    placeholder={"example@example.com"}
                     register={register("email", {
                         required: "Email is required",
                     })}

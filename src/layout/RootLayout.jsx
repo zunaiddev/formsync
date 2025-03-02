@@ -1,7 +1,13 @@
-import {Outlet} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 import {Toaster} from "react-hot-toast";
+import {useEffect} from "react";
 
 function RootLayout() {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        navigate("/login");
+    }, [navigate]);
 
     return (
         <main>
