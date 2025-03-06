@@ -13,6 +13,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^6.4.6",
+    "@tailwindcss/vite": "^4.0.10",
     "axios": "^1.8.1",
     "classnames": "^2.5.1",
     "prop-types": "^15.8.1",
@@ -23,7 +24,8 @@
     "react-router-dom": "^7.2.0",
     "react-spinner": "^0.2.7",
     "react-spinners": "^0.15.0",
-    "reactjs-popup": "^2.0.6"
+    "reactjs-popup": "^2.0.6",
+    "tailwindcss": "^4.0.10"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

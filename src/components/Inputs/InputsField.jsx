@@ -7,7 +7,6 @@ import {useState} from "react";
 function InputField({label = "", type = "text", placeholder = "", register = null, error = null}) {
     const [isVisible, setVisible] = useState(false);
 
-
     return (
         <div className={style.container}>
             <label>{label}</label>
@@ -36,6 +35,7 @@ InputField.propTypes = {
     placeholder: PropTypes.string,
     register: PropTypes.object.isRequired,
     error: PropTypes.object.isRequired,
+    ref: PropTypes.object
 }
 
 export default InputField;

@@ -2,9 +2,9 @@
     height: 100vh;
     width: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+    color: var(--text);
 }
 
 .form {
@@ -32,8 +32,21 @@
 }
 
 .header h1 {
-    color: var(--text);
     font: bold 1.5rem var(--open-sans);
+}
+
+.form ul {
+    width: 100%;
+    list-style: none;
+    font: normal 14px var(--roboto);
+}
+
+.form li {
+    margin-bottom: 3px;
+}
+
+.form li:last-child {
+    margin-bottom: 0;
 }
 
 .switch {

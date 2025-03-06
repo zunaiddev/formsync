@@ -1,0 +1,22 @@
+.container {
+    height: 100vh;
+    width: 100%;
+    background: rgba(4, 8, 15, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+}
+
+.form {
+    min-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border-radius: 10px;
+    background: var(--input-background);
+    padding: 25px;
+}

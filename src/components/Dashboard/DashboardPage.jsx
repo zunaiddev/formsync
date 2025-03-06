@@ -1,63 +1,44 @@
-import style from './dashboard.module.css';
-import Form from '../Form/Form.jsx';
 import toast from "react-hot-toast";
-import {useEffect, useState} from "react";
-import {userInfo} from "../../services/userService.js";
-
+import copyIcon from "../../assets/copy.png"
+import PropTypes from "prop-types";
+import {useLoaderData} from "react-router-dom";
 
 function DashboardPage() {
-    const [info, setInfo] = useState(null);
-    const [forms, setForms] = useState([]);
-
-    useEffect(() => {
-        (async () => {
-            const infoResponse = await userInfo("info");
-            const formsResponse = await userInfo("forms");
-
-            if (infoResponse.success || formsResponse.success) {
-                setInfo(infoResponse.data);
-                setForms(formsResponse.data);
-            } else {
-                toast.error(infoResponse.error);
-            }
-        })();
-    }, []);
-
-
-    if (!info) {
-        return <div>
-            <h1 className={style.wrongMessage}>Loading......</h1>
-        </div>;
-    }
-
-    console.log(info);
-    console.log(forms);
-
-    let updatedForms = forms.map((form) => {
-        return <Form key={form.id} name={form.name} email={form.email} subject={form.subject}
-                     message={form.message} date={form.submittedAt}/>;
-    })
+    let response = useLoaderData();
+    console.log(response)
 
     return (
-        <div className={style.container}>
-            <div className={style.keyContainer}>
-                <button onClick={copyToClipboard}>
-                    {info.apikey.key || "Not available"}
+        <div className="flex flex-col gap-2 w-fit border-1 rounded-lg px-4 py-5 text-white">
+            <div
+                className="flex items-center gap-1 w-full border rounded-md px-2 py-2">
+                <span>{response?.data?.keyInfo?.key || "null"}</span>
+                <button onClick={() => copyToClipboard(response?.data?.keyInfo?.key)} className="bg-none border-none">
+                    <img src={copyIcon} alt="copy" className="size-5 cursor-pointer"/>
                 </button>
             </div>
-
-            <div className={style.forms}>
-                {updatedForms}
+            <div className="flex items-center min-w-50 gap-6 w-full border rounded-md px-2 py-2">
+                <span>Requests Left - </span>
+                <span>{response?.data?.keyInfo?.requestsLeft || "none"}</span>
+            </div>
+            <div className={`flex items-center min-w-50 gap-2 w-full rounded-md px-2
+             py-2 ${response?.data?.keyInfo?.isActive ? "bg-green-500" : "bg-red-500"}`}>
+                <span>Status</span>
+                <p>{response?.data?.keyInfo?.isActive ? "Active" : "Locked"}</p>
             </div>
         </div>
     );
 }
 
-function copyToClipboard(e) {
-    let text = e.target.textContent;
+function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
         .then(() => toast.success("Copied!"))
         .catch((err) => toast.error("Failed to copy:" + err));
 }
 
+
+DashboardPage.propTypes = {
+    apiKey: PropTypes.string.isRequired,
+    reqLeft: PropTypes.number.isRequired,
+    isActive: PropTypes.bool.isRequired,
+}
 export default DashboardPage;
