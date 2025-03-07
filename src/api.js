@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "https://frantic-karee-api-v9-e95c5f4b.koyeb.app/api",
     headers: {
         "Content-Type": "application/json",
     },

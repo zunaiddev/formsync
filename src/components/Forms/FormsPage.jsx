@@ -12,11 +12,11 @@ function FormsPage() {
     }, [])
 
     return <div className="flex flex-wrap items-center gap-3">
-        {forms.map(item => (<Form key={item.id} name={item.name}
-                                  subject={item.subject} email={item.email} date={item.createdAt}
-                                  message={item.message} onDelete={() => {
-            deleteForm(item.id).then(r => {
-                forms.splice(forms.indexOf(r), 1);
+        {forms.map((item, index) => (<Form key={item.id} name={item.name}
+                                           subject={item.subject} email={item.email} date={item.createdAt}
+                                           message={item.message} onDelete={() => {
+            deleteForm(item.id).then(() => {
+                setForms(prev => prev.remove(index));
             })
         }}/>))}
     </div>;

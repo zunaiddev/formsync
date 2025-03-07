@@ -11,7 +11,7 @@ function Form({
               }) {
     return (
         <div
-            className="flex flex-col text-white gap-3 border
+            className="flex flex-col text-white gap-3 border min-h-50
             border-gray-200 px-4 py-8 max-w-50 relative text-wrap break-words">
 
             <h1 className="text-lg font-bold">{name}</h1>

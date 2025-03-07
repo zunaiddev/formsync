@@ -16,8 +16,8 @@ function Footer() {
                 <div className={styles.links}>
                     <h3>Useful Links</h3>
                     <ul>
-                        <li><Link to="/home">Home</Link></li>
-                        <li><Link to="/about">Docs</Link></li>
+                        <li><Link to="/">Home</Link></li>
+                        <li><Link to="/docs">Docs</Link></li>
                         <li><Link to="/contact">Contact</Link></li>
                     </ul>
                 </div>
