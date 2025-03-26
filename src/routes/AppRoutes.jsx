@@ -13,7 +13,8 @@ import Signup from "../pages/Signup.jsx";
 import Verify from "../pages/Verify.jsx";
 import AuthRedirect from "../Auth/AuthRedirect.jsx";
 import ProtectedRoute from "../Auth/ProtectedRedirect.jsx";
-import {userInfo} from "../services/userService.js";
+import ForgetPassword from "../pages/ForgetPassword.jsx";
+import ResetPassword from "../pages/ResetPassword.jsx";
 
 const router = createBrowserRouter([
     {
@@ -49,6 +50,12 @@ const router = createBrowserRouter([
             {
                 path: "/auth/verify",
                 element: <Verify/>
+            }, {
+                path: "/auth/forget-password",
+                element: <ForgetPassword/>
+            }, {
+                path: "/auth/reset-password",
+                element: <ResetPassword/>
             }
         ]
     },
@@ -59,12 +66,10 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard",
                 element: <Dashboard/>,
-                loader: () => userInfo("info")
             },
             {
                 path: "/forms",
                 element: <Forms/>,
-                loader: () => userInfo("forms")
             },
             {
                 path: "/settings",

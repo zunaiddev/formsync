@@ -29,14 +29,12 @@ export async function userInfo(path) {
     }
 }
 
-async function refreshToken() {
+export async function refreshToken() {
     try {
         let response = await API.post("/auth/refresh");
-        localStorage.setItem("accessToken", response.data.token);
         return response.data.token;
     } catch (error) {
         console.error("Session expired. Redirecting to login.", error);
-        localStorage.removeItem("accessToken");
         window.location.href = "/auth/login";
         return null;
     }

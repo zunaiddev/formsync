@@ -1,12 +1,8 @@
 import toast from "react-hot-toast";
 import copyIcon from "../../assets/copy.png"
 import PropTypes from "prop-types";
-import {useLoaderData} from "react-router-dom";
 
 function DashboardPage() {
-    let response = useLoaderData();
-    console.log(response)
-
     return (
         <div className="flex flex-col gap-2 w-fit border-1 rounded-lg px-4 py-5 text-white">
             <div

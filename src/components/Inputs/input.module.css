@@ -29,6 +29,7 @@
     border-radius: 5px;
     padding: 0 5px;
     outline: none;
+    font-size: 12px;
 }
 
 .inputContainer .inputError {
