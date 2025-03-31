@@ -1,9 +1,22 @@
 import {Navigate} from "react-router-dom";
 import PropTypes from "prop-types";
 import isAuthenticated from "../util/jwtAuth.js"
+import {useEffect, useState} from "react";
 
 const AuthRedirect = ({children}) => {
-    return isAuthenticated() ? children : <Navigate to="/auth/login"/>;
+    const [authStatus, setAuthStatus] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            setAuthStatus(await isAuthenticated());
+        })();
+    }, []);
+
+    if (authStatus === null) {
+        return null;
+    }
+
+    return authStatus ? <Navigate to="/dashboard"/> : children;
 };
 
 AuthRedirect.propTypes = {

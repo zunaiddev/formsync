@@ -1,11 +1,10 @@
 function SettingsPage() {
     return (
-        <div className="container-fluid text-white">
-            <h1>Name: {"none"}</h1>
-            <h1>Email: {"none"}</h1>
-            <h1>Password: {"none"}</h1>
-            <h1>Role: {"none"}</h1>
-            <h1>Created At: {"none"}</h1>
+        <div className="p-6">
+            <button
+                className="bg-red-500 hover:bg-red-600 cursor-pointer text-white px-3 py-1.5 rounded-lg font-semibold">
+                Delete Account
+            </button>
         </div>
     );
 }

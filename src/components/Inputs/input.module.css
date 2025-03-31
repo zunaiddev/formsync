@@ -24,7 +24,7 @@
     width: 100%;
     height: 30px;
     color: var(--text);
-    border: 1px solid var(--input-border);
+    border: 1px solid #FFFFFF;
     background: var(--input-background);
     border-radius: 5px;
     padding: 0 5px;
@@ -33,9 +33,8 @@
 }
 
 .inputContainer .inputError {
-    border: 1px solid var(--input-error-border);
+    border: 1px solid red;
 }
-
 
 .toggleIcon {
     height: 26px;

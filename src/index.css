@@ -15,24 +15,18 @@ body, html {
 
 body {
     background: var(--primary);
+    /*background: gray;*/
 }
 
 :root {
-    --orange: #f46c38;
-    --primary: #04080F;
-    --text: #F8F9FA;
-    --text-secondary: #b0b0b0;
-    --button-background: #08229D;
-    --button-hover: #1E3FC2FF;
-    --blue: #023047;
-    --steel-blue: #407BA7;
-    --royal-blue: #002962;
-    --secondary: #212529;
-    --input-border: #CED4DA;
-    --input-background: #212529;
-    --input-error-border: #FF0000;
-    --social-btn: #343A40;
-
+    --primary: #0d1b2a;
+    --bg-secondary: #1b263b;
+    --input-border: #1b263b;
+    --input-background: #1b263b;
+    --text: #ffffff;
+    --text-secondary: #c2c0c0;
+    --button-background: #0049CE;
+    --button-hover: #0452e0;
     --roboto: 'Roboto', sans-serif;
     --oswald: 'Oswald', sans-serif;
     --open-sans: 'Open Sans', sans-serif;

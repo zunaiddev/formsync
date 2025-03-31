@@ -17,6 +17,6 @@
     justify-content: center;
     gap: 20px;
     border-radius: 10px;
-    background: var(--input-background);
+    background: var(--bg-secondary);
     padding: 25px;
 }

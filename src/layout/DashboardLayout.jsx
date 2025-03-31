@@ -1,20 +1,19 @@
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import {Outlet} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {userInfo} from "../services/userService.js";
+import {Bars3BottomLeftIcon} from "@heroicons/react/16/solid/index.js";
+import {useState} from "react";
 
 function DashboardLayout() {
-    const [response, setResponse] = useState({});
+    const [show, setShow] = useState(false);
 
-    useEffect(() => {
-        (async () => {
-            setResponse(await userInfo("info"));
-        })()
-    }, []);
-
-    return <main className="relative pl-50 sm:pt-20">
-        <Sidebar name={response.data?.name} email={response.data?.email}/>
-        <Outlet/>
+    return <main className="flex min-h-[100vh] relative">
+        <Sidebar show={show}/>
+        <div className="relative w-full">
+            <Outlet/>
+        </div>
+        <Bars3BottomLeftIcon
+            className="absolute inset-x-0 w-5 h-5 left-1 top-1 z-40 text-white cursor-pointer md:hidden"
+            onClick={() => setShow(true)}/>
     </main>;
 }
 

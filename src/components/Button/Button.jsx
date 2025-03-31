@@ -1,6 +1,7 @@
 import style from './button.module.css';
 import PropTypes from "prop-types";
 
+
 function Button({
                     type = "button", text, isSubmitting = false, onClick = () => {
     }

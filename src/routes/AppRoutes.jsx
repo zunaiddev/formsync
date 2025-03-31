@@ -10,11 +10,13 @@ import Settings from "../pages/Settings.jsx";
 import AuthLayout from "../layout/AuthLayout.jsx";
 import Login from "../pages/Login.jsx";
 import Signup from "../pages/Signup.jsx";
-import Verify from "../pages/Verify.jsx";
 import AuthRedirect from "../Auth/AuthRedirect.jsx";
 import ProtectedRoute from "../Auth/ProtectedRedirect.jsx";
+import Profile from "../pages/Profile.jsx";
+import Verify from "../pages/Verify.jsx";
 import ForgetPassword from "../pages/ForgetPassword.jsx";
 import ResetPassword from "../pages/ResetPassword.jsx";
+import NotFound from "../pages/NotFound.jsx";
 
 const router = createBrowserRouter([
     {
@@ -37,27 +39,27 @@ const router = createBrowserRouter([
     },
     {
         path: "/auth",
-        element: <AuthLayout/>,
+        element: <AuthRedirect><AuthLayout/></AuthRedirect>,
         children: [
             {
                 path: "/auth/login",
-                element: <AuthRedirect><Login/></AuthRedirect>,
+                element: <Login/>,
             },
             {
                 path: "/auth/signup",
-                element: <AuthRedirect><Signup/></AuthRedirect>,
-            },
-            {
-                path: "/auth/verify",
-                element: <Verify/>
-            }, {
-                path: "/auth/forget-password",
-                element: <ForgetPassword/>
-            }, {
-                path: "/auth/reset-password",
-                element: <ResetPassword/>
+                element: <Signup/>,
             }
         ]
+    },
+    {
+        path: "/verify",
+        element: <Verify/>
+    }, {
+        path: "/forget-password",
+        element: <ForgetPassword/>
+    }, {
+        path: "/reset-password",
+        element: <ResetPassword/>
     },
     {
         path: "/",
@@ -74,8 +76,16 @@ const router = createBrowserRouter([
             {
                 path: "/settings",
                 element: <Settings/>,
+            },
+            {
+                path: "/profile",
+                element: <Profile/>,
             }
         ]
+    },
+    {
+        path: "*",
+        element: <NotFound/>,
     }
 ]);
 
