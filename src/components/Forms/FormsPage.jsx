@@ -1,28 +1,37 @@
 import deleteIcon from '../../assets/delete.svg';
 import {useEffect, useState} from "react";
 import {fetchData} from "../../services/userService.js";
+import Loader from "../Loader/Loader.jsx";
+import {getToken} from "../../services/authService.js";
 
 function FormsPage() {
     let [forms, setForms] = useState([]);
     const [errors, setErrors] = useState(false);
+    const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
         (async () => {
-            let response = await fetchData("forms");
+            let response = await fetchData("forms", await getToken());
             console.log(response.data);
             setForms(response.data);
 
+            setLoading(false);
             setErrors(!response.success);
         })();
     }, []);
 
-    if (!forms.length) {
-        return <h1>Could Not Found Any Form</h1>
+    if (loading) {
+        return <Loader/>;
     }
 
     if (errors) {
         return <h1>Something Went Wrong</h1>;
+    }
+
+    if (!forms.length) {
+        return <h1 className="text-xl font-bold font-(family-name:--open-sans) text-white m-5">Could Not Found Any
+            Form</h1>
     }
 
     return <div className="flex items-center gap-4 flex-col sm:p-2 md:p-4 ">

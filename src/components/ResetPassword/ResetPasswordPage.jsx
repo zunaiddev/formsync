@@ -11,7 +11,7 @@ function ResetPasswordForm() {
     } = useForm({})
 
     function onSubmit() {
-        console.log("reset password successfully!");
+
     }
 
 

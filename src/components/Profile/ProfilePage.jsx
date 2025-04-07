@@ -1,63 +1,72 @@
-import {PencilSquareIcon} from "@heroicons/react/16/solid/index.js";
 import {useEffect, useState} from "react";
 import {fetchData} from "../../services/userService.js";
+import {getToken} from "../../services/authService.js";
 
 function ProfilePage() {
-    const [info, setInfo] = useState({
-        name: undefined,
-        email: undefined,
-        password: "******",
-        role: undefined,
-    });
-    const [error, setError] = useState(false);
+    const [{name, email, role, createdAt}, setInfo] = useState({});
+    const [error, setError] = useState(true);
 
     useEffect(() => {
 
         (async () => {
-            let response = await fetchData("info");
-            console.log(response.data["name"]);
-            setInfo({...info, name: response.data["name"], email: response.data["email"], role: response.data.role});
+            let response = await fetchData("info", await getToken());
+            if (response.success) {
+                setInfo(response.data);
+            }
 
             setError(!response.success);
         })();
 
     }, []);
 
-    if (info === null) {
-        return <h1>Loading...</h1>;
-    }
-
     if (error) {
-        return <h1>Something Went Wrong.</h1>;
+        return <div className="h-full w-full flex items-center justify-center text-white">
+            <h1 className="text-3xl font-bold">Something Went Wrong.</h1>
+        </div>;
     }
 
     return (
-        <div className="flex flex-col text-white border border-gray-600 rounded-lg w-fit py-6 m-6">
-            <div className=" text-white border-transparent border-b border-b-gray-600 w-full px-3 pb-2">
-                <h1 className="text-lg font-bold">Personal Info</h1>
-            </div>
-            <div className=" text-white border-b border-gray-600 flex gap-20 w-full px-8 py-2">
-                <span className="text-md min-w-21">Name </span>
-                <span className="text-md font-bold min-w-81">{info.name}</span>
-                <PencilSquareIcon className="h-5 w-5 text-blue-700 cursor-pointer"/>
-            </div>
-            <div className=" text-white border-b border-gray-600 flex gap-20 w-full px-8 py-2">
-                <span className="text-md min-w-21">Email </span>
-                <span className="text-md font-bold min-w-81">{info.email}</span>
-                <PencilSquareIcon className="h-5 w-5 text-blue-700 cursor-pointer"/>
-            </div>
-            <div className=" text-white border-b border-gray-600 flex gap-20 w-full px-8 py-2">
-                <span className="text-md min-w-21">Password </span>
-                <span className="text-md font-bold min-w-81 ">{info.password}</span>
-                <PencilSquareIcon className="h-5 w-5 text-blue-700 cursor-pointer"/>
-            </div>
-            <div className="  text-white border-b border-gray-600 flex gap-20 w-full px-8 py-2">
-                <span className="text-md min-w-21">Role </span>
-                <span className="text-md font-bold min-w-81">{info.role}</span>
-                <PencilSquareIcon className="h-5 w-5 text-blue-700 cursor-pointer"/>
+        <div className="min-h-screen px-6 md:px-18 py-12 bg-[#0d1b2a] text-white">
+            <div className="max-w-4xl ">
+                <h1 className="text-3xl font-bold mb-8 text-white/90">User Information</h1>
+
+                <div className="flex flex-col md:flex-row items-start gap-10">
+
+                    <div
+                        className="w-32 h-32 rounded-full bg-white/10 border border-white/20 text-white text-5xl font-semibold flex items-center justify-center shadow-lg">
+                        {name.substring(0, 1)}
+                    </div>
+
+
+                    <div className="flex-1 space-y-6">
+                        <div>
+                            <p className="text-sm text-gray-400">Name</p>
+                            <p className="text-xl font-medium">{name}</p>
+                        </div>
+
+                        <div>
+                            <p className="text-sm text-gray-400">Email</p>
+                            <p className="text-xl font-medium">{email}</p>
+                        </div>
+
+                        <div>
+                            <p className="text-sm text-gray-400">Role</p>
+                            <span
+                                className="inline-block bg-blue-800/40 text-blue-300 text-sm font-semibold px-3 py-1 rounded">
+              {role}
+            </span>
+                        </div>
+
+                        <div>
+                            <p className="text-sm text-gray-400">Account Created</p>
+                            <p className="text-xl font-medium">{createdAt}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
+
 }
 
 export default ProfilePage;

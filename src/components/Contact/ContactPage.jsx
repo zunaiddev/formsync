@@ -14,14 +14,15 @@ function ContactPage() {
     } = useForm();
 
     function onSubmit(data) {
-        console.log(data)
+
     }
 
     return (
-        <div className="w-full mx-auto p-6 text-white rounded-lg shadow-lg">
+        <div
+            className="w-full flex justify-center flex-col items-center mx-auto p-6 text-white rounded-lg shadow-lg ">
             <h1 className="text-3xl font-bold mb-4 text-blue-400">Contact Me</h1>
             <p className="mb-4">Feel free to reach out to me using the form below.</p>
-            <div className="bg-gray-800 max-w-2xl p-6 rounded-lg shadow-md">
+            <div className="w-full bg-gray-800 max-w-2xl p-6 rounded-lg shadow-md">
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
                     <InputField label="Full Name"
                                 placeholder="Full Name"

@@ -7,12 +7,12 @@ function DashboardLayout() {
     const [show, setShow] = useState(false);
 
     return <main className="flex min-h-[100vh] relative">
-        <Sidebar show={show}/>
+        <Sidebar show={show} onClose={() => setShow(false)}/>
         <div className="relative w-full">
             <Outlet/>
         </div>
         <Bars3BottomLeftIcon
-            className="absolute inset-x-0 w-5 h-5 left-1 top-1 z-40 text-white cursor-pointer md:hidden"
+            className="absolute w-7 h-7 left-1 top-1 text-white cursor-pointer md:hidden"
             onClick={() => setShow(true)}/>
     </main>;
 }

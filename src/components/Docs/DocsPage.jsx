@@ -2,7 +2,9 @@ import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {dracula} from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const DocsPage = () => {
-    const fetchCode = `fetch('domainName/api/public/submit', {
+    const BASE_URL = import.meta.env.VITE_API_URL;
+
+    const fetchCode = `fetch('${BASE_URL}/api/public/submit', {
   method: 'POST',
   headers: {
     'X-API-KEY': 'user_api_key_here',
@@ -20,7 +22,7 @@ const DocsPage = () => {
 .catch(error => console.error('Error:', error));`;
 
     const axiosCode = `import axios from 'axios';
-axios.post('domainName/api/public/submit', {
+axios.post('${BASE_URL}/api/public/submit', {
   name: 'John Doe',
   email: 'email@gmail.com',
   subject: 'Subject here',
@@ -38,15 +40,16 @@ axios.post('domainName/api/public/submit', {
         <div className="w-full mx-auto p-6  text-white rounded-lg shadow-lg">
             <h1 className="text-3xl font-bold mb-4 text-blue-400">FormSync API Documentation</h1>
             <h2 className="text-2xl font-semibold mt-4">Submit Form</h2>
-            <p className="mb-4">Users can submit their forms using the following API endpoint.</p>
 
             <h3 className="text-xl font-semibold mt-4">Endpoint</h3>
-            <p className="bg-gray-800 p-2 rounded text-blue-300">POST domainName/api/public/submit</p>
+            <p className="bg-gray-800 p-2 rounded text-white">
+                <span className="text-yellow-400">[POST]</span> {BASE_URL}/api/public/submit
+            </p>
 
             <h3 className="text-xl font-semibold mt-4">Headers</h3>
             <SyntaxHighlighter language="json" style={dracula}>
                 {`{
-  "X-API-KEY": "user_api_key_here",
+  "X-API-KEY": "Your-Api-Key",
   "Content-Type": "application/json"
 }`}
             </SyntaxHighlighter>
@@ -87,10 +90,10 @@ axios.post('domainName/api/public/submit', {
                     <td className="p-2 border border-gray-700">Form submitted successfully.</td>
                 </tr>
                 <tr>
-                    <td className="p-2 border border-gray-700">422 UNPROCESSABLE_ENTITY</td>
+                    <td className="p-2 border border-gray-700 ">422 UNPROCESSABLE_ENTITY</td>
                     <td className="p-2 border border-gray-700 text-yellow-400">❌ Validation Error</td>
-                    <td className="p-2 border border-gray-700">Missing fields, invalid email, or message length not
-                        between 15-200 characters.
+                    <td className="p-2 border border-gray-700 break-words">Missing fields, invalid email, or message
+                        length not between 15-200 characters.
                     </td>
                 </tr>
                 <tr>

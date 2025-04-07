@@ -15,7 +15,7 @@ function SignupForm() {
     } = useForm();
 
     async function onSubmit(data, e) {
-        console.log("Function Called")
+
         e.preventDefault();
         let response = await signup(data.name, data.email, data.password);
         console.log(response);

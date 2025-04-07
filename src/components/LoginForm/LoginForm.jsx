@@ -21,7 +21,7 @@ function Login() {
     async function onSubmit(data) {
         data.email = data.email.toLowerCase();
         let response = await login(data.email, data.password);
-        console.log(response);
+
 
         if (response.success) {
             console.log(response.token);
@@ -67,8 +67,8 @@ function Login() {
             <div className="flex justify-between items-center w-full px-1">
                 <Checkbox text="Remember Me"/>
                 <span className="justify-self-start text-blue-700 text-sm cursor-pointer hover:underline">
-                                <Link to="/auth/forget-password">Forget Password</Link>
-                            </span>
+                                <Link to="/forget-password">Forget Password</Link>
+                </span>
             </div>
 
             <Button type="submit" text="login"

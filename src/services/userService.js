@@ -1,13 +1,7 @@
 import API from "../api.js";
 import toast from "react-hot-toast";
 
-export async function fetchData(path) {
-    let token = localStorage.getItem("accessToken");
-
-    if (!token) {
-        return {success: false, data: null, error: "Could not access access token"};
-    }
-
+export async function fetchData(path, token) {
     try {
         let response = await API.get(`/user/${path}`, {
             headers: {
@@ -15,11 +9,9 @@ export async function fetchData(path) {
             },
         });
 
-        // console.log(response.data.data);
-
         return {success: true, error: null, data: response.data.data};
-    } catch {
-        toast.error("Something went wrong");
+    } catch (error) {
+        console.log(error);
         return {success: false, error: "Something went wrong"};
     }
 }
@@ -27,21 +19,14 @@ export async function fetchData(path) {
 export async function refreshToken() {
     try {
         let response = await API.post("/auth/refresh");
-        console.log(response.data.data.token)
         return response.data.data.token;
     } catch (error) {
-        console.error("Session expired. Redirecting to login.", error);
+        console.error("An Error Occurred:", error);
         return null;
     }
 }
 
-export async function deleteForm(id) {
-    let token = localStorage.getItem("accessToken");
-
-    if (!token) {
-        return {success: false, data: null, error: "Could not access access token"};
-    }
-
+export async function deleteForm(id, token) {
     try {
         let response = await API.delete(`/user/forms/${id}`, {
             headers: {
@@ -61,5 +46,47 @@ export async function deleteForm(id) {
 
         toast.error(error.response?.data?.message || "Something went wrong");
         return {success: false, error: "Something went wrong"};
+    }
+}
+
+export async function logout() {
+
+    try {
+        await API.get("/auth/logout");
+        window.location.reload();
+    } catch (error) {
+        console.log(error);
+    }
+
+    localStorage.removeItem("accessToken");
+}
+
+export async function regenerateKey(token) {
+    try {
+        let response = await API.put(`/user/key`, null, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return {data: response.data.data};
+    } catch (error) {
+        console.log(error);
+        toast.error("Something went wrong");
+        return null;
+    }
+}
+
+export async function generateKey(domain, token) {
+    try {
+        let response = await API.post(`/user/key`, {domain: domain}, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return {data: response.data.data};
+    } catch (error) {
+        console.log(error);
+        toast.error("Something went wrong");
+        return null;
     }
 }

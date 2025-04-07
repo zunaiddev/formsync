@@ -1,22 +1,26 @@
 import {createBrowserRouter} from "react-router-dom";
-import Home from "../pages/Home.jsx";
+import {lazy, Suspense} from "react";
 import PublicLayout from "../layout/PublicLayout.jsx";
 import DashboardLayout from "../layout/DashboardLayout.jsx";
-import Docs from "../pages/Docs.jsx";
-import Contact from "../pages/Contact.jsx";
-import Dashboard from "../pages/Dashboard.jsx";
-import Forms from "../pages/Forms.jsx";
-import Settings from "../pages/Settings.jsx";
 import AuthLayout from "../layout/AuthLayout.jsx";
-import Login from "../pages/Login.jsx";
-import Signup from "../pages/Signup.jsx";
 import AuthRedirect from "../Auth/AuthRedirect.jsx";
 import ProtectedRoute from "../Auth/ProtectedRedirect.jsx";
-import Profile from "../pages/Profile.jsx";
-import Verify from "../pages/Verify.jsx";
-import ForgetPassword from "../pages/ForgetPassword.jsx";
-import ResetPassword from "../pages/ResetPassword.jsx";
-import NotFound from "../pages/NotFound.jsx";
+import Loader from "../components/Loader/Loader.jsx";
+
+
+const Home = lazy(() => import("../pages/Home.jsx"));
+const Docs = lazy(() => import("../pages/Docs.jsx"));
+const Contact = lazy(() => import("../pages/Contact.jsx"));
+const Login = lazy(() => import("../pages/Login.jsx"));
+const Signup = lazy(() => import("../pages/Signup.jsx"));
+const Verify = lazy(() => import("../pages/Verify.jsx"));
+const ForgetPassword = lazy(() => import("../pages/ForgetPassword.jsx"));
+const ResetPassword = lazy(() => import("../pages/ResetPassword.jsx"));
+const Dashboard = lazy(() => import("../pages/Dashboard.jsx"));
+const Forms = lazy(() => import("../pages/Forms.jsx"));
+const Profile = lazy(() => import("../pages/Profile.jsx"));
+const Settings = lazy(() => import("../pages/Settings.jsx"));
+const NotFound = lazy(() => import("../pages/NotFound.jsx"));
 
 const router = createBrowserRouter([
     {
@@ -25,15 +29,21 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "",
-                element: <Home/>,
+                element: <Suspense fallback={<Loader/>}>
+                    <Home/>,
+                </Suspense>
             },
             {
                 path: "/docs",
-                element: <Docs/>,
+                element: <Suspense fallback={<Loader/>}>
+                    <Docs/>,
+                </Suspense>
             },
             {
                 path: "/contact",
-                element: <Contact/>,
+                element: <Suspense fallback={<Loader/>}>
+                    <Contact/>,
+                </Suspense>
             }
         ]
     },
@@ -43,23 +53,27 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/auth/login",
-                element: <Login/>,
+                element: <Suspense fallback={<Loader/>}>
+                    <Login/>
+                </Suspense>,
             },
             {
                 path: "/auth/signup",
-                element: <Signup/>,
+                element: <Suspense fallback={<Loader/>}>
+                    <Signup/>
+                </Suspense>,
             }
         ]
     },
     {
         path: "/verify",
-        element: <Verify/>
+        element: <Suspense fallback={<Loader/>}><Verify/></Suspense>
     }, {
         path: "/forget-password",
-        element: <ForgetPassword/>
+        element: <Suspense fallback={<Loader/>}><ForgetPassword/></Suspense>
     }, {
         path: "/reset-password",
-        element: <ResetPassword/>
+        element: <Suspense fallback={<Loader/>}><ResetPassword/></Suspense>
     },
     {
         path: "/",

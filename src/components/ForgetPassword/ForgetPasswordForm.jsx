@@ -1,16 +1,26 @@
 import InputField from "../Inputs/InputsField.jsx";
 import {useForm} from "react-hook-form";
 import Button from "../Button/Button.jsx";
+import {forgotPassword} from "../../services/authService.js";
+import toast from "react-hot-toast";
 
 function ForgetPasswordForm() {
     const {
         register,
         handleSubmit,
+        reset,
         formState: {errors, isSubmitting},
     } = useForm();
 
-    async function onSubmit() {
-        console.log("Submitted");
+    async function onSubmit(data) {
+        let success = await forgotPassword(data.email.toLowerCase());
+
+        if (success) {
+            toast.success("Password Reset Email sent.");
+            reset();
+        } else {
+            toast.error("Invalid email address");
+        }
     }
 
     return (
