@@ -15,17 +15,21 @@ function SignupForm() {
     } = useForm();
 
     async function onSubmit(data, e) {
-
         e.preventDefault();
         let response = await signup(data.name, data.email, data.password);
-        console.log(response);
 
-        if (response.error != null) {
+        if (response.success) {
+            toast.success("Please Verify Your email.");
+            navigate("/verify-email");
             return;
         }
 
-        toast.success("Please Verify Your email address");
-        navigate("/auth/login");
+        if (response.statusCode === 409) {
+            toast.error("User already exist");
+            return;
+        }
+
+        toast.error("Something went wrong");
     }
 
     return (

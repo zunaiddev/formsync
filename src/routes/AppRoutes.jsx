@@ -1,18 +1,18 @@
 import {createBrowserRouter} from "react-router-dom";
 import {lazy, Suspense} from "react";
-import PublicLayout from "../layout/PublicLayout.jsx";
 import DashboardLayout from "../layout/DashboardLayout.jsx";
 import AuthLayout from "../layout/AuthLayout.jsx";
 import AuthRedirect from "../Auth/AuthRedirect.jsx";
 import ProtectedRoute from "../Auth/ProtectedRedirect.jsx";
 import Loader from "../components/Loader/Loader.jsx";
 
-
+const PublicLayout = lazy(() => import("../layout/PublicLayout.jsx"));
 const Home = lazy(() => import("../pages/Home.jsx"));
 const Docs = lazy(() => import("../pages/Docs.jsx"));
 const Contact = lazy(() => import("../pages/Contact.jsx"));
 const Login = lazy(() => import("../pages/Login.jsx"));
 const Signup = lazy(() => import("../pages/Signup.jsx"));
+const VerifyEmail = lazy(() => import("../pages/VerifyEmail.jsx"));
 const Verify = lazy(() => import("../pages/Verify.jsx"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword.jsx"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword.jsx"));
@@ -25,7 +25,7 @@ const NotFound = lazy(() => import("../pages/NotFound.jsx"));
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <PublicLayout/>,
+        element: <Suspense fallback={<Loader/>}><PublicLayout/></Suspense>,
         children: [
             {
                 path: "",
@@ -74,6 +74,10 @@ const router = createBrowserRouter([
     }, {
         path: "/reset-password",
         element: <Suspense fallback={<Loader/>}><ResetPassword/></Suspense>
+    },
+    {
+        path: "/verify-email",
+        element: <Suspense fallback={<Loader/>}><VerifyEmail/></Suspense>
     },
     {
         path: "/",

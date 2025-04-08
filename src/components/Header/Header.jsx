@@ -1,11 +1,10 @@
-import logo from '../../../public/logo.png';
 import {NavLink} from "react-router-dom";
 
 function Header() {
     return (
         <div className="flex items-center justify-between w-full px-4 py-2">
             <div className="flex items-center justify-between gap-2">
-                <img src={logo} alt="logo" className="size-8"/>
+                <img src="/logo.png" alt="logo" className="size-8"/>
                 <span className="font-bold text-white">FORM SYNC</span>
             </div>
 
