@@ -3,13 +3,11 @@ import InputField from "../Inputs/InputsField.jsx";
 import Button from "../Button/Button.jsx";
 import login from "../../services/authService.js";
 import {Link, useNavigate} from "react-router-dom";
-import {useState} from "react";
 import Checkbox from "../CheckBox/CheckBox.jsx";
 import toast from "react-hot-toast";
 
 function Login() {
     const navigate = useNavigate();
-    const [clearPass, setClearPass] = useState(false);
 
     const {
         register,
@@ -37,9 +35,12 @@ function Login() {
         if (response.status === 401) {
             toast.error("Invalid email or password");
             resetField("password");
+            return;
         }
 
-
+        if (response.status === 403) {
+            toast.error("Please Verify Your Email.");
+        }
     }
 
     return (<div className="w-full flex justify-center items-center p-3 ">
@@ -61,7 +62,6 @@ function Login() {
                     required: "Password is required",
                 })}
                 error={errors.password}
-                clear={clearPass}
             />
 
             <div className="flex justify-between items-center w-full px-1">

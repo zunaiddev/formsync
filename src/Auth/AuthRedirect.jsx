@@ -18,7 +18,7 @@ const AuthRedirect = ({children}) => {
         return <Loader/>;
     }
 
-    return authStatus ? <Navigate to="/dashboard"/> : children;
+    return authStatus ? <Navigate to="/dashboard" replace/> : children;
 };
 
 AuthRedirect.propTypes = {

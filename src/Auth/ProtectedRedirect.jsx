@@ -17,7 +17,7 @@ const ProtectedRoute = ({children}) => {
         return <Loader/>;
     }
 
-    return authStatus ? children : <Navigate to="/auth/login"/>;
+    return authStatus ? children : <Navigate to="/auth/login" replace/>;
 };
 
 ProtectedRoute.propTypes = {

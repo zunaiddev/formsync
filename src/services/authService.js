@@ -67,7 +67,7 @@ export async function verifyToken(token) {
 export async function getToken() {
     let token = localStorage.getItem("accessToken");
 
-    if (!token) {
+    if (!token && isTokenExpired(token)) {
         return null;
     }
 

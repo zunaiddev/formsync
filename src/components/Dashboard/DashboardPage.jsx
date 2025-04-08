@@ -13,7 +13,12 @@ function DashboardPage() {
 
     useEffect(() => {
         (async () => {
-            let response = await fetchData("key", await getToken());
+            const token = await getToken();
+            if (!token) {
+                return;
+            }
+
+            let response = await fetchData("key", token);
 
             if (!response.success) {
                 toast.error("Something went wrong");

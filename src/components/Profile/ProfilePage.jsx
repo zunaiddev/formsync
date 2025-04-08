@@ -1,23 +1,30 @@
 import {useEffect, useState} from "react";
 import {fetchData} from "../../services/userService.js";
 import {getToken} from "../../services/authService.js";
+import Loader from "../Loader/Loader.jsx";
 
 function ProfilePage() {
     const [{name, email, role, createdAt}, setInfo] = useState({});
     const [error, setError] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
 
         (async () => {
+            setLoading(true);
             let response = await fetchData("info", await getToken());
+            setLoading(false);
             if (response.success) {
                 setInfo(response.data);
             }
-
             setError(!response.success);
         })();
 
     }, []);
+
+    if (loading) {
+        return <Loader/>;
+    }
 
     if (error) {
         return <div className="h-full w-full flex items-center justify-center text-white">
