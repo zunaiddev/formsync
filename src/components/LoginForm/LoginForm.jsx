@@ -22,7 +22,6 @@ function Login() {
 
 
         if (response.success) {
-            console.log(response.token);
             localStorage.setItem("accessToken", response.token);
             navigate("/dashboard");
         }

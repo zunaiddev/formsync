@@ -2,7 +2,7 @@ function Loader() {
     return (
         <>
             <div
-                className="h-screen w-screen flex justify-center items-center fixed top-0 left-0 z-50  backdrop-blur-sm">
+                className="h-full w-full flex justify-center items-center absolute top-0 left-0 z-50 backdrop-blur-lg">
                 <div className="ripple-loader"></div>
             </div>
 

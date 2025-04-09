@@ -1,52 +1,45 @@
-const Popup = ({isOpen, onSubmit}) => {
+import {useForm} from "react-hook-form";
+import Button from "../Button/Button.jsx";
+import InputField from "../Inputs/InputsField.jsx";
+import {XMarkIcon} from "@heroicons/react/16/solid/index.js";
+
+const Popup = ({isOpen, onSubmit, onClose}) => {
+    const {
+        register,
+        reset,
+        formState: {errors, isSubmitting},
+        handleSubmit,
+    } = useForm();
+
     if (!isOpen) return null;
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const inputValue = e.target.elements.popupInput.value;
-        onSubmit(inputValue);
+    const submit = (data) => {
+        onSubmit(data.domain);
+        reset();
+        onClose();
     };
 
     return (
-        <div style={styles.overlay}>
-            <div style={styles.popup}>
-                <h2>Enter Something</h2>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        name="popupInput"
-                        type="text"
-                        placeholder="Type here..."
-                        style={styles.input}
-                    />
-                    <div style={styles.buttonGroup}>
-                        <button type="submit" style={styles.button}>Submit</button>
-                        <button style={styles.button}>Close</button>
-                    </div>
-                </form>
-            </div>
+        <div
+            className="border absolute top-[50%] left-[50%] translate-[-50%] px-4 pt-6 pb-3 rounded-lg transition duration-500">
+            <form onSubmit={handleSubmit(submit)} className="w-80 space-y-4">
+                <InputField
+                    label="Domain name"
+                    placeholder="www.example.com"
+                    register={register("domain", {
+                        required: "Domain is required",
+                        pattern: {
+                            value: /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
+                            message: "Invalid domain name",
+                        },
+                    })}
+                    error={errors.domain}
+                />
+                <Button text="submit" isSubmitting={isSubmitting} type="submit"/>
+            </form>
+            <XMarkIcon className="h-5 w-5 absolute top-1 right-1 cursor-pointer" onClick={onClose}/>
         </div>
     );
-};
-
-const styles = {
-    overlay: {
-        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-        backgroundColor: 'rgba(0, 0, 0, 0.4)', display: 'flex',
-        alignItems: 'center', justifyContent: 'center', zIndex: 1000
-    },
-    popup: {
-        backgroundColor: 'black', padding: '20px', borderRadius: '10px',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.2)', width: '300px', textAlign: 'center'
-    },
-    input: {
-        width: '100%', padding: '10px', marginTop: '10px', marginBottom: '15px'
-    },
-    buttonGroup: {
-        display: 'flex', justifyContent: 'space-between'
-    },
-    button: {
-        padding: '8px 12px', cursor: 'pointer'
-    }
 };
 
 export default Popup;

@@ -1,4 +1,5 @@
 import {Link} from "react-router-dom";
+import emailIcon from "../assets/email-sent.svg"
 
 function VerifyEmail() {
     return (
@@ -6,7 +7,7 @@ function VerifyEmail() {
 
             <div className="bg-slate-800 p-6 rounded-2xl shadow-lg max-w-sm text-center">
                 <img
-                    src="https://cdn-icons-png.flaticon.com/512/561/561127.png"
+                    src={emailIcon}
                     alt="Email Icon"
                     className="w-16 h-16 mx-auto mb-4"
                 />
@@ -17,9 +18,9 @@ function VerifyEmail() {
                     your registration.
                 </p>
                 <Link
-                    className="mt-2 px-4 py-2 bg-sky-500 hover:bg-sky-600 rounded-xl font-medium transition-all duration-300"
+                    className="text-blue-600 hover:underline font-medium transition-all duration-300"
                     to="/auth/login">
-                    go back to login
+                    back to login
                 </Link>
             </div>
 

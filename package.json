@@ -28,7 +28,7 @@
     "react-router-dom": "^7.2.0",
     "react-spinner": "^0.2.7",
     "react-spinners": "^0.15.0",
-    "react-syntax-highlighter": "^15.6.1",
+    "react-syntax-highlighter": "^5.8.0",
     "react-tooltip": "^5.28.0",
     "reactjs-popup": "^2.0.6",
     "styled-components": "^6.1.16",

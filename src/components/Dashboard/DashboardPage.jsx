@@ -5,11 +5,13 @@ import {useEffect, useState} from "react";
 import {fetchData, generateKey, regenerateKey} from "../../services/userService.js";
 import {getToken} from "../../services/authService.js";
 import Popup from "../Popup/Popup.jsx";
+import Spinner from "../Loader/Spinner.jsx";
 
 function DashboardPage() {
     const [{domains, key, requests}, setKeyInfo] = useState({domains: []});
-    const [isKey, setKey] = useState(false);
+    const [isKey, setKey] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
@@ -19,7 +21,7 @@ function DashboardPage() {
             }
 
             let response = await fetchData("key", token);
-
+            setLoading(false);
             if (!response.success) {
                 toast.error("Something went wrong");
                 return;
@@ -32,6 +34,7 @@ function DashboardPage() {
 
             setKey(true);
             setKeyInfo(response.data);
+
         })();
     }, []);
 
@@ -46,14 +49,18 @@ function DashboardPage() {
         let response = await generateKey(domain, await getToken());
         if (response) {
             toast.success("Key generated successfully");
+            setKey(true);
             setKeyInfo(response.data);
-            console.log(response.data);
         }
     }
 
+    if (loading) {
+        return <Spinner/>;
+    }
+
     return (
-        <div className="h-full  sm:p-3 md:p-6 text-white">
-            <div className="shadow-lg rounded-2xl p-6 w-fit bg-[var(--bg-secondary)]">
+        <div className="h-full px-1 md:px-6 pt-8 text-white relative">
+            <div className="shadow-lg rounded-2xl p-6 w-fit bg-[var(--bg-secondary)] relative">
                 {isKey ? <>
                     <h2 className="text-xl font-semibold mb-4">API Key Details</h2>
                     <div className="mb-4">
@@ -82,14 +89,14 @@ function DashboardPage() {
                             {domains !== undefined && domains.map((domain) => (<li key={domain}>{domain}</li>))}
                         </ul>
                     </div>
-                    <div className="flex space-x-4">
+                    <div className="flex flex-col gap-3 flex-wrap md:flex-row">
                         <button
                             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer text-nowrap"
                             onClick={regenerate}>Regenerate Key
                         </button>
                         <button
-                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 cursor-pointer text-nowrap">Add
-                            Domain
+                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 cursor-pointer text-nowrap"
+                            onClick={() => setShowPopup(true)}>Add Domain
                         </button>
                         <button
                             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 cursor-pointer text-nowrap">Deactivate
@@ -102,7 +109,7 @@ function DashboardPage() {
                 </button>}
             </div>
 
-            <Popup onSubmit={generate} isOpen={showPopup}/>
+            <Popup onSubmit={generate} isOpen={showPopup} onClose={() => setShowPopup(false)}/>
         </div>
     );
 }
@@ -119,4 +126,5 @@ DashboardPage.propTypes = {
     reqLeft: PropTypes.number,
     domains: PropTypes.arrayOf(PropTypes.string),
 }
+
 export default DashboardPage;

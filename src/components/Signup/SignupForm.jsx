@@ -4,9 +4,12 @@ import {useForm} from "react-hook-form";
 import {signup} from "../../services/authService.js";
 import {Link, useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
+import {useState} from "react";
 
 function SignupForm() {
     const navigate = useNavigate();
+    const [conflict, setConflict] = useState(null);
+
     const {
         register,
         handleSubmit,
@@ -20,12 +23,13 @@ function SignupForm() {
 
         if (response.success) {
             toast.success("Please Verify Your email.");
+            setConflict(null);
             navigate("/verify-email");
             return;
         }
 
         if (response.statusCode === 409) {
-            toast.error("User already exist");
+            setConflict({message: "User already exist"});
             return;
         }
 
@@ -57,7 +61,7 @@ function SignupForm() {
                             message: "Invalid email"
                         },
                     })}
-                    error={errors.email}
+                    error={errors.email || conflict}
                 />
 
                 <InputField
@@ -82,7 +86,7 @@ function SignupForm() {
                     type="password"
                     register={register("confirmPassword", {
                         required: "Password do not match",
-                        validate: value => value === watch("password") || "Password do not match",
+                        validate: value => value === watch("password".toString) || "Password do not match",
                     })}
                     error={errors.confirmPassword}
                 />
