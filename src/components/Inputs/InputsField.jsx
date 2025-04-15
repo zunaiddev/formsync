@@ -4,7 +4,14 @@ import hideIcon from '../../assets/hide.svg';
 import showIcon from '../../assets/show.svg';
 import {useState} from "react";
 
-function InputField({label = "", type = "text", placeholder = "", register = null, error = null}) {
+function InputField({
+                        label = "",
+                        type = "text",
+                        placeholder = "",
+                        register = null,
+                        error = null,
+                        autoComplete = "off"
+                    }) {
     const [isVisible, setVisible] = useState(false);
 
     return (
@@ -14,7 +21,7 @@ function InputField({label = "", type = "text", placeholder = "", register = nul
                 <input className={error ? style.inputError : ""}
                        type={type === "password" ? (isVisible ? "text" : "password") : type}
                        placeholder={placeholder}
-                       autoComplete="on"
+                       autoComplete={autoComplete}
                        {...register}
                 />
                 {type === "password" && <img
@@ -35,7 +42,8 @@ InputField.propTypes = {
     placeholder: PropTypes.string,
     register: PropTypes.object.isRequired,
     error: PropTypes.object.isRequired,
-    ref: PropTypes.object
+    ref: PropTypes.object,
+    autoComplete: PropTypes.string,
 }
 
 export default InputField;

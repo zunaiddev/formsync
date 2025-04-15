@@ -44,14 +44,16 @@ function Login() {
 
     return (<div className="w-full flex justify-center items-center p-3 ">
         <form className="w-full flex flex-col justify-center items-center gap-5"
-              onSubmit={handleSubmit(onSubmit)}>
+              onSubmit={handleSubmit(onSubmit)} autoComplete="on">
             <InputField
                 label="Email"
                 placeholder={"example@example.com"}
                 register={register("email", {
                     required: "Email is required",
                 })}
-                error={errors.email}/>
+                error={errors.email}
+                autoComplete="email"
+            />
 
             <InputField
                 label="Password"
@@ -61,6 +63,7 @@ function Login() {
                     required: "Password is required",
                 })}
                 error={errors.password}
+                autoComplete="current-password"
             />
 
             <div className="flex justify-between items-center w-full px-1">

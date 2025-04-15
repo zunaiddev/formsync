@@ -39,7 +39,7 @@ function SignupForm() {
     return (
         <div className="flex justify-center items-center w-full h-[100%] p-3">
             <form className="w-full flex flex-col justify-center items-center gap-3"
-                  onSubmit={handleSubmit(onSubmit)}>
+                  onSubmit={handleSubmit(onSubmit)} autoComplete="on">
                 <InputField
                     label="Name"
                     placeholder={"Full name"}
@@ -50,7 +50,8 @@ function SignupForm() {
                         maxLength: {value: 50, message: "Maximum 50 characters"},
                         validate: (value) => value.toString().trim().length > 3 || "Name can't be empty",
                     })}
-                    error={errors.name}/>
+                    error={errors.name}
+                    autoComplete="given-name"/>
                 <InputField
                     label="Email"
                     placeholder="example@example.com"
@@ -62,6 +63,7 @@ function SignupForm() {
                         },
                     })}
                     error={errors.email || conflict}
+                    autoComplete="email"
                 />
 
                 <InputField
@@ -78,6 +80,7 @@ function SignupForm() {
                         })
                     }
                     error={errors.password}
+                    autoComplete="new-password"
                 />
 
                 <InputField
@@ -86,9 +89,10 @@ function SignupForm() {
                     type="password"
                     register={register("confirmPassword", {
                         required: "Password do not match",
-                        validate: value => value === watch("password".toString) || "Password do not match",
+                        validate: value => value === watch("password") || "Password do not match",
                     })}
                     error={errors.confirmPassword}
+                    autoComplete="confirm-password"
                 />
 
                 <Button type="submit" text="signup" isSubmitting={isSubmitting}/>

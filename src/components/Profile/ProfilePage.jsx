@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {fetchData} from "../../services/userService.js";
 import {getToken} from "../../services/authService.js";
-import Loader from "../Loader/Loader.jsx";
+import Spinner from "../Loader/Spinner.jsx";
 
 function ProfilePage() {
     const [{name, email, role, createdAt}, setInfo] = useState({});
@@ -23,7 +23,7 @@ function ProfilePage() {
     }, []);
 
     if (loading) {
-        return <Loader/>;
+        return <Spinner/>;
     }
 
     if (error) {
