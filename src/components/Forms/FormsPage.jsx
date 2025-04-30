@@ -27,6 +27,10 @@ function FormsPage() {
         setShowForm(true)
     }
 
+    function updateForms(forms) {
+        setForms(forms);
+    }
+
     if (loading) {
         return <Spinner/>;
     }
@@ -35,7 +39,7 @@ function FormsPage() {
         return <h1>Something Went Wrong</h1>;
     }
 
-    if (!forms && !forms.length) {
+    if (!forms.length) {
         return (
             <h1 className="text-xl font-bold font-(family-name:--open-sans) text-white m-5">
                 Could Not Found Any Form
@@ -45,19 +49,24 @@ function FormsPage() {
 
     return (
         <div className="flex items-center gap-4 flex-col sm:p-2 md:p-4 relative min-h-screen">
-            {forms.map((form, idx) => <Form key={idx} form={form} idx={idx} view={() => viewForm(form)}/>)}
+            {forms.map((form, idx) => <Form key={idx} form={form} idx={idx} view={() => viewForm(form)} forms={forms}
+                                            updateForms={updateForms}/>)}
             <FormView show={showForm} form={selectedForm} onClose={() => setShowForm(false)}/>
         </div>
     );
 }
 
 
-function Form({form, idx, view}) {
+function Form({form, idx, view, forms, updateForms}) {
+    let [loading, setLoading] = useState(false);
 
     async function handleDeleteForm(form) {
+        setLoading(true);
         let response = await deleteForm(form.id, await getToken());
-
+        // let response = await new Promise((resolve) => setTimeout(() => resolve({success: true}, 2000), 1000));
+        setLoading(false);
         if (response.success) {
+            updateForms(forms.filter((f) => f.id !== form.id));
             toast.success("deleted");
             return;
         }
@@ -91,8 +100,12 @@ function Form({form, idx, view}) {
               onClick={view}> View </span>
         <button
             className="flex justify-center items-center cursor-pointer justify-self-stretch-end
-                                absolute right-0 bg-red-700 h-full rounded-r-lg px-2">
-            <img src={deleteIcon} className="size-5" alt="deleteIcon" onClick={() => handleDeleteForm(form)}/>
+                                absolute right-0 bg-red-700 h-full rounded-r-lg px-2 min-w-9 min-h-full">
+            {
+                loading ? <span
+                        className="size-4 border-2 border-white border-b-transparent rounded-full inline-block animate-spin"></span> :
+                    <img src={deleteIcon} className="size-5" alt="deleteIcon" onClick={() => handleDeleteForm(form)}/>
+            }
         </button>
     </div>
 }
