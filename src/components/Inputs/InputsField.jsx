@@ -5,6 +5,7 @@ import showIcon from '../../assets/show.svg';
 import {useState} from "react";
 
 function InputField({
+                        name,
                         label = "",
                         type = "text",
                         placeholder = "",
@@ -22,6 +23,7 @@ function InputField({
                        type={type === "password" ? (isVisible ? "text" : "password") : type}
                        placeholder={placeholder}
                        autoComplete={autoComplete}
+                       name={name}
                        {...register}
                 />
                 {type === "password" && <img

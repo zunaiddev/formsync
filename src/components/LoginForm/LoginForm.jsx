@@ -46,6 +46,7 @@ function Login() {
         <form className="w-full flex flex-col justify-center items-center gap-5"
               onSubmit={handleSubmit(onSubmit)} autoComplete="on">
             <InputField
+                name="email"
                 label="Email"
                 placeholder={"example@example.com"}
                 register={register("email", {
@@ -56,6 +57,7 @@ function Login() {
             />
 
             <InputField
+                name="password"
                 label="Password"
                 placeholder={"password"}
                 type="password"
