@@ -26,12 +26,15 @@ export async function refreshToken() {
     }
 }
 
-export async function deleteForm(id, token) {
+export async function deleteForm(ids, token) {
     try {
-        await API.delete(`/user/forms/${id}`, {
+        await API.delete(`/user/forms`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
+            data: {
+                id: ids,
+            }
         });
 
         return {success: true};

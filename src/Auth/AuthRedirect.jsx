@@ -1,11 +1,17 @@
-import {Navigate} from "react-router-dom";
+import {Navigate, useLocation} from "react-router-dom";
 import PropTypes from "prop-types";
 import {useEffect, useState} from "react";
-import {getToken} from "../services/authService.js";
+import {getToken} from "../services/tokenService.js";
 import Loader from "../components/Loader/Loader.jsx";
 
 const AuthRedirect = ({children}) => {
     const [authStatus, setAuthStatus] = useState(null);
+    const location = useLocation();
+    const redirected = location.state?.redirected;
+
+    if (redirected) {
+        return children;
+    }
 
     useEffect(() => {
         (async () => {
@@ -18,7 +24,7 @@ const AuthRedirect = ({children}) => {
         return <Loader/>;
     }
 
-    return authStatus ? <Navigate to="/dashboard" replace/> : children;
+    return authStatus ? <Navigate to="/dashboard" replace state={{redirected: true}}/> : children;
 };
 
 AuthRedirect.propTypes = {

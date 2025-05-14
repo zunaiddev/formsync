@@ -1,4 +1,3 @@
-import style from './button.module.css';
 import PropTypes from "prop-types";
 
 
@@ -7,9 +6,13 @@ function Button({
     }
                 }) {
     return (
-        <div className={style.container}>
-            <button type={type} className={style.button} disabled={isSubmitting} onClick={onClick}>
-                {isSubmitting ? <span className={style.loader}></span> : text}
+        <div className="h-8 w-full">
+            <button type={type}
+                    className="h-full w-full flex justify-center items-center text-md text-white bg-[var(--button-background)] hover:bg-[var(--button-hover)] rounded-md cursor-pointer"
+                    disabled={isSubmitting}
+                    onClick={onClick}>
+                {isSubmitting ? <span
+                    className="size-[15px] border-3 border-b-transparent rounded-full animate-spin"></span> : text}
             </button>
         </div>
     );

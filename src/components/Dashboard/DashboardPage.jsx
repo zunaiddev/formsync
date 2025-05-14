@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {DocumentDuplicateIcon} from "@heroicons/react/16/solid/index.js";
 import {useEffect, useState} from "react";
 import {addDomain, fetchData, generateKey, regenerateKey,} from "../../services/userService.js";
-import {getToken} from "../../services/authService.js";
+import {getToken} from "../../services/tokenService.js";
 import Popup from "../Popup/Popup.jsx";
 import Spinner from "../Loader/Spinner.jsx";
 import {HttpStatusCode} from "axios";
@@ -13,8 +13,6 @@ function DashboardPage() {
     const [isKey, setKey] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [conflictError, setConflictError] = useState(false);
-    const [generatePopup, setGeneratePopup] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -47,16 +45,12 @@ function DashboardPage() {
         }
     }
 
-    function handleGenerate() {
-        setGeneratePopup(true);
-    }
-
     function handleAddDomain() {
-        setGeneratePopup(false);
         setShowPopup(true);
     }
 
     async function generate(domain) {
+        console.log("generate function called")
         let response = await generateKey(domain, await getToken());
         if (response) {
             toast.success("Key generated successfully");
@@ -65,9 +59,7 @@ function DashboardPage() {
         }
     }
 
-
     async function add(domain) {
-        setConflictError(false);
         let response = await addDomain(domain, await getToken());
         if (response.success) {
             setKeyInfo(response.data);
@@ -75,7 +67,6 @@ function DashboardPage() {
         }
 
         if (response.status === HttpStatusCode.Conflict) {
-            setConflictError(true);
             return;
         }
 
@@ -94,8 +85,8 @@ function DashboardPage() {
                         <h2 className="text-xl font-semibold mb-4">API Key Details</h2>
                         <div className="mb-4">
                             <p className="font-medium">API Key:</p>
-                            <div className="flex items-center">
-                <span className="text-[var(--text-secondary)] truncate">
+                            <div className="flex items-center overflow-x-auto w-60 sm:w-fit">
+                <span className="text-[var(--text-secondary)]">
                   {key}
                 </span>
                                 <button
@@ -106,6 +97,7 @@ function DashboardPage() {
                                 </button>
                             </div>
                         </div>
+
                         <div className="mb-4">
                             <p className="font-medium">Requests Left:</p>
                             <span className="text-[var(--text-secondary)]">
@@ -126,7 +118,7 @@ function DashboardPage() {
                         <div className="flex flex-col gap-3 flex-wrap md:flex-row">
                             <button
                                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer text-nowrap"
-                                onClick={handleGenerate}
+                                onClick={regenerate}
                             >
                                 Regenerate Key
                             </button>
@@ -153,7 +145,7 @@ function DashboardPage() {
             </div>
 
             <Popup
-                onSubmit={generatePopup ? generate : add}
+                onSubmit={isKey ? add : generate}
                 isOpen={showPopup}
                 onClose={() => setShowPopup(false)}
             />

@@ -5,10 +5,11 @@ import {useState} from "react";
 
 function DashboardLayout() {
     const [show, setShow] = useState(false);
+    let isDesktop = window.innerWidth > 768;
 
     return <main className="flex min-h-[100vh] relative">
         <Sidebar show={show} onClose={() => setShow(false)}/>
-        <div className="relative w-full">
+        <div className={`relative w-full ${isDesktop && "ml-44"}`}>
             <Outlet/>
         </div>
         <Bars3BottomLeftIcon

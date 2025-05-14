@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {fetchData} from "../../services/userService.js";
-import {getToken} from "../../services/authService.js";
+import {getToken} from "../../services/tokenService.js";
 import Spinner from "../Loader/Spinner.jsx";
 
 function ProfilePage() {

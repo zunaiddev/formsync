@@ -12,8 +12,8 @@ import {logout} from "../../services/userService.js";
 
 function Sidebar({show, onClose}) {
     return (
-        <div className={`flex items-center  justify-center h-screen bg-[var(bg-secondary)] border-r-1 fixed left-0
-         top-0 z-10 md:relative md:block text-white ${show ? 'flex' : 'hidden'}`} onClick={onClose}>
+        <div className={`flex items-center justify-center h-screen bg-[var(bg-secondary)] border-r-1 fixed left-0
+         top-0 z-10 text-white`} onClick={onClose}>
             <Card
                 className="h-full w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 text-white bg-[var(--primary)]">
                 <div className="mb-2 p-4">

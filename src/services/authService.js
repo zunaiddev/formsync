@@ -1,6 +1,4 @@
 import API from "../api.js";
-import {refreshToken} from "./userService.js";
-import {isTokenExpired} from "../util/jwt.js";
 
 export async function login(email, password) {
     let emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -62,30 +60,6 @@ export async function verifyToken(token) {
             statusCode: err.response.status,
         };
     }
-}
-
-export async function getToken() {
-    let token = localStorage.getItem("accessToken");
-
-    if (!token && isTokenExpired(token)) {
-        return null;
-    }
-
-    if (token) {
-        if (!isTokenExpired(token)) {
-            return token;
-        }
-    }
-
-    token = await refreshToken();
-
-    if (!token) {
-        return null;
-    }
-
-    localStorage.setItem("accessToken", token);
-
-    return token;
 }
 
 export async function forgotPassword(email) {

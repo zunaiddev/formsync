@@ -3,7 +3,6 @@ import InputField from "../Inputs/InputsField.jsx";
 import Button from "../Button/Button.jsx";
 import login from "../../services/authService.js";
 import {Link, useNavigate} from "react-router-dom";
-import Checkbox from "../CheckBox/CheckBox.jsx";
 import toast from "react-hot-toast";
 
 function Login() {
@@ -65,18 +64,16 @@ function Login() {
                     required: "Password is required",
                 })}
                 error={errors.password}
-                autoComplete="current-password"
+                autoComplete="password"
             />
 
-            <div className="flex justify-between items-center w-full px-1">
-                <Checkbox text="Remember Me"/>
-                <span className="justify-self-start text-blue-700 text-sm cursor-pointer hover:underline">
+            <div className="flex justify-end items-center w-full px-1">
+                <span className="text-blue-700 text-sm cursor-pointer hover:underline">
                                 <Link to="/forget-password">Forget Password</Link>
                 </span>
             </div>
 
             <Button type="submit" text="login"
-                    onClick={() => console.log("Submit")}
                     isSubmitting={isSubmitting}/>
             <p><Link to={"/auth/signup"} className="text-white">
                 Don&#39;t Have an account? <span
