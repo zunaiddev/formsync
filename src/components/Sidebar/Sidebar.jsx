@@ -11,11 +11,13 @@ import {NavLink} from "react-router-dom";
 import {logout} from "../../services/userService.js";
 
 function Sidebar({show, onClose}) {
+    let isMobile = window.innerWidth <= 768;
+
     return (
-        <div className={`flex items-center justify-center h-screen bg-[var(bg-secondary)] border-r-1 fixed left-0
-         top-0 z-10 text-white`} onClick={onClose}>
+        <div className={`flex items-center h-screen bg-[var(bg-secondary)] border-r-1 fixed left-0
+         top-0 z-10 text-white transition duration-75 ${show ? "translate-x-0 w-screen" : "translate-x-[-100%]"}`}>
             <Card
-                className="h-full w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 text-white bg-[var(--primary)]">
+                className="h-full w-full max-w-[12rem] p-4 shadow-xl shadow-blue-gray-900/5 text-white bg-[var(--primary)]">
                 <div className="mb-2 p-4">
                     <Typography variant="h5" color="blue-gray">
                         Form Sync
@@ -80,9 +82,10 @@ function Sidebar({show, onClose}) {
                         </ListItemPrefix>
                         Log Out
                     </ListItem>
-
                 </List>
             </Card>
+
+            {isMobile && <div className="w-full h-full bg-transparent" onClick={onClose}/>}
         </div>
     )
 }

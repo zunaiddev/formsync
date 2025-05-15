@@ -4,7 +4,7 @@ import {Bars3BottomLeftIcon} from "@heroicons/react/16/solid/index.js";
 import {useState} from "react";
 
 function DashboardLayout() {
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState(window.innerWidth > 768);
     let isDesktop = window.innerWidth > 768;
 
     return <main className="flex min-h-[100vh] relative">
@@ -13,7 +13,7 @@ function DashboardLayout() {
             <Outlet/>
         </div>
         <Bars3BottomLeftIcon
-            className="absolute w-7 h-7 left-1 top-1 text-white cursor-pointer md:hidden"
+            className={`absolute w-7 h-7 left-1 top-1 text-white cursor-pointer ${show ? "hidden" : "visible"}`}
             onClick={() => setShow(true)}/>
     </main>;
 }
