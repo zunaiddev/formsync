@@ -2,7 +2,6 @@ import {Navigate, useLocation} from "react-router-dom";
 import PropTypes from "prop-types";
 import {useEffect, useState} from "react";
 import {getToken} from "../services/tokenService.js";
-import Loader from "../components/Loader/Loader.jsx";
 
 const AuthRedirect = ({children}) => {
     const [authStatus, setAuthStatus] = useState(null);
@@ -19,10 +18,6 @@ const AuthRedirect = ({children}) => {
             setAuthStatus(token !== null);
         })();
     }, []);
-
-    if (authStatus === null) {
-        return <Loader/>;
-    }
 
     return authStatus ? <Navigate to="/dashboard" replace state={{redirected: true}}/> : children;
 };

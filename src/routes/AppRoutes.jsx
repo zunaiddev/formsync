@@ -5,29 +5,28 @@ import DashboardLayout from "../layout/DashboardLayout.jsx";
 import AuthLayout from "../layout/AuthLayout.jsx";
 import AuthRedirect from "../Auth/AuthRedirect.jsx";
 import ProtectedRoute from "../Auth/ProtectedRedirect.jsx";
-import Nprogress from "nprogress";
-import "nprogress/nprogress.css";
+import TopLoader from "../components/TopLoader/TopLoader.jsx";
 
-const PublicLayout = lazyWithProgress("../layout/PublicLayout.jsx");
-const Docs = lazyWithProgress("../pages/Docs.jsx");
-const Contact = lazyWithProgress("../pages/Contact.jsx");
-const Login = lazyWithProgress("../pages/Login.jsx");
-const Signup = lazyWithProgress("../pages/Signup.jsx");
-const VerifyEmail = lazyWithProgress("../pages/VerifyEmail.jsx");
-const Verify = lazyWithProgress("../pages/Verify.jsx");
-const ForgetPassword = lazyWithProgress("../pages/ForgetPassword.jsx");
-const ResetPassword = lazyWithProgress("../pages/ResetPassword.jsx");
-const Dashboard = lazyWithProgress("../pages/Dashboard.jsx");
-const Forms = lazyWithProgress("../pages/Forms.jsx");
-const Profile = lazyWithProgress("../pages/Profile.jsx");
-const Settings = lazyWithProgress("../pages/Settings.jsx");
-const NotFound = lazyWithProgress("../pages/NotFound.jsx");
+const PublicLayout = lazy(() => import("../layout/PublicLayout.jsx"));
+const Docs = lazy(() => import("../pages/Docs.jsx"));
+const Contact = lazy(() => import("../pages/Contact.jsx"));
+const Login = lazy(() => import("../pages/Login.jsx"));
+const Signup = lazy(() => import("../pages/Signup.jsx"));
+const VerifyEmail = lazy(() => import("../pages/VerifyEmail.jsx"));
+const Verify = lazy(() => import("../pages/Verify.jsx"));
+const ForgetPassword = lazy(() => import("../pages/ForgetPassword.jsx"));
+const ResetPassword = lazy(() => import("../pages/ResetPassword.jsx"));
+const Dashboard = lazy(() => import("../pages/Dashboard.jsx"));
+const Forms = lazy(() => import("../pages/Forms.jsx"));
+const Profile = lazy(() => import("../pages/Profile.jsx"));
+const Settings = lazy(() => import("../pages/Settings.jsx"));
+const NotFound = lazy(() => import("../pages/NotFound.jsx"));
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: (
-            <Suspense>
+            <Suspense fallback={<TopLoader/>}>
                 <PublicLayout/>
             </Suspense>
         ),
@@ -39,7 +38,7 @@ const router = createBrowserRouter([
             {
                 path: "/docs",
                 element: (
-                    <Suspense>
+                    <Suspense fallback={<TopLoader/>}>
                         <Docs/>
                     </Suspense>
                 ),
@@ -47,7 +46,7 @@ const router = createBrowserRouter([
             {
                 path: "/contact",
                 element: (
-                    <Suspense>
+                    <Suspense fallback={<TopLoader/>}>
                         <Contact/>
                     </Suspense>
                 ),
@@ -65,7 +64,7 @@ const router = createBrowserRouter([
             {
                 path: "/auth/login",
                 element: (
-                    <Suspense>
+                    <Suspense fallback={<TopLoader/>}>
                         <Login/>
                     </Suspense>
                 ),
@@ -73,7 +72,7 @@ const router = createBrowserRouter([
             {
                 path: "/auth/signup",
                 element: (
-                    <Suspense>
+                    <Suspense fallback={<TopLoader/>}>
                         <Signup/>
                     </Suspense>
                 ),
@@ -83,7 +82,7 @@ const router = createBrowserRouter([
     {
         path: "/verify",
         element: (
-            <Suspense>
+            <Suspense fallback={<TopLoader/>}>
                 <Verify/>
             </Suspense>
         ),
@@ -91,7 +90,7 @@ const router = createBrowserRouter([
     {
         path: "/forget-password",
         element: (
-            <Suspense>
+            <Suspense fallback={<TopLoader/>}>
                 <ForgetPassword/>
             </Suspense>
         ),
@@ -99,7 +98,7 @@ const router = createBrowserRouter([
     {
         path: "/reset-password",
         element: (
-            <Suspense>
+            <Suspense fallback={<TopLoader/>}>
                 <ResetPassword/>
             </Suspense>
         ),
@@ -107,7 +106,7 @@ const router = createBrowserRouter([
     {
         path: "/verify-email",
         element: (
-            <Suspense>
+            <Suspense fallback={<TopLoader/>}>
                 <VerifyEmail/>
             </Suspense>
         ),
@@ -143,14 +142,5 @@ const router = createBrowserRouter([
         element: <NotFound/>,
     },
 ]);
-
-function lazyWithProgress(path) {
-    return lazy(async () => {
-        Nprogress.start();
-        let module = await import(path);
-        Nprogress.done();
-        return module;
-    })
-}
 
 export default router;

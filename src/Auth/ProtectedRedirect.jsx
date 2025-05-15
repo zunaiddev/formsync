@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import {Navigate, useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getToken} from "../services/tokenService.js";
-import Loader from "../components/Loader/Loader.jsx";
 
 const ProtectedRoute = ({children}) => {
     const [authStatus, setAuthStatus] = useState(true);
@@ -16,7 +15,7 @@ const ProtectedRoute = ({children}) => {
     }, []);
 
     if (authStatus === null) {
-        return <Loader/>;
+        return null;
     }
 
     if (redirected) {
