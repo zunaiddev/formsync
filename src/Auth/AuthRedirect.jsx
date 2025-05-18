@@ -19,6 +19,10 @@ const AuthRedirect = ({children}) => {
         })();
     }, []);
 
+    if (authStatus === null) {
+        return null;
+    }
+
     return authStatus ? <Navigate to="/dashboard" replace state={{redirected: true}}/> : children;
 };
 

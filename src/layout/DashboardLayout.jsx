@@ -9,7 +9,7 @@ function DashboardLayout() {
 
     return <main className="flex min-h-[100vh] relative">
         <Sidebar show={show} onClose={() => setShow(false)}/>
-        <div className={`relative w-full ${isDesktop && "ml-44"}`}>
+        <div className={`relative w-full  ${isDesktop ? "ml-44" : "pt-6"}`}>
             <Outlet/>
         </div>
         <Bars3BottomLeftIcon

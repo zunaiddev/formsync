@@ -8,6 +8,10 @@ const ProtectedRoute = ({children}) => {
     const location = useLocation();
     const redirected = location.state?.redirected;
 
+    if (redirected) {
+        return children;
+    }
+
     useEffect(() => {
         (async () => {
             setAuthStatus(await getToken() !== null);
@@ -16,10 +20,6 @@ const ProtectedRoute = ({children}) => {
 
     if (authStatus === null) {
         return null;
-    }
-
-    if (redirected) {
-        return children;
     }
 
     return authStatus ? children : <Navigate to="/auth/login" replace state={{redirected: true}}/>;

@@ -50,7 +50,6 @@ function DashboardPage() {
     }
 
     async function generate(domain) {
-        console.log("generate function called")
         let response = await generateKey(domain, await getToken());
         if (response) {
             toast.success("Key generated successfully");
@@ -79,7 +78,7 @@ function DashboardPage() {
 
     return (
         <div className="h-full px-1 md:px-6 pt-8 text-white relative">
-            <div className="shadow-lg rounded-2xl p-6 w-fit bg-[var(--bg-secondary)] relative">
+            <div className="shadow-lg rounded-2xl p-6 w-fit bg-[var(--bg-secondary)] relative mx-auto sm:mx-0">
                 {isKey ? (
                     <>
                         <h2 className="text-xl font-semibold mb-4">API Key Details</h2>
