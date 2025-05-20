@@ -1,6 +1,6 @@
 import {createBrowserRouter} from "react-router-dom";
 import {lazy, Suspense} from "react";
-import Home from "../components/Home/HomePage.jsx";
+import Home from "../pages/Home.jsx";
 import DashboardLayout from "../layout/DashboardLayout.jsx";
 import AuthLayout from "../layout/AuthLayout.jsx";
 import AuthRedirect from "../Auth/AuthRedirect.jsx";

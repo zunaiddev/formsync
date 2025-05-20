@@ -7,12 +7,14 @@ import {getToken} from "../../services/tokenService.js";
 import Popup from "../Popup/Popup.jsx";
 import Spinner from "../Loader/Spinner.jsx";
 import {HttpStatusCode} from "axios";
+import useConfirm from "../../Hooks/useConfirm.jsx";
 
 function DashboardPage() {
     const [{domains, key, requests}, setKeyInfo] = useState({domains: []});
     const [isKey, setKey] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [confirm, Confirmation] = useConfirm();
 
     useEffect(() => {
         (async () => {
@@ -39,6 +41,9 @@ function DashboardPage() {
     }, []);
 
     async function regenerate() {
+        const result = await confirm("Are You Sure You want to regenerate the Key.", "Current Key Will Considered as Invalid.");
+        if (!result) return;
+
         let response = await regenerateKey(await getToken());
         if (response) {
             setKeyInfo(response.data);
@@ -148,6 +153,8 @@ function DashboardPage() {
                 isOpen={showPopup}
                 onClose={() => setShowPopup(false)}
             />
+
+            {Confirmation}
         </div>
     );
 }
