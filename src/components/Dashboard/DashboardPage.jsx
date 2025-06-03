@@ -10,7 +10,7 @@ import {HttpStatusCode} from "axios";
 import useConfirm from "../../Hooks/useConfirm.jsx";
 
 function DashboardPage() {
-    const [{domains, key, requests}, setKeyInfo] = useState({domains: []});
+    const [{domains, key, requests, role}, setKeyInfo] = useState({domains: []});
     const [isKey, setKey] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -102,7 +102,7 @@ function DashboardPage() {
                             </div>
                         </div>
                         {
-                            key.role === "USER" && <div className="mb-4">
+                            role === "USER" && <div className="mb-4">
                                 <p className="font-medium">Requests Left:</p>
                                 <span className="text-[var(--text-secondary)]">
                 {10 - requests} requests
