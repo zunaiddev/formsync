@@ -8,9 +8,6 @@ const AuthRedirect = ({children}) => {
     const location = useLocation();
     const redirected = location.state?.redirected;
 
-    if (redirected) {
-        return children;
-    }
 
     useEffect(() => {
         (async () => {
@@ -18,6 +15,10 @@ const AuthRedirect = ({children}) => {
             setAuthStatus(token !== null);
         })();
     }, []);
+
+    if (redirected) {
+        return children;
+    }
 
     if (authStatus === null) {
         return null;
