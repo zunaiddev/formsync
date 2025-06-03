@@ -101,13 +101,14 @@ function DashboardPage() {
                                 </button>
                             </div>
                         </div>
-
-                        <div className="mb-4">
-                            <p className="font-medium">Requests Left:</p>
-                            <span className="text-[var(--text-secondary)]">
+                        {
+                            key.role === "USER" && <div className="mb-4">
+                                <p className="font-medium">Requests Left:</p>
+                                <span className="text-[var(--text-secondary)]">
                 {10 - requests} requests
               </span>
-                        </div>
+                            </div>
+                        }
                         <div className="mb-4">
                             <p className="font-medium">Status:</p>
                             <span className="text-green-500 font-semibold">Active</span>
