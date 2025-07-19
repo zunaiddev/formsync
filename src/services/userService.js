@@ -106,3 +106,16 @@ export async function addDomain(domain, token) {
         return {success: false, status: error?.response.status || 500};
     }
 }
+
+export async function deleteUser(token, data) {
+    try {
+        return await API.delete(`/user`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            data: data
+        });
+    } catch {
+        return null;
+    }
+}
