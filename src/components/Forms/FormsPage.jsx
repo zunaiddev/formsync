@@ -6,7 +6,7 @@ import Form from "./Form.jsx";
 import FormView from "./FormView.jsx";
 import FormsHeader from "./FormsHeader.jsx";
 import toast from "react-hot-toast";
-import useConfirm from "../../Hooks/useConfirm.jsx";
+import useConfirm from "../../hooks/useConfirm.jsx";
 
 function FormsPage() {
     const [forms, setForms] = useState([]);

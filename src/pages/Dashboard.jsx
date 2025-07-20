@@ -1,7 +1,203 @@
-import DashboardPage from "../components/Dashboard/DashboardPage.jsx";
+import toast from "react-hot-toast";
+import PropTypes from "prop-types";
+import {addDomain, fetchData, generateKey, regenerateKey} from "../services/userService.js";
+import {getToken} from "../services/tokenService.js";
+import {HttpStatusCode} from "axios";
+import {useEffect, useState} from "react";
+import useConfirm from "../hooks/useConfirm.jsx";
+import MainLoader from "../components/Loader/MainLoader.jsx";
+import {DocumentDuplicateIcon} from "@heroicons/react/16/solid/index.js";
+import Popup from "../components/Popup/Popup.jsx";
 
 function Dashboard() {
-    return <DashboardPage isActive={false}/>
+    const [{domains, key, requests, role, active}, setKeyInfo] = useState({domains: []});
+    const [isKey, setKey] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [confirm, Confirmation] = useConfirm();
+
+    useEffect(() => {
+        (async () => {
+            const token = await getToken();
+            if (!token) {
+                return;
+            }
+
+            let response = await fetchData("key", token);
+            setLoading(false);
+            if (!response.success) {
+                toast.error("Something went wrong");
+                return;
+            }
+
+            if (response.data == null) {
+                setKey(false);
+                return;
+            }
+
+            setKey(true);
+            setKeyInfo(response.data);
+        })();
+    }, []);
+
+    async function regenerate() {
+        const result = await confirm(undefined, undefined, <div
+                className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed space-y-4">
+                <p>
+                    Regenerating your API key will <span className="font-semibold text-red-600 dark:text-red-400">immediately deactivate your current key</span>.
+                    Any connected applications, services, or scripts using the current key will
+                    <span className="font-semibold text-red-600 dark:text-red-400">&nbsp;stop functioning</span>.
+                </p>
+                <p>
+                    To avoid disruptions, please ensure you
+                    <span
+                        className="font-semibold text-blue-600 dark:text-blue-400">&nbsp;update your key wherever it is in use</span> after
+                    regeneration.
+                </p>
+            </div>
+        );
+        if (!result) return;
+
+        let response = await regenerateKey(await getToken());
+        if (response) {
+            setKeyInfo(response.data);
+        }
+    }
+
+    function handleAddDomain() {
+        setShowPopup(true);
+    }
+
+    async function generate(domain) {
+        let response = await generateKey(domain, await getToken());
+        if (response) {
+            toast.success("Key generated successfully");
+            setKey(true);
+            setKeyInfo(response.data);
+        }
+    }
+
+    async function add(domain) {
+        let response = await addDomain(domain, await getToken());
+        if (response.success) {
+            setKeyInfo(response.data);
+            return;
+        }
+
+        if (response.status === HttpStatusCode.Conflict) {
+            return;
+        }
+
+        toast.error("Something went wrong");
+    }
+
+    if (loading) {
+        return <MainLoader/>;
+    }
+
+    return (
+        <div className="h-full px-1 md:px-6 pt-8 text-white relative">
+            <div className="shadow-lg rounded-2xl p-6 w-fit bg-[var(--bg-secondary)] relative mx-auto sm:mx-0">
+                {isKey ? (
+                    <>
+                        <h2 className="text-xl font-semibold mb-4">API Key Details</h2>
+                        <div className="mb-4">
+                            <p className="font-medium">API Key:</p>
+                            <div className="flex items-center overflow-x-auto w-60 sm:w-fit">
+                <span className="text-[var(--text-secondary)]">
+                  {key}
+                </span>
+                                <button
+                                    className="ml-2 text-blue-500 hover:text-blue-600 cursor-pointer"
+                                    onClick={() => copyToClipboard(key)}
+                                >
+                                    <DocumentDuplicateIcon className="h-5 w-5"/>
+                                </button>
+                            </div>
+                        </div>
+                        {
+                            role === "USER" && <div className="mb-4">
+                                <p className="font-medium">Requests Left:</p>
+                                <span className="text-[var(--text-secondary)]">
+                {10 - requests} requests
+              </span>
+                            </div>
+                        }
+                        <div className="mb-4">
+                            <p className="font-medium">Status:</p>
+                            <span
+                                className={`${active ? "text-green-500" : "text-red-500"} font-semibold`}>{active ? "Active" : "Locked"}</span>
+                        </div>
+
+                        <div className="mb-4">
+                            <p className="font-medium">Registered Domains:</p>
+                            <ul className="list-disc pl-5 text-[var(--text-secondary)]">
+                                {domains !== undefined &&
+                                    domains.map((domain) => <li key={domain}>{domain}</li>)}
+                            </ul>
+                        </div>
+                        <div className="flex flex-col gap-3 flex-wrap md:flex-row">
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer text-nowrap"
+                                onClick={regenerate}
+                            >
+                                Regenerate Key
+                            </button>
+                            <button
+                                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 cursor-pointer text-nowrap"
+                                onClick={handleAddDomain}
+                            >
+                                Add Domain
+                            </button>
+                            <button
+                                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 cursor-pointer text-nowrap">
+                                Deactivate Key
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer text-nowrap"
+                        onClick={handleAddDomain}
+                    >
+                        Generate Key
+                    </button>
+                )}
+            </div>
+
+            <Popup
+                onSubmit={isKey ? add : generate}
+                isOpen={showPopup}
+                onClose={() => setShowPopup(false)}
+                topLabel={isKey ? "Add Domain" : "Generate Key"}
+                label="Enter Domain name"
+                placeholder="www.example.com"
+                btnText={isKey ? "Add" : "Generate"}
+                name="domain"
+                validation={{
+                    required: "domain is required",
+                    pattern: {value: /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,6}$/, message: "Invalid domain name"},
+                }}
+            />
+
+            {Confirmation}
+        </div>
+    );
+
 }
+
+function copyToClipboard(text) {
+    navigator.clipboard
+        .writeText(text)
+        .then(() => toast.success("Copied!"))
+        .catch((err) => toast.error("Failed to copy:" + err));
+}
+
+Dashboard.propTypes = {
+    isKey: PropTypes.bool.isRequired,
+    apiKey: PropTypes.string,
+    reqLeft: PropTypes.number,
+    domains: PropTypes.arrayOf(PropTypes.string),
+};
 
 export default Dashboard;

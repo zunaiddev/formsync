@@ -4,9 +4,9 @@ import PopupModel from "../components/Model/PopupModel.jsx";
 function useConfirm() {
     const [dialogState, setDialogState] = useState(null);
 
-    function confirm(message, desc = "") {
+    function confirm(message, desc = "", custom = null, buttonText) {
         return new Promise((resolve) => {
-            setDialogState({message, desc, resolve});
+            setDialogState({message, desc, custom, resolve, buttonText});
         });
     }
 
@@ -23,8 +23,10 @@ function useConfirm() {
     const Confirmation = dialogState ? <PopupModel
         message={dialogState.message}
         desc={dialogState.desc}
+        custom={dialogState.custom}
         onClose={handleClose}
-        onSubmit={handleSubmit}/> : null;
+        onSubmit={handleSubmit}
+        buttonText={dialogState.buttonText}/> : null;
 
     return [confirm, Confirmation];
 }

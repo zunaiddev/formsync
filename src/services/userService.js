@@ -73,7 +73,7 @@ export async function generateKey(domain, token) {
     try {
         let response = await API.post(
             `/user/key`,
-            {domain: domain},
+            domain,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -92,7 +92,7 @@ export async function addDomain(domain, token) {
     try {
         let response = await API.put(
             "user/key/domain",
-            {domain: domain},
+            domain,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -109,13 +109,13 @@ export async function addDomain(domain, token) {
 
 export async function deleteUser(token, data) {
     try {
-        return await API.delete(`/user`, {
+        return (await API.delete(`/user`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
             data: data
-        });
-    } catch {
-        return null;
+        })).status;
+    } catch (err) {
+        return err.status;
     }
 }
