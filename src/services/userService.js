@@ -1,5 +1,6 @@
 import API from "../api.js";
 import toast from "react-hot-toast";
+import {getToken} from "./tokenService.js";
 
 export async function fetchData(path, token) {
     try {
@@ -88,14 +89,14 @@ export async function generateKey(domain, token) {
     }
 }
 
-export async function addDomain(domain, token) {
+export async function addDomain(domain) {
     try {
         let response = await API.put(
             "user/key/domain",
             domain,
             {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${await getToken()}`,
                 },
             },
         );
@@ -105,6 +106,10 @@ export async function addDomain(domain, token) {
         console.log(error);
         return {success: false, status: error?.response.status || 500};
     }
+}
+
+export async function removeDomain(domain, token) {
+    return true;
 }
 
 export async function deleteUser(token, data) {
