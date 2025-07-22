@@ -6,6 +6,7 @@ import AuthLayout from "../layout/AuthLayout.jsx";
 import AuthRedirect from "../Auth/AuthRedirect.jsx";
 import ProtectedRoute from "../Auth/ProtectedRedirect.jsx";
 import TopLoader from "../components/TopLoader/TopLoader.jsx";
+import Admin from "../pages/Admin.jsx";
 
 const PublicLayout = lazy(() => import("../layout/PublicLayout.jsx"));
 const Docs = lazy(() => import("../pages/Docs.jsx"));
@@ -21,6 +22,7 @@ const Forms = lazy(() => import("../pages/Forms.jsx"));
 const Profile = lazy(() => import("../pages/Profile.jsx"));
 const Settings = lazy(() => import("../pages/Settings.jsx"));
 const NotFound = lazy(() => import("../pages/NotFound.jsx"));
+const Admin = lazy(() => import("../pages/Admin.jsx"));
 
 const router = createBrowserRouter([
     {
@@ -135,6 +137,10 @@ const router = createBrowserRouter([
                 path: "/profile",
                 element: <Profile/>,
             },
+            {
+                path: "/admin",
+                element: <Admin/>,
+            }
         ],
     },
     {
