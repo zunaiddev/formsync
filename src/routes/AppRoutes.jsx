@@ -6,7 +6,6 @@ import AuthLayout from "../layout/AuthLayout.jsx";
 import AuthRedirect from "../Auth/AuthRedirect.jsx";
 import ProtectedRoute from "../Auth/ProtectedRedirect.jsx";
 import TopLoader from "../components/TopLoader/TopLoader.jsx";
-import Admin from "../pages/Admin.jsx";
 
 const PublicLayout = lazy(() => import("../layout/PublicLayout.jsx"));
 const Docs = lazy(() => import("../pages/Docs.jsx"));
