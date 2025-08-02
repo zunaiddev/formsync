@@ -22,6 +22,7 @@ const Profile = lazy(() => import("../pages/Profile.jsx"));
 const Settings = lazy(() => import("../pages/Settings.jsx"));
 const NotFound = lazy(() => import("../pages/NotFound.jsx"));
 const Admin = lazy(() => import("../pages/Admin.jsx"));
+const Test = lazy(() => import("../pages/Test.jsx"));
 
 const router = createBrowserRouter([
     {
@@ -141,6 +142,10 @@ const router = createBrowserRouter([
                 element: <Admin/>,
             }
         ],
+    },
+    {
+        path: "/test",
+        element: <Test/>,
     },
     {
         path: "*",

@@ -1,6 +1,6 @@
 import {DocumentDuplicateIcon} from "@heroicons/react/16/solid/index.js";
-import toast from "react-hot-toast";
 import PropTypes from "prop-types";
+import copyToClipboard from "../../util/copyToClipboard.js";
 
 function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain, handleDeleteDomain}) {
     return (
@@ -100,13 +100,6 @@ function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain
             </div>
         </div>
     );
-}
-
-function copyToClipboard(text) {
-    navigator.clipboard
-        .writeText(text)
-        .then(() => toast.success("Copied!"))
-        .catch((err) => toast.error("Failed to copy:" + err));
 }
 
 KeyCard.propTypes = {

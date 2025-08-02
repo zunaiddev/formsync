@@ -1,4 +1,4 @@
-import CustomHighlighter from "../SyntaxHighlighter/CustomHighlighter.jsx";
+import CodeBlock from "../CodeBlock.jsx";
 
 const DocsPage = () => {
     const BASE_URL = import.meta.env.VITE_API_URL;
@@ -38,7 +38,7 @@ axios.post('${BASE_URL}/api/public/submit', {
     const headers = {
         'X-API-KEY': "user_api_key_here",
         'Content-Type': "application/json"
-    }
+    };
 
     const json = {
         name: "John Doe",
@@ -48,32 +48,30 @@ axios.post('${BASE_URL}/api/public/submit', {
     };
 
     return (
-        <div className="w-full mx-auto p-6  text-white rounded-lg shadow-lg">
+        <div className="w-full mx-auto p-6 text-white rounded-lg shadow-lg">
             <h1 className="text-3xl font-bold mb-4 text-blue-400">
                 FormSync API Documentation
             </h1>
             <h2 className="text-2xl font-semibold mt-4">Submit Form</h2>
 
             <h3 className="text-xl font-semibold mt-4">Endpoint</h3>
-            <p className="bg-gray-800 p-2 rounded text-white">
-                <span className="text-yellow-400">[POST]</span> {BASE_URL}
-                /api/public/submit
-            </p>
+            <CodeBlock language="http" code={`[POST] ${BASE_URL}/api/public/submit`}/>
 
             <h3 className="text-xl font-semibold mt-4">Headers</h3>
-            <CustomHighlighter language={"json"}>
-                {headers}
-            </CustomHighlighter>
-
+            <CodeBlock language="json" code={JSON.stringify(headers, null, 4)}/>
 
             <h3 className="text-xl font-semibold mt-4">Request Body</h3>
-            <CustomHighlighter language={"json"}>
-                {json}
-            </CustomHighlighter>
+            <CodeBlock language="json" code={JSON.stringify(json, null, 4)}/>
 
             <h3 className="text-xl font-semibold mt-4">Example using Fetch</h3>
+            <CodeBlock
+                title="Fetch Example"
+                language="javascript"
+                code={fetchCode}
+            />
 
             <h3 className="text-xl font-semibold mt-4">Example using Axios</h3>
+            <CodeBlock language="javascript" code={axiosCode}/>
 
             <h3 className="text-xl font-semibold mt-4">Response Codes</h3>
             <table className="w-full mt-4 border border-gray-700 text-left">
@@ -88,30 +86,28 @@ axios.post('${BASE_URL}/api/public/submit', {
                 <tr>
                     <td className="p-2 border border-gray-700">200 OK</td>
                     <td className="p-2 border border-gray-700 text-green-400">
-                        ✅ Success
+                        Success
                     </td>
                     <td className="p-2 border border-gray-700">
                         Form submitted successfully.
                     </td>
                 </tr>
                 <tr>
-                    <td className="p-2 border border-gray-700 ">
+                    <td className="p-2 border border-gray-700">
                         422 UNPROCESSABLE_ENTITY
                     </td>
                     <td className="p-2 border border-gray-700 text-yellow-400">
-                        ❌ Validation Error
+                        Validation Error
                     </td>
                     <td className="p-2 border border-gray-700 break-words">
                         Missing fields, invalid email, or message length not between
-                        15-200 characters.
+                        15–200 characters.
                     </td>
                 </tr>
                 <tr>
-                    <td className="p-2 border border-gray-700">
-                        429 TOO_MANY_REQUESTS
-                    </td>
+                    <td className="p-2 border border-gray-700">429 TOO_MANY_REQUESTS</td>
                     <td className="p-2 border border-gray-700 text-red-400">
-                        ❌ Submission Limit Reached
+                        Submission Limit Reached
                     </td>
                     <td className="p-2 border border-gray-700">
                         User has exceeded 10 submissions per day.
@@ -120,7 +116,7 @@ axios.post('${BASE_URL}/api/public/submit', {
                 <tr>
                     <td className="p-2 border border-gray-700">403 FORBIDDEN</td>
                     <td className="p-2 border border-gray-700 text-red-500">
-                        ❌ Invalid API Key
+                        Invalid API Key
                     </td>
                     <td className="p-2 border border-gray-700">
                         API key is missing or incorrect.
