@@ -93,7 +93,7 @@ axios.post('${BASE_URL}/api/public/submit', {
                     </td>
                 </tr>
                 <tr>
-                    <td className="p-2 border border-gray-700">
+                    <td className="p-2 border border-gray-700 break-words max-w-[120px]">
                         422 UNPROCESSABLE_ENTITY
                     </td>
                     <td className="p-2 border border-gray-700 text-yellow-400">
@@ -105,7 +105,7 @@ axios.post('${BASE_URL}/api/public/submit', {
                     </td>
                 </tr>
                 <tr>
-                    <td className="p-2 border border-gray-700">429 TOO_MANY_REQUESTS</td>
+                    <td className="p-2 border border-gray-700 break-words max-w-[120px]">429 TOO_MANY_REQUESTS</td>
                     <td className="p-2 border border-gray-700 text-red-400">
                         Submission Limit Reached
                     </td>
@@ -114,7 +114,7 @@ axios.post('${BASE_URL}/api/public/submit', {
                     </td>
                 </tr>
                 <tr>
-                    <td className="p-2 border border-gray-700">403 FORBIDDEN</td>
+                    <td className="p-2 border border-gray-700 break-words max-w-[120px]">403 FORBIDDEN</td>
                     <td className="p-2 border border-gray-700 text-red-500">
                         Invalid API Key
                     </td>
