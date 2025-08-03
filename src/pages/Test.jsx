@@ -1,5 +1,5 @@
 import "highlight.js/styles/atom-one-dark.css";
-import CodeBlock from "../components/CodeBlock.jsx";
+import CodeBlock from "../components/CodeBlock/CodeBlock.jsx";
 
 function Test() {
     return <CodeBlock

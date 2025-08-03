@@ -1,4 +1,4 @@
-import CodeBlock from "../CodeBlock.jsx";
+import CodeBlock from "../CodeBlock/CodeBlock.jsx";
 import PropTypes from "prop-types";
 
 const DocsPage = () => {

@@ -10,13 +10,7 @@ function Contact() {
         register,
         handleSubmit,
         formState: {errors, isSubmitting},
-    } = useForm({
-        defaultValues: {
-            name: "John Doe",
-            email: "work87t@gmail.com",
-            message: "Hii trghib syhwd hdgd egudehd gf"
-        }
-    });
+    } = useForm();
 
     async function onSubmit(data) {
         let response = await axios.post("https://intact-roanna-api-v9-6a640f42.koyeb.app/api/public/submit", data, {
@@ -82,7 +76,7 @@ function Contact() {
                         />
                         {errors.message && <small className="text-red-600">{errors.message.message}</small>}
                     </div>
-                    <Button type="submit" text="Submit" isSubmitting={isSubmitting}/>
+                    <Button type="submit" text="Submit" isSubmitting={true}/>
                 </form>
             </div>
         </div>

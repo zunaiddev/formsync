@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import hljs from "highlight.js";
 import "highlight.js/styles/atom-one-dark.css";
-import CopyIcon from "./Icon/CopyIcon.jsx";
+import CopyIcon from "../Icon/CopyIcon.jsx";
 import toast from "react-hot-toast";
 
 function CodeBlock({code, language = "javascript"}) {
