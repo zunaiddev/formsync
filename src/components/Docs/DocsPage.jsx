@@ -1,4 +1,5 @@
 import CodeBlock from "../CodeBlock.jsx";
+import PropTypes from "prop-types";
 
 const DocsPage = () => {
     const BASE_URL = import.meta.env.VITE_API_URL;
@@ -6,7 +7,7 @@ const DocsPage = () => {
     const fetchCode = `fetch('${BASE_URL}/api/public/submit', {
   method: 'POST',
   headers: {
-    'X-API-KEY': 'user_api_key_here',
+    'X-API-KEY': 'fs_test_api_key', // Replace with Your actual api key
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
@@ -18,21 +19,6 @@ const DocsPage = () => {
 })
 .then(response => response.json())
 .then(data => console.log(data))
-.catch(error => console.error('Error:', error));`;
-
-    const axiosCode = `import axios from 'axios';
-axios.post('${BASE_URL}/api/public/submit', {
-  name: 'John Doe',
-  email: 'email@gmail.com',
-  subject: 'Subject here',
-  message: 'Message should be between 15 to 200 characters'
-}, {
-  headers: {
-    'X-API-KEY': 'user_api_key_here',
-    'Content-Type': 'application/json'
-  }
-})
-.then(response => console.log(response.data))
 .catch(error => console.error('Error:', error));`;
 
     const headers = {
@@ -48,30 +34,24 @@ axios.post('${BASE_URL}/api/public/submit', {
     };
 
     return (
-        <div className="w-full mx-auto p-6 text-white rounded-lg shadow-lg">
+        <div className="w-full mx-auto p-6 text-white rounded-lg shadow-lg space-y-8">
             <h1 className="text-3xl font-bold mb-4 text-blue-400">
                 FormSync API Documentation
             </h1>
+
             <h2 className="text-2xl font-semibold mt-4">Submit Form</h2>
 
-            <h3 className="text-xl font-semibold mt-4">Endpoint</h3>
-            <CodeBlock language="http" code={`[POST] ${BASE_URL}/api/public/submit`}/>
+            <Block text="Endpoint" language="http" code={`[POST] ${BASE_URL}/api/public/submit`}/>
 
-            <h3 className="text-xl font-semibold mt-4">Headers</h3>
-            <CodeBlock language="json" code={JSON.stringify(headers, null, 4)}/>
+            <Block text="Headers" language="json" code={JSON.stringify(headers, null, 4)}/>
 
-            <h3 className="text-xl font-semibold mt-4">Request Body</h3>
-            <CodeBlock language="json" code={JSON.stringify(json, null, 4)}/>
+            <Block text="Test Your API Integration (Without Signing Up)" desc="Want to try FormSync without registering? Use our Test API Key to simulate form submission. This is
+                helpful for checking your integration before creating an account." language="vbnet"
+                   code="API Key: fs_test_api_key"/>
 
-            <h3 className="text-xl font-semibold mt-4">Example using Fetch</h3>
-            <CodeBlock
-                title="Fetch Example"
-                language="javascript"
-                code={fetchCode}
-            />
+            <Block text="Request Body" language="json" code={JSON.stringify(json, null, 4)}/>
 
-            <h3 className="text-xl font-semibold mt-4">Example using Axios</h3>
-            <CodeBlock language="javascript" code={axiosCode}/>
+            <Block text="Example using Fetch" language="javascript" code={fetchCode}/>
 
             <h3 className="text-xl font-semibold mt-4">Response Codes</h3>
             <table className="w-full mt-4 border border-gray-700 text-left">
@@ -127,5 +107,22 @@ axios.post('${BASE_URL}/api/public/submit', {
         </div>
     );
 };
+
+function Block({text, desc, language, code}) {
+    return (
+        <div className="space-y-4">
+            <h3 className="text-xl font-semibold mt-4">{text}</h3>
+            {desc && <p>{desc}</p>}
+            {(language && code) && <CodeBlock language={language} code={code}/>}
+        </div>
+    );
+}
+
+Block.propTypes = {
+    text: PropTypes.string.isRequired,
+    desc: PropTypes.string,
+    language: PropTypes.string,
+    code: PropTypes.string,
+}
 
 export default DocsPage;

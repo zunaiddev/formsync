@@ -2,16 +2,35 @@ import {useForm} from "react-hook-form";
 import InputField from "../components/Inputs/InputsField.jsx";
 import Select from "../components/Select/Select.jsx";
 import Button from "../components/Button/Button.jsx";
+import toast from "react-hot-toast";
+import axios, {HttpStatusCode} from "axios";
 
 function Contact() {
     const {
         register,
         handleSubmit,
         formState: {errors, isSubmitting},
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            name: "John Doe",
+            email: "work87t@gmail.com",
+            message: "Hii trghib syhwd hdgd egudehd gf"
+        }
+    });
 
-    function onSubmit(data) {
+    async function onSubmit(data) {
+        let response = await axios.post("https://intact-roanna-api-v9-6a640f42.koyeb.app/api/public/submit", data, {
+            headers: {
+                "X-API-Key": import.meta.env.VITE_API_KEY,
+                "content-type": "application/json"
+            },
+        })
+        if (response.status === HttpStatusCode.Ok) {
+            toast.success("We Will Connect to you shortly");
+            return;
+        }
 
+        toast.error("Something went wrong");
     }
 
     return (
@@ -31,7 +50,7 @@ function Contact() {
                                     validate: (value) => value.toString().trim().length > 3 || "Name can't be blank",
                                 })}
                                 error={errors.name}/>
-                    <InputField label="email"
+                    <InputField label="Email"
                                 placeholder="Email"
                                 register={register("email", {
                                     required: "Please enter your email",
@@ -47,15 +66,22 @@ function Contact() {
                             register={register("subject", {required: "Please Select Subject"})}
                             error={errors.subject}/>
 
-                    <InputField label="Message"
-                                placeholder="Message"
-                                register={register("message", {
-                                    required: "Please enter your message",
-                                    minLength: {value: 15, message: "Please enter at least 15 characters"},
-                                    maxLength: {value: 200, message: "Message can only be less than 200 characters"},
-                                    validate: (value) => value.toString().trim().length > 15 || "message can't be blank",
-                                })}
-                                error={errors.message}/>
+                    <div className="w-full text-white flex flex-col">
+                        <small>Message</small>
+                        <textarea
+                            className={`border rounded-sm text-sm pl-1 pt-2 min-h-28 max-h-40 ${errors.message && "border-red-600"}`}
+                            maxLength={150}
+                            placeholder="Message"
+
+                            {...register("message", {
+                                required: "Please enter your message",
+                                minLength: {value: 15, message: "Please enter at least 15 characters"},
+                                maxLength: {value: 200, message: "Message can only be less than 200 characters"},
+                                validate: (value) => value.toString().trim().length > 15 || "message can't be blank",
+                            })}
+                        />
+                        {errors.message && <small className="text-red-600">{errors.message.message}</small>}
+                    </div>
                     <Button type="submit" text="Submit" isSubmitting={isSubmitting}/>
                 </form>
             </div>

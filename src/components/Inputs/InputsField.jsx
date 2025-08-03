@@ -1,4 +1,3 @@
-import style from './input.module.css';
 import PropTypes from "prop-types";
 import hideIcon from '../../assets/hide.svg';
 import showIcon from '../../assets/show.svg';
@@ -16,24 +15,26 @@ function InputField({
     const [isVisible, setVisible] = useState(false);
 
     return (
-        <div className={style.container}>
-            <label>{label}</label>
-            <div className={style.inputContainer}>
-                <input className={error ? style.inputError : ""}
-                       type={type === "password" ? (isVisible ? "text" : "password") : type}
-                       placeholder={placeholder}
-                       autoComplete={autoComplete}
-                       name={name}
-                       {...register}
+        <div className="w-full text-white">
+            <small>{label}</small>
+            <div className="flex items-center justify-between relative">
+                <input
+                    className={`w-full h-8 border rounded-sm bg-gray-800 pl-1 pr-7 py-4 text-sm outline-none ${error && "border-red-600"}`}
+                    type={type === "password" ? (isVisible ? "text" : "password") : type}
+                    placeholder={placeholder}
+                    autoComplete={autoComplete}
+                    name={name}
+                    {...register}
                 />
-                {type === "password" && <img
-                    src={isVisible ? hideIcon : showIcon}
-                    alt="Toggle visibility"
-                    className={style.toggleIcon}
-                    onClick={() => setVisible(!isVisible)}
-                />}
+                {type === "password" &&
+                    <img
+                        src={isVisible ? hideIcon : showIcon}
+                        alt="Toggle visibility"
+                        className="size-4 absolute right-2 cursor-pointer"
+                        onClick={() => setVisible(!isVisible)}
+                    />}
             </div>
-            {error && <span>{error.message}</span>}
+            {error && <small className="text-red-600">{error.message}</small>}
         </div>
     );
 }

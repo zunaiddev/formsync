@@ -1,19 +1,18 @@
-import styles from './Select.module.css';
 import PropTypes from "prop-types";
 
 function Select({label, values, register, error}) {
     return (
-        <div className={styles.container} onClick={() => {
-            styles.hide
-        }}>
-            <label>{label}</label>
-            <select {...register} className={error ? styles.selectError : ''} defaultValue="">
+        <div className=" w-full">
+            <small>{label}</small>
+            <select {...register}
+                    className={`w-full h-8 border rounded-sm bg-gray-800 cursor-pointer text-sm ${error && "border-red-600"}`}
+                    defaultValue="">
                 <option value="" disabled hidden>Select...</option>
                 {values.map(value => (
-                    <option key={value} value={value}>{value}</option>
+                    <option className="cursor-pointer rounded-md" key={value} value={value}>{value}</option>
                 ))}
             </select>
-            {error && <span>{error.message}</span>}
+            {error && <small className="text-red-600">{error.message}</small>}
         </div>
     );
 }
