@@ -3,6 +3,7 @@ import hljs from "highlight.js";
 import "highlight.js/styles/atom-one-dark.css";
 import CopyIcon from "../Icon/CopyIcon.jsx";
 import toast from "react-hot-toast";
+import CheckIcon from "../Icon/CheckIcon.jsx";
 
 function CodeBlock({code, language = "javascript"}) {
     const codeRef = useRef(null);
@@ -40,8 +41,8 @@ function CodeBlock({code, language = "javascript"}) {
                 </small>
                 <button onClick={copy}
                         className="bg-black/30 absolute top-0 right-0 uppercase text-xs rounded-bl-md px-2 py-1 flex items-center justify-center gap-2 cursor-pointer">
-                    {copied ? "Copied!" : <>
-                        <CopyIcon/>
+                    {copied ? <CheckIcon/> : <>
+                        <CopyIcon color="green"/>
                         Copy
                     </>}
                 </button>
