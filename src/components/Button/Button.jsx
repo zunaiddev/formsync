@@ -1,14 +1,11 @@
 import PropTypes from "prop-types";
 
 
-function Button({
-                    type = "button", text, isSubmitting = false, onClick = () => {
-    }
-                }) {
+function Button({className, type = "button", text, isSubmitting = false, onClick}) {
     return (
         <div className="h-8 w-full">
             <button type={type}
-                    className="h-full w-full flex justify-center items-center text-md text-white bg-[var(--button-background)] hover:bg-[var(--button-hover)] rounded-md cursor-pointer"
+                    className={`h-full w-full flex justify-center items-center text-md text-white bg-[var(--button-background)] hover:bg-[var(--button-hover)] rounded-md cursor-pointer ${className}`}
                     disabled={isSubmitting}
                     onClick={onClick}>
                 {isSubmitting ? <Loader/> : text}

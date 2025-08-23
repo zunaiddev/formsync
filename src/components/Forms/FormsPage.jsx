@@ -3,20 +3,19 @@ import {deleteForm, fetchData} from "../../services/userService.js";
 import Spinner from "../Loader/Spinner.jsx";
 import {getToken} from "../../services/tokenService.js";
 import Form from "./Form.jsx";
-import FormView from "./FormView.jsx";
 import FormsHeader from "./FormsHeader.jsx";
 import toast from "react-hot-toast";
 import useConfirm from "../../hooks/useConfirm.jsx";
+import FormView from "./FormView.jsx";
 
 function FormsPage() {
     const [forms, setForms] = useState([]);
     const [errors, setErrors] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [selectedForm, setSelectedForm] = useState(null);
-    const [showForm, setShowForm] = useState(false);
     const [formsToDelete, setFormsToDelete] = useState([]);
     const [showDelete, setShowDelete] = useState(false);
     const [confirm, Confirmation] = useConfirm();
+    const [viewData, setViewData] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -34,11 +33,6 @@ function FormsPage() {
             setShowDelete(false);
         }
     }, [formsToDelete])
-
-    function viewForm(form) {
-        setSelectedForm(form);
-        setShowForm(true)
-    }
 
     if (loading) {
         return <Spinner/>;
@@ -60,8 +54,12 @@ function FormsPage() {
         setFormsToDelete([...formsToDelete, id]);
     }
 
-    function removeForm(id) {
+    function removeFormToDelete(id) {
         setFormsToDelete(formsToDelete.filter(form => form !== id));
+    }
+
+    function removeForm(id) {
+        setForms(forms.filter(form => form.id !== id));
     }
 
     async function deleteForms() {
@@ -108,8 +106,9 @@ function FormsPage() {
         <div className="flex items-center gap-4 flex-col sm:p-2 md:p-4 relative min-h-screen">
             <FormsHeader showDelete={showDelete} deleteOne={deleteForms} deleteAll={deleteAll}/>
             {forms.map((form, idx) => <Form key={form.id} form={form} idx={idx} addForm={addForm}
-                                            removeForm={removeForm}/>)}
-            <FormView show={showForm} form={selectedForm} onClose={() => setShowForm(false)}/>
+                                            removeForm={removeFormToDelete} setViewData={setViewData}/>)}
+            {viewData && <FormView data={viewData} onClose={() => setViewData(null)} removeForm={removeForm}/>}
+
             {Confirmation}
         </div>
     );

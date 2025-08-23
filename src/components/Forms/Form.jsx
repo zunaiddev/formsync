@@ -1,7 +1,7 @@
 import Checkbox from "../CheckBox/CheckBox.jsx";
 import {useState} from "react";
 
-function Form({form, idx, view, addForm, removeForm}) {
+function Form({form, idx, setViewData, addForm, removeForm}) {
     const [selected, setSelected] = useState(false);
 
     async function handleOnChange(e) {
@@ -11,6 +11,10 @@ function Form({form, idx, view, addForm, removeForm}) {
         } else {
             removeForm(form.id);
         }
+    }
+
+    function handleView() {
+        setViewData(form);
     }
 
     return <div
@@ -40,7 +44,7 @@ function Form({form, idx, view, addForm, removeForm}) {
             {form.message}
           </span>
         <span className="text-sm cursor-pointer text-blue-500 hover:underline"
-              onClick={view}> View </span>
+              onClick={handleView}> View </span>
     </div>
 }
 
