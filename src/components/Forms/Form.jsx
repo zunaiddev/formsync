@@ -1,13 +1,10 @@
 import Checkbox from "../CheckBox/CheckBox.jsx";
-import {useState} from "react";
 
-function Form({form, idx, setViewData, addForm, removeForm}) {
-    const [selected, setSelected] = useState(false);
+function Form({form, idx, setViewData, addForm, removeForm, checked}) {
 
-    async function handleOnChange(e) {
+    function handleOnChange(e) {
         if (e.target.checked) {
             addForm(form.id);
-            setSelected(true);
         } else {
             removeForm(form.id);
         }
@@ -17,12 +14,11 @@ function Form({form, idx, setViewData, addForm, removeForm}) {
         setViewData(form);
     }
 
-    return <div
-        key={form.id}
-        className="flex gap-2 items-center bg-[#1b263b] w-full h-12 rounded-lg relative group border border-transparent hover:border-blue-400 hover:bg-[#1b263c]">
+    return <div key={form.id}
+                className="flex gap-2 items-center bg-[#1b263b] w-full h-12 rounded-lg relative group border border-transparent hover:border-blue-400 hover:bg-[#1b263c]">
         <div
-            className={`flex justify-center items-center cursor-pointer h-full rounded-r-lg px-2 min-w-9 min-h-full group-hover:visible ${selected ? "visible" : "invisible"}`}>
-            <Checkbox onChange={(e) => handleOnChange(e)}/>
+            className={`flex justify-center items-center cursor-pointer h-full rounded-r-lg px-2 min-w-9 min-h-full group-hover:visible ${checked ? "visible" : "invisible"}`}>
+            <Checkbox onChange={handleOnChange} checked={checked}/>
         </div>
         <div
             className="h-full w-5  rounded-l-lg flex items-center justify-center text-white border-r-2 mr-1">

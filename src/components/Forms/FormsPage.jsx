@@ -1,56 +1,41 @@
 import {useEffect, useState} from "react";
 import {deleteForm, fetchData} from "../../services/userService.js";
-import Spinner from "../Loader/Spinner.jsx";
 import {getToken} from "../../services/tokenService.js";
 import Form from "./Form.jsx";
 import FormsHeader from "./FormsHeader.jsx";
 import toast from "react-hot-toast";
 import useConfirm from "../../hooks/useConfirm.jsx";
 import FormView from "./FormView.jsx";
+import MainLoader from "../Loader/MainLoader.jsx";
+import RefreshIcon from "../Icon/RefreshIcon.jsx";
+import Button from "../Button/Button.jsx";
 
 function FormsPage() {
     const [forms, setForms] = useState([]);
-    const [errors, setErrors] = useState(false);
+    const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
     const [formsToDelete, setFormsToDelete] = useState([]);
-    const [showDelete, setShowDelete] = useState(false);
     const [confirm, Confirmation] = useConfirm();
     const [viewData, setViewData] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         (async () => {
-            let response = await fetchData("forms", await getToken());
-            setForms(response.data);
-            setLoading(false);
-            setErrors(!response.success);
+            await loadForms();
         })();
     }, []);
 
-    useEffect(() => {
-        if (formsToDelete.length) {
-            setShowDelete(true);
-        } else {
-            setShowDelete(false);
-        }
-    }, [formsToDelete])
+    async function loadForms() {
+        let response = await fetchData("forms", await getToken());
+        setForms(response.data);
+        setLoading(false);
+        setError(!response.success);
 
-    if (loading) {
-        return <Spinner/>;
+        return response;
     }
 
-    if (errors) {
-        return <h1>Something Went Wrong</h1>;
-    }
-
-    if (!forms.length) {
-        return (
-            <h1 className="text-xl font-bold font-(family-name:--open-sans) text-white m-5">
-                Could Not Found Any Form
-            </h1>
-        );
-    }
-
-    function addForm(id) {
+    function addFormsToDelete(id) {
         setFormsToDelete([...formsToDelete, id]);
     }
 
@@ -63,50 +48,82 @@ function FormsPage() {
     }
 
     async function deleteForms() {
-        const result = await confirm("Are you sure you want to delete forms?");
+        const result = await confirm(`Are you sure you want to delete ${formsToDelete.length === forms.length ? "All" : ""} forms?`);
 
         if (!result) {
             return;
         }
 
-        let id = toast.loading("Deleting Forms...");
-        let token = await getToken();
-        let response = await deleteForm(formsToDelete, token);
-        toast.remove(id);
+        setIsDeleting(true);
+        let response = await deleteForm(formsToDelete, await getToken());
+        setIsDeleting(false);
+
         if (response.success) {
             setForms(forms.filter(form => !formsToDelete.includes(form.id)));
             setFormsToDelete([]);
+
+            toast.success("deleted");
         } else {
             toast.error("Something went wrong");
         }
     }
 
-    async function deleteAll() {
-        console.log("delete all fun called")
-        const result = await confirm("Are you sure you want to delete All forms?");
+    async function handleRefresh() {
+        setRefreshing(true);
+        let response = await loadForms();
+        setRefreshing(false);
 
-        if (!result) {
+        if (response.success) {
+            setFormsToDelete([]);
+
+            if (response.data.length) {
+                toast.success("Refreshed");
+            } else {
+                toast.error("No Forms Found!");
+            }
+
             return;
         }
 
-        let id = toast.loading("Deleting Forms...");
-        setFormsToDelete([]);
-        let ids = forms.map(form => form.id);
-        let token = await getToken();
-        let response = await deleteForm(ids, token);
-        toast.remove(id);
-        if (response.success) {
-            setForms([]);
-        } else {
-            toast.error("Something went wrong");
+        toast.error("Could Not Refresh");
+    }
+
+    function handleSelectAll() {
+        if (formsToDelete.length === forms.length) {
+            setFormsToDelete([]);
+            return;
         }
+
+        setFormsToDelete(forms.map((form) => form.id));
+    }
+
+    if (loading) {
+        return <MainLoader/>;
+    }
+
+    if (error) {
+        return <h1>Something Went Wrong</h1>;
+    }
+
+    if (!forms.length) {
+        return (<div className="w-full h-full flex flex-col justify-center items-center">
+                <h1 className="text-xl font-bold font-(family-name:--open-sans) text-white m-5">
+                    Could Not Found Any Forms
+                </h1>
+                <Button icon={RefreshIcon} text="Refresh" onClick={handleRefresh} isSubmitting={refreshing}
+                        className="!w-fit"/>
+            </div>
+        );
     }
 
     return (
         <div className="flex items-center gap-4 flex-col sm:p-2 md:p-4 relative min-h-screen">
-            <FormsHeader showDelete={showDelete} deleteOne={deleteForms} deleteAll={deleteAll}/>
-            {forms.map((form, idx) => <Form key={form.id} form={form} idx={idx} addForm={addForm}
-                                            removeForm={removeFormToDelete} setViewData={setViewData}/>)}
+            <FormsHeader onSelectAll={handleSelectAll} showDelete={formsToDelete.length > 0}
+                         deleteOne={deleteForms} checked={formsToDelete.length === forms.length}
+                         deleting={isDeleting} onRefresh={handleRefresh} refreshing={refreshing}/>
+            {forms.map((form, idx) => <Form key={form.id} form={form} idx={idx} addForm={addFormsToDelete}
+                                            removeForm={removeFormToDelete} setViewData={setViewData}
+                                            checked={formsToDelete.includes(form.id)}/>)}
             {viewData && <FormView data={viewData} onClose={() => setViewData(null)} removeForm={removeForm}/>}
 
             {Confirmation}
