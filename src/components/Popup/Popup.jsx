@@ -12,9 +12,10 @@ const Popup = ({topLabel, name, label, placeholder, btnText, validation, isOpen,
 
     if (!isOpen) return null;
 
-    const submit = (data) => {
-        onSubmit(data);
+    const submit = async (data) => {
+        await onSubmit(data);
         reset();
+        onClose();
     };
 
     return (

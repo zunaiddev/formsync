@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import PropTypes from "prop-types";
-import {addDomain, fetchData, generateKey, regenerateKey, removeDomain} from "../services/userService.js";
+import {addDomain, fetchData, generateKey, regenerateKey} from "../services/userService.js";
 import {getToken} from "../services/tokenService.js";
 import {HttpStatusCode} from "axios";
 import {useEffect, useState} from "react";
@@ -68,9 +68,6 @@ function Dashboard() {
         setShowPopup(true);
     }
 
-    function handleRemoveDomain() {
-    }
-
     async function generate(domain) {
         let response = await generateKey(domain, await getToken());
         if (response) {
@@ -94,8 +91,11 @@ function Dashboard() {
         toast.error("Something went wrong");
     }
 
-    async function remove(domain) {
-        let response = await removeDomain(domain, await getToken());
+    function remove(id) {
+        setKeyInfo(prev => ({
+            ...prev,
+            domains: prev.domains.filter(domain => domain.id !== id)
+        }));
     }
 
     if (loading) {
@@ -108,7 +108,7 @@ function Dashboard() {
                 <KeyCard apiKey={key} role={role} active={active} requests={requests} domains={domains}
                          regenerate={regenerate}
                          addDomain={handleAddDomain}
-                         handleDeleteDomain={handleRemoveDomain}
+                         remove={remove}
                 />
             ) : (
                 <button
@@ -131,6 +131,9 @@ function Dashboard() {
                 validation={{
                     required: "domain is required",
                     pattern: {value: /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,6}$/, message: "Invalid domain name"},
+                    validate: (value) => {
+                        return domains.filter(domain => domain.domain === value).length <= 0 ? true : "Domain Already Exists";
+                    }
                 }}
             />
 

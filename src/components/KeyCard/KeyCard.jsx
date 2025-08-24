@@ -1,8 +1,29 @@
 import {DocumentDuplicateIcon} from "@heroicons/react/16/solid/index.js";
 import PropTypes from "prop-types";
 import copyToClipboard from "../../util/copyToClipboard.js";
+import {getToken} from "../../services/tokenService.js";
+import {HttpStatusCode} from "axios";
+import toast from "react-hot-toast";
+import {removeDomain} from "../../services/userService.js";
+import {useState} from "react";
+import {Spinner} from "@material-tailwind/react";
 
-function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain, handleDeleteDomain}) {
+function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain, remove}) {
+    const [deleting, setDeleting] = useState(null);
+
+    async function handleDeleteDomain(id) {
+        setDeleting(id);
+        let status = await removeDomain(id, await getToken());
+        setDeleting(null);
+
+        if (status === HttpStatusCode.NoContent) {
+            remove(id);
+            toast.success("Deleted");
+        } else {
+            toast.error("Something Went Wrong!");
+        }
+    }
+
     return (
         <div
             className={`shadow-lg rounded-2xl p-6 w-fit bg-[var(--bg-secondary)] relative mx-auto sm:mx-0 ${role === "ULTIMATE" ? "border-2 border-yellow-400" : role === "ADMIN" && "border-2 border-blue-400"}`}>
@@ -54,25 +75,31 @@ function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain
                     <div className="flex flex-wrap gap-2 max-w-4xl">
                         {domains.map((domain) => (
                             <div
-                                key={domain}
+                                key={domain.id}
                                 className="flex items-center gap-2 bg-gray-700 text-white px-3 py-1 rounded-full text-sm shadow-sm"
                             >
-                                <span>{domain}</span>
+                                <span>{domain.domain}</span>
                                 <button
-                                    className="hover:text-red-400 transition-colors"
-                                    onClick={() => handleDeleteDomain(domain)}
+                                    className="hover:text-red-400 transition-colors cursor-pointer disabled:cursor-not-allowed"
+                                    onClick={() => handleDeleteDomain(domain.id)}
                                     title="Delete Domain"
+                                    disabled={deleting === domain.id}
                                 >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-4 w-4"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                              d="M6 18L18 6M6 6l12 12"/>
-                                    </svg>
+                                    {deleting === domain.id ? (
+                                        <Spinner className="size-4 px-0.5"/>
+                                    ) : (
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-4 w-4"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                  d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    )}
+
                                 </button>
                             </div>
                         ))}
@@ -109,7 +136,7 @@ KeyCard.propTypes = {
     domains: PropTypes.array.isRequired,
     regenerate: PropTypes.func.isRequired,
     addDomain: PropTypes.func.isRequired,
-    handleDeleteDomain: PropTypes.func.isRequired,
+    remove: PropTypes.func.isRequired,
 }
 
 export default KeyCard;

@@ -108,8 +108,16 @@ export async function addDomain(domain) {
     }
 }
 
-export async function removeDomain(domain, token) {
-    return true;
+export async function removeDomain(id, token) {
+    try {
+        return (await API.delete(`/user/key/domain/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })).status;
+    } catch (err) {
+        return err.status;
+    }
 }
 
 export async function deleteUser(token, data) {
