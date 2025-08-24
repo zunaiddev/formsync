@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {fetchData} from "../../services/userService.js";
 import {getToken} from "../../services/tokenService.js";
-import Spinner from "../Loader/Spinner.jsx";
+import MainLoader from "../Loader/MainLoader.jsx";
 
 function ProfilePage() {
     const [{name, email, role, createdAt}, setInfo] = useState({});
@@ -23,7 +23,7 @@ function ProfilePage() {
     }, []);
 
     if (loading) {
-        return <Spinner/>;
+        return <MainLoader/>;
     }
 
     if (error) {
@@ -40,15 +40,15 @@ function ProfilePage() {
                 <div className="flex flex-col md:flex-row items-start gap-10">
 
                     <div
-                        className="w-32 h-32 rounded-full bg-white/10 border border-white/20 text-white text-5xl font-semibold flex items-center justify-center shadow-lg">
-                        {name.substring(0, 1)}
+                        className="w-32 select-none h-32 rounded-full bg-white/10 border border-white/20 text-white text-5xl font-semibold flex items-center justify-center shadow-lg">
+                        {name.substring(0, 1).toUpperCase()}
                     </div>
 
 
                     <div className="flex-1 space-y-6">
                         <div>
                             <p className="text-sm text-gray-400">Name</p>
-                            <p className="text-xl font-medium">{name}</p>
+                            <p className="text-xl font-medium">{name.substring(0, 1).toUpperCase()}{name.substring(1)}</p>
                         </div>
 
                         <div>
