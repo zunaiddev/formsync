@@ -8,7 +8,7 @@ function FormsHeader({checked, onSelectAll, showDelete, deleteOne, deleting, onR
 
 
     return (
-        <header className="flex gap-3 w-full  text-white p-3 min-h-14 ">
+        <header className="flex gap-3 w-full text-white p-3 min-h-14 ">
 
             <Checkbox text="Select All" onChange={onSelectAll} checked={checked}/>
             {showDelete &&

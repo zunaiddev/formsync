@@ -76,7 +76,7 @@ function Contact() {
                         />
                         {errors.message && <small className="text-red-600">{errors.message.message}</small>}
                     </div>
-                    <Button type="submit" text="Submit" isSubmitting={true}/>
+                    <Button type="submit" text="Submit" isSubmitting={isSubmitting}/>
                 </form>
             </div>
         </div>
