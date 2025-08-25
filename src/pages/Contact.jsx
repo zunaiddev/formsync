@@ -10,6 +10,7 @@ function Contact() {
         register,
         handleSubmit,
         formState: {errors, isSubmitting},
+        reset
     } = useForm();
 
     async function onSubmit(data) {
@@ -19,12 +20,14 @@ function Contact() {
                 "content-type": "application/json"
             },
         })
+
         if (response.status === HttpStatusCode.Ok) {
-            toast.success("We Will Connect to you shortly");
+            toast.success("We'll Connect to you shortly");
+            reset();
             return;
         }
 
-        toast.error("Something went wrong");
+        toast.error("Something went wrong")
     }
 
     return (
