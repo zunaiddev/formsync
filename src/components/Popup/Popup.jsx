@@ -1,6 +1,7 @@
 import {useForm} from "react-hook-form";
 import {XMarkIcon} from "@heroicons/react/24/solid/index.js";
 import PropTypes from "prop-types";
+import ButtonLoader from "../Loader/ButtonLoader.jsx";
 
 const Popup = ({topLabel, name, label, placeholder, btnText, validation, isOpen, onSubmit, onClose}) => {
     const {
@@ -46,8 +47,8 @@ const Popup = ({topLabel, name, label, placeholder, btnText, validation, isOpen,
                                 {errors[name] && <small className="text-red-600 ml-1">{errors[name].message}</small>}
                             </div>
                             <button type="submit" disabled={isSubmitting}
-                                    className="w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 cursor-pointer">
-                                {isSubmitting ? "Submitting" : (btnText || "Submit")}
+                                    className="w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 cursor-pointer disabled:bg-blue-800 disabled:cursor-not-allowed">
+                                {isSubmitting ? <ButtonLoader/> : (btnText || "Submit")}
                             </button>
                         </form>
                     </div>

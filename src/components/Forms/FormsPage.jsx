@@ -110,14 +110,14 @@ function FormsPage() {
                 <h1 className="text-xl font-bold font-(family-name:--open-sans) text-white m-5">
                     Could Not Found Any Forms
                 </h1>
-                <Button icon={RefreshIcon} text="Refresh" onClick={handleRefresh} isSubmitting={refreshing}
-                        className="!w-fit"/>
+                <Button icon={RefreshIcon} text="Refresh" onClick={handleRefresh}
+                        isSubmitting={refreshing} className="!w-fit"/>
             </div>
         );
     }
 
     return (
-        <div className="flex items-center gap-4 flex-col sm:p-2 md:p-4 relative min-h-screen">
+        <div className="flex items-center gap-4 flex-col p-2 md:p-4 relative min-h-screen">
             <FormsHeader onSelectAll={handleSelectAll} showDelete={formsToDelete.length > 0}
                          deleteOne={deleteForms} checked={formsToDelete.length === forms.length}
                          deleting={isDeleting} onRefresh={handleRefresh} refreshing={refreshing}/>

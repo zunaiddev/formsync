@@ -14,7 +14,7 @@ function Sidebar({show, onClose}) {
     let isMobile = window.innerWidth <= 768;
 
     return (
-        <div className={`flex items-center h-screen bg-[var(bg-secondary)] border-r-1 fixed left-0
+        <div className={`flex items-center h-screen bg-[var(bg-secondary)] sm:border-r-1 fixed left-0
          top-0 z-10 text-white transition duration-75 ${show ? "translate-x-0" : "translate-x-[-100%]"} ${isMobile && show && "w-screen"}`}>
             <Card
                 className="h-full w-full max-w-[12rem] p-4 shadow-xl shadow-blue-gray-900/5 text-white bg-[var(--primary)]">
