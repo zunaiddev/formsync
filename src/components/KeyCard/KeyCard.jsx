@@ -4,7 +4,7 @@ import copyToClipboard from "../../util/copyToClipboard.js";
 import {getToken} from "../../services/tokenService.js";
 import {HttpStatusCode} from "axios";
 import toast from "react-hot-toast";
-import {removeDomain} from "../../services/userService.js";
+import {deleteDomain} from "../../services/userService.js";
 import {useState} from "react";
 import {Spinner} from "@material-tailwind/react";
 
@@ -13,7 +13,7 @@ function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain
 
     async function handleDeleteDomain(id) {
         setDeleting(id);
-        let status = await removeDomain(id, await getToken());
+        let status = await deleteDomain(id, await getToken());
         setDeleting(null);
 
         if (status === HttpStatusCode.NoContent) {

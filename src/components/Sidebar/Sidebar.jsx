@@ -7,7 +7,7 @@ import {
     PresentationChartBarIcon,
     UserCircleIcon,
 } from "@heroicons/react/24/solid";
-import {logout} from "../../services/userService.js";
+import {logout} from "../../services/authService.js";
 import MenuItem from "./MenuItem.jsx";
 
 function Sidebar({show, onClose}) {

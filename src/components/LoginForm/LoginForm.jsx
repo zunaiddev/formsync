@@ -1,9 +1,12 @@
 import {useForm} from 'react-hook-form';
 import InputField from "../Inputs/InputsField.jsx";
 import Button from "../Button/Button.jsx";
-import login from "../../services/authService.js";
+import {login} from "../../services/authService.js";
 import {Link, useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
+import ErrorType from "../../util/ErrorType.js";
+import {HttpStatusCode} from "axios";
+import AuthForm from "../AuthForm/AuthForm.jsx";
 
 function Login() {
     const navigate = useNavigate();
@@ -17,31 +20,37 @@ function Login() {
 
     async function onSubmit(data) {
         data.email = data.email.toLowerCase();
-        let response = await login(data.email, data.password);
+        let {data: resData, error} = await login(data);
 
 
-        if (response.success) {
-            localStorage.setItem("accessToken", response.token);
+        if (resData) {
+            localStorage.setItem("accessToken", resData.data.token);
             navigate("/dashboard");
-        }
-
-        if (response.status === 500) {
-            toast.error("server Not responding");
             return;
         }
 
-        if (response.status === 401) {
-            toast.error("Invalid email or password");
-            resetField("password");
+        if (error.type === ErrorType.server) {
+            if (error.status === HttpStatusCode.Unauthorized) {
+                toast.error("Invalid email or password");
+                resetField("password");
+                return;
+            } else if (error.status === HttpStatusCode.Forbidden) {
+                toast.error("Please Verify Your Email.");
+            } else {
+                toast.error("Unexpected Server Error");
+            }
+
             return;
         }
 
-        if (response.status === 403) {
-            toast.error("Please Verify Your Email.");
+        if (error.type === ErrorType.network) {
+            toast.error("Server Not Responding");
+        } else {
+            toast.error("Something went wrong");
         }
     }
 
-    return (<div className="w-full flex justify-center items-center p-3 ">
+    return (<AuthForm isSignup={false}>
         <form className="w-full flex flex-col justify-center items-center gap-5"
               onSubmit={handleSubmit(onSubmit)} autoComplete="on">
             <InputField
@@ -55,32 +64,30 @@ function Login() {
                 autoComplete="email"
             />
 
-            <InputField
-                name="password"
-                label="Password"
-                placeholder={"password"}
-                type="password"
-                register={register("password", {
-                    required: "Password is required",
-                })}
-                error={errors.password}
-                autoComplete="password"
-            />
+            <div className="w-full flex items-end flex-col gap-2">
+                <InputField
+                    name="password"
+                    label="Password"
+                    placeholder={"password"}
+                    type="password"
+                    register={register("password", {
+                        required: "Password is required",
+                    })}
+                    error={errors.password}
+                    autoComplete="password"
+                />
 
-            <div className="flex justify-end items-center w-full px-1">
-                <span className="text-blue-700 text-sm cursor-pointer hover:underline">
+
+                <span className="text-blue-600 text-sm cursor-pointer hover:underline">
                                 <Link to="/forget-password">Forget Password</Link>
-                </span>
+            </span>
             </div>
+
 
             <Button type="submit" text="login"
                     isSubmitting={isSubmitting}/>
-            <p><Link to={"/auth/signup"} className="text-white">
-                Don&#39;t Have an account? <span
-                className="text-blue-700 hover:underline hover:text-blue-800">signup</span>
-            </Link></p>
         </form>
-    </div>);
+    </AuthForm>);
 }
 
 export default Login;

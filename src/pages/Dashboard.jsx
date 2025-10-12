@@ -1,44 +1,33 @@
 import toast from "react-hot-toast";
-import PropTypes from "prop-types";
-import {addDomain, fetchData, generateKey, regenerateKey} from "../services/userService.js";
-import {getToken} from "../services/tokenService.js";
+import {addDomain, getApiKey, reGenerateApiKey} from "../services/userService.js";
 import {HttpStatusCode} from "axios";
 import {useEffect, useState} from "react";
 import useConfirm from "../hooks/useConfirm.jsx";
 import MainLoader from "../components/Loader/MainLoader.jsx";
 import Popup from "../components/Popup/Popup.jsx";
 import KeyCard from "../components/KeyCard/KeyCard.jsx";
+import {useQuery} from '@tanstack/react-query';
 
 function Dashboard() {
     const [{domains, key, requests, role, active}, setKeyInfo] = useState({domains: []});
-    const [isKey, setKey] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
-    const [loading, setLoading] = useState(true);
     const [confirm, Confirmation] = useConfirm();
 
+    const {data, isLoading, error} = useQuery({
+        queryKey: ["apiKey"],
+        queryFn: getApiKey,
+        retry: 1
+    });
+
     useEffect(() => {
-        (async () => {
-            const token = await getToken();
-            if (!token) {
-                return;
-            }
+        if (data) {
+            setKeyInfo(data.data);
+        }
+    }, [data]);
 
-            let response = await fetchData("key", token);
-            setLoading(false);
-            if (!response.success) {
-                toast.error("Something went wrong");
-                return;
-            }
-
-            if (response.data == null) {
-                setKey(false);
-                return;
-            }
-
-            setKey(true);
-            setKeyInfo(response.data);
-        })();
-    }, []);
+    useEffect(() => {
+        console.log(key);
+    }, [key]);
 
     async function regenerate() {
         const result = await confirm(undefined, undefined, <div
@@ -58,9 +47,9 @@ function Dashboard() {
         );
         if (!result) return;
 
-        let response = await regenerateKey(await getToken());
-        if (response) {
-            setKeyInfo(response.data);
+        let {data} = await reGenerateApiKey();
+        if (data) {
+            setKeyInfo(data);
         }
     }
 
@@ -69,12 +58,7 @@ function Dashboard() {
     }
 
     async function generate(domain) {
-        let response = await generateKey(domain, await getToken());
-        if (response) {
-            toast.success("Key generated successfully");
-            setKey(true);
-            setKeyInfo(response.data);
-        }
+
     }
 
     async function add(domain) {
@@ -98,13 +82,13 @@ function Dashboard() {
         }));
     }
 
-    if (loading) {
+    if (isLoading) {
         return <MainLoader/>;
     }
 
     return (
         <div className="h-full px-1 md:px-6 pt-8 text-white relative">
-            {isKey ? (
+            {key ? (
                 <KeyCard apiKey={key} role={role} active={active} requests={requests} domains={domains}
                          regenerate={regenerate}
                          addDomain={handleAddDomain}
@@ -120,13 +104,13 @@ function Dashboard() {
             )}
 
             <Popup
-                onSubmit={isKey ? add : generate}
+                onSubmit={key ? add : generate}
                 isOpen={showPopup}
                 onClose={() => setShowPopup(false)}
-                topLabel={isKey ? "Add Domain" : "Generate Key"}
+                topLabel={key ? "Add Domain" : "Generate Key"}
                 label="Enter Domain name"
                 placeholder="www.example.com"
-                btnText={isKey ? "Add" : "Generate"}
+                btnText={key ? "Add" : "Generate"}
                 name="domain"
                 validation={{
                     required: "domain is required",
@@ -141,12 +125,5 @@ function Dashboard() {
         </div>
     );
 }
-
-Dashboard.propTypes = {
-    isKey: PropTypes.bool.isRequired,
-    apiKey: PropTypes.string,
-    reqLeft: PropTypes.number,
-    domains: PropTypes.arrayOf(PropTypes.string),
-};
 
 export default Dashboard;

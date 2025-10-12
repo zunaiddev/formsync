@@ -1,74 +1,48 @@
 import API from "../api.js";
+import ErrorType from "../util/ErrorType.js";
+import {HttpStatusCode} from "axios";
+import postReq from "../util/postReq.js";
 
-export async function login(email, password) {
+async function login(data) {
+    const email = data.email;
+    const password = data.password;
+
     let emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     let passwordReg = /^(?!.*\\s)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$&*]).{8,20}$/;
+
     if (!emailReg.test(email) || !passwordReg.test(password)) {
-        return {
-            success: false,
-            status: 401,
-            token: null
-        };
+        return {type: ErrorType.server, status: HttpStatusCode.Unauthorized};
     }
 
-
-    try {
-        const response = await API.post("/auth/login", {email, password});
-        return {
-            success: true,
-            status: response.status,
-            token: response.data.data.token,
-        };
-    } catch (error) {
-        console.error("Error response sent");
-        return {
-            success: false,
-            status: error.response ? error.response.status : 500,
-            token: null
-        };
-    }
+    return await postReq("/auth/login", {email, password});
 }
 
-export async function signup(name, email, password) {
-    try {
-        let response = await API.post("/auth/signup", {name, email, password});
-        return {success: true, data: response.data, statusCode: response.status};
-    } catch (err) {
-        return {success: false, data: null, statusCode: err.response.status};
-    }
+async function signup(data) {
+    return await postReq("/auth/signup", data);
 }
 
-export async function verifyToken(token) {
-    try {
-        let response = await API.get(`/verify`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return {
-            success: true,
-            message: response.data.message,
-            data: response.data.data,
-            statusCode: response.status,
-        };
-    } catch (err) {
-        console.log("Error Response:", err.response);
-
-        return {
-            success: false,
-            message: err.response.data,
-            statusCode: err.response.status,
-        };
-    }
+async function refreshToken() {
+    let response = await API.post("/auth/refresh");
+    return response?.data;
 }
 
-export async function forgotPassword(email) {
-    try {
-        await API.post("/auth/forget-password", {email: email});
-        return true;
-    } catch {
-        return false;
-    }
+async function forgetPassword(email) {
+    let response = await API.post("/auth/forget-password", {email});
+    return response?.data;
 }
 
-export default login;
+async function logout() {
+    let response = await API.post("/auth/logout");
+    return response?.data;
+}
+
+async function verifyToken(token) {
+    let response = await API.get(`/verify`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return response?.data;
+}
+
+export {login, signup, refreshToken, forgetPassword, logout, verifyToken};

@@ -1,5 +1,5 @@
 import {isTokenExpired} from "../util/jwt.js";
-import {refreshToken} from "./userService.js";
+import {refreshToken} from "./authService.js";
 
 export async function getToken() {
     let token = localStorage.getItem("accessToken");

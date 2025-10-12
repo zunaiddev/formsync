@@ -1,52 +1,48 @@
-import PropTypes from "prop-types";
-import hideIcon from '../../assets/hide.svg';
-import showIcon from '../../assets/show.svg';
 import {useState} from "react";
+import EyeOnIcon from "../icons/EyeOnIcon.jsx";
+import EyeOffIcon from "../icons/EyeOffIcon.jsx";
 
 function InputField({
-                        name,
-                        label = "",
-                        type = "text",
-                        placeholder = "",
-                        register = null,
-                        error = null,
-                        autoComplete = "off"
+                        label = null, placeholder = "", autoComplete, type = "text",
+                        register, error, autoFocus = false
                     }) {
-    const [isVisible, setVisible] = useState(false);
+    const [show, setShow] = useState(false);
+
+    function handleShow() {
+        setShow(!show);
+    }
 
     return (
-        <div className="w-full text-white">
-            <small>{label}</small>
-            <div className="flex items-center justify-between relative">
+        <div className="w-full flex flex-col">
+            {label && <label className="block mb-1 text-sm font-medium text-gray-300">{label}</label>}
+            <div className="relative">
                 <input
-                    className={`w-full h-8 border rounded-sm bg-gray-800 pl-1 pr-7 py-4 text-sm outline-none ${error && "border-red-600"}`}
-                    type={type === "password" ? (isVisible ? "text" : "password") : type}
+                    className={`shadow-xs border border-gray-700 text-sm rounded-sm focus:border-blue-500 outline-none block w-full p-2.5 bg-gray-700 
+                     placeholder-gray-400 text-white
+                      ${error && "border-red-600"} ${type === "password" && "pr-9"}`}
+                    autoFocus={autoFocus}
                     placeholder={placeholder}
                     autoComplete={autoComplete}
-                    name={name}
-                    {...register}
-                />
-                {type === "password" &&
-                    <img
-                        src={isVisible ? hideIcon : showIcon}
-                        alt="Toggle visibility"
-                        className="size-4 absolute right-2 cursor-pointer"
-                        onClick={() => setVisible(!isVisible)}
-                    />}
+                    type={type === "password" ? (show ? "text" : "password") : type}
+                    {...register}/>
+                {type === "password" && (show ?
+                        <div
+                            className="absolute top-[50%] bottom-[50%] translate-y-[-50%] right-2 text-gray-400 size-5 cursor-pointer"
+                            onClick={handleShow}>
+                            <EyeOnIcon/>
+                        </div> :
+                        <div
+                            className="absolute top-[50%] bottom-[50%] translate-y-[-50%] right-2 text-gray-400 size-5 cursor-pointer"
+                            onClick={handleShow}>
+                            <EyeOffIcon/>
+                        </div>
+                )}
+
             </div>
-            {error && <small className="text-red-600">{error.message}</small>}
+
+            {error?.message && <span className="text-[12px] ml-1 text-red-600 mt-1">{error.message}</span>}
         </div>
     );
-}
-
-InputField.propTypes = {
-    label: PropTypes.string.isRequired,
-    type: PropTypes.string,
-    placeholder: PropTypes.string,
-    register: PropTypes.object.isRequired,
-    error: PropTypes.object.isRequired,
-    ref: PropTypes.object,
-    autoComplete: PropTypes.string,
 }
 
 export default InputField;
