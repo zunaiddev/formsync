@@ -1,8 +1,7 @@
 import Button from "../Button/Button.jsx";
 import InputField from "../Inputs/InputsField.jsx";
 import {useForm} from "react-hook-form";
-import CheckIcon from "../Icon/CheckIcon.jsx";
-import CrossIcon from "../Icon/CrossIcon.jsx";
+import {X} from "lucide-react";
 
 function ResetPasswordForm() {
     const {
@@ -61,7 +60,7 @@ function ResetPasswordForm() {
                             <li className={`flex items-center gap-2 ${rule.isValid ? "text-green-500" : "text-red-500"}`}
                                 key={i}>
 
-                                {rule.isValid ? <CheckIcon/> : <CrossIcon/>}
+                                {rule.isValid ? <X/> : <X/>}
                                 <span>{rule.label}</span>
                             </li>)
                     })}

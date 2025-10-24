@@ -1,6 +1,6 @@
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import {Outlet} from "react-router-dom";
-import {Bars3BottomLeftIcon} from "@heroicons/react/16/solid/index.js";
+import {Menu} from "lucide-react";
 import {useState} from "react";
 
 function DashboardLayout() {
@@ -12,7 +12,7 @@ function DashboardLayout() {
         <div className={`relative w-full  ${isDesktop ? "ml-44" : "pt-6"}`}>
             <Outlet/>
         </div>
-        <Bars3BottomLeftIcon
+        <Menu
             className={`absolute w-7 h-7 left-1 top-1 text-white cursor-pointer ${show ? "hidden" : "visible"}`}
             onClick={() => setShow(true)}/>
     </main>;

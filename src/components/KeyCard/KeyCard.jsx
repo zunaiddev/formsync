@@ -1,4 +1,3 @@
-import {DocumentDuplicateIcon} from "@heroicons/react/16/solid/index.js";
 import PropTypes from "prop-types";
 import copyToClipboard from "../../util/copyToClipboard.js";
 import {getToken} from "../../services/tokenService.js";
@@ -6,7 +5,7 @@ import {HttpStatusCode} from "axios";
 import toast from "react-hot-toast";
 import {deleteDomain} from "../../services/userService.js";
 import {useState} from "react";
-import {Spinner} from "@material-tailwind/react";
+import {Copy} from "lucide-react";
 
 function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain, remove}) {
     const [deleting, setDeleting] = useState(null);
@@ -49,7 +48,7 @@ function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain
                         className="ml-2 text-blue-500 hover:text-blue-600 cursor-pointer"
                         onClick={() => copyToClipboard(apiKey)}
                     >
-                        <DocumentDuplicateIcon className="h-5 w-5"/>
+                        <Copy className="h-5 w-5"/>
                     </button>
                 </div>
             </div>

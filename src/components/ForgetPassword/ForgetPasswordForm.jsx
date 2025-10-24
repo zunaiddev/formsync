@@ -54,7 +54,9 @@ function ForgetPasswordForm() {
                     autoComplete="email"
                 />
 
-                <Button type="submit" text="Submit" isSubmitting={isSubmitting}/>
+                <Button type="submit" isSubmitting={isSubmitting}>
+                    Submit
+                </Button>
                 <LinkField label="Remembered your password" linkText="Sign in" to="/auth/signin"/>
             </form>
         </div>

@@ -64,8 +64,10 @@ function FormView({data, onClose, removeForm}) {
                     <small>{data.submittedAt.substring(11)}</small>
                 </div>
 
-                <Button className="bg-red-500 border-white outline-0 hover:bg-red-600" text="Delete"
-                        isSubmitting={deleting} onClick={handleDelete}/>
+                <Button className="bg-red-500 border-white outline-0 hover:bg-red-600"
+                        isSubmitting={deleting} onClick={handleDelete}>
+                    Delete
+                </Button>
             </div>
             {Confirmation}
         </div>

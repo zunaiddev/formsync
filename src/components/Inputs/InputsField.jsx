@@ -1,6 +1,5 @@
 import {useState} from "react";
-import EyeOnIcon from "../icons/EyeOnIcon.jsx";
-import EyeOffIcon from "../icons/EyeOffIcon.jsx";
+import {Eye, EyeOff} from "lucide-react";
 
 function InputField({
                         label = null, placeholder = "", autoComplete, type = "text",
@@ -25,17 +24,12 @@ function InputField({
                     autoComplete={autoComplete}
                     type={type === "password" ? (show ? "text" : "password") : type}
                     {...register}/>
-                {type === "password" && (show ?
-                        <div
+                {type === "password" && (
+                    <button type="button"
                             className="absolute top-[50%] bottom-[50%] translate-y-[-50%] right-2 text-gray-400 size-5 cursor-pointer"
                             onClick={handleShow}>
-                            <EyeOnIcon/>
-                        </div> :
-                        <div
-                            className="absolute top-[50%] bottom-[50%] translate-y-[-50%] right-2 text-gray-400 size-5 cursor-pointer"
-                            onClick={handleShow}>
-                            <EyeOffIcon/>
-                        </div>
+                        {show ? <Eye size={19}/> : <EyeOff size={19}/>}
+                    </button>
                 )}
 
             </div>
