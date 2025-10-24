@@ -12,7 +12,7 @@ const Docs = lazy(() => import("../pages/Docs.jsx"));
 const Contact = lazy(() => import("../pages/Contact.jsx"));
 const Login = lazy(() => import("../pages/Login.jsx"));
 const Signup = lazy(() => import("../pages/Signup.jsx"));
-const VerifyEmail = lazy(() => import("../pages/VerifyEmail.jsx"));
+const VerifyEmail = lazy(() => import("../pages/./CheckEmail"));
 const Verify = lazy(() => import("../pages/Verify.jsx"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword.jsx"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword.jsx"));
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
         ),
         children: [
             {
-                path: "",
+                index: true,
                 element: <Home/>,
             },
             {
@@ -106,7 +106,7 @@ const router = createBrowserRouter([
         ),
     },
     {
-        path: "/verify-email",
+        path: "/check-email",
         element: (
             <Suspense fallback={<TopLoader/>}>
                 <VerifyEmail/>

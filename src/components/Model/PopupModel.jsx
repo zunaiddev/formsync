@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import {XMarkIcon} from "@heroicons/react/24/solid/index.js";
+import {X} from "lucide-react";
 
 function PopupModel({message, desc, onSubmit, onClose, custom, buttonText}) {
     return (
@@ -9,7 +9,7 @@ function PopupModel({message, desc, onSubmit, onClose, custom, buttonText}) {
                 <div className="relative rounded-lg shadow-sm bg-gray-700 pt-4">
                     <button type="button" onClick={onClose}
                             className="absolute top-3 end-2.5 text-gray-400 bg-transparent rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white">
-                        <XMarkIcon className="h-6 w-6 text-gray-400"/>
+                        <X className="h-6 w-6 text-gray-400"/>
                     </button>
                     <div className={`p-4 md:p-5 ${!custom && 'text-center'}`}>
                         <svg className="mx-auto mb-4 size-10 text-gray-200" aria-hidden="true"

@@ -4,9 +4,9 @@ import Button from "../Button/Button.jsx";
 import {login} from "../../services/authService.js";
 import {Link, useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
-import ErrorType from "../../util/ErrorType.js";
 import {HttpStatusCode} from "axios";
 import AuthForm from "../AuthForm/AuthForm.jsx";
+import {useMutation} from "@tanstack/react-query";
 
 function Login() {
     const navigate = useNavigate();
@@ -18,36 +18,26 @@ function Login() {
         resetField
     } = useForm();
 
-    async function onSubmit(data) {
-        data.email = data.email.toLowerCase();
-        let {data: resData, error} = await login(data);
-
-
-        if (resData) {
-            localStorage.setItem("accessToken", resData.data.token);
+    const {mutate, isPending} = useMutation({
+        mutationFn: login,
+        onSuccess: (data) => {
+            localStorage.setItem("accessToken", data.token);
             navigate("/dashboard");
-            return;
-        }
+        },
+        onError: error => {
+            let status = error.response.status;
 
-        if (error.type === ErrorType.server) {
-            if (error.status === HttpStatusCode.Unauthorized) {
-                toast.error("Invalid email or password");
+            if (status === HttpStatusCode.Unauthorized) {
                 resetField("password");
-                return;
-            } else if (error.status === HttpStatusCode.Forbidden) {
-                toast.error("Please Verify Your Email.");
+                toast.error("Invalid Email or Password");
             } else {
-                toast.error("Unexpected Server Error");
+                toast.error("Something went wrong");
             }
-
-            return;
         }
+    });
 
-        if (error.type === ErrorType.network) {
-            toast.error("Server Not Responding");
-        } else {
-            toast.error("Something went wrong");
-        }
+    async function onSubmit(data) {
+        mutate(data);
     }
 
     return (<AuthForm isSignup={false}>
@@ -84,8 +74,9 @@ function Login() {
             </div>
 
 
-            <Button type="submit" text="login"
-                    isSubmitting={isSubmitting}/>
+            <Button type="submit" isSubmitting={isPending}>
+                Sign in
+            </Button>
         </form>
     </AuthForm>);
 }

@@ -8,7 +8,6 @@ import Popup from "../components/Popup/Popup.jsx";
 import KeyCard from "../components/KeyCard/KeyCard.jsx";
 import {useQuery} from '@tanstack/react-query';
 
-
 function Dashboard() {
     const [{domains, key, requests, role, active}, setKeyInfo] = useState({domains: []});
     const [showPopup, setShowPopup] = useState(false);

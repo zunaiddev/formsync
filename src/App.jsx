@@ -5,7 +5,7 @@ import "nprogress/nprogress.css";
 
 function App() {
     return <>
-        <Toaster position="bottom-left"/>
+        <Toaster/>
         <RouterProvider router={router}/>
     </>;
 }

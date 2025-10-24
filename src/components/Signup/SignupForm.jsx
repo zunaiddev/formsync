@@ -3,10 +3,10 @@ import Button from "../Button/Button.jsx";
 import {useForm} from "react-hook-form";
 import {signup} from "../../services/authService.js";
 import {useNavigate} from "react-router-dom";
-import toast from "react-hot-toast";
 import {HttpStatusCode} from "axios";
-import ErrorType from "../../util/ErrorType.js";
 import AuthForm from "../AuthForm/AuthForm.jsx";
+import {useMutation} from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 function SignupForm() {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ function SignupForm() {
         register,
         handleSubmit,
         watch,
-        formState: {errors, isSubmitting},
+        formState: {errors},
         setError,
     } = useForm({
         defaultValues: {
@@ -26,33 +26,26 @@ function SignupForm() {
         }
     });
 
-    async function onSubmit(data, e) {
-        e.preventDefault();
-        let {data: responseData, error} = await signup(data);
-
-        if (responseData) {
-            toast.success("Please Verify Your email.");
+    const {mutate, isPending} = useMutation({
+        mutationFn: signup,
+        onSuccess: () => {
+            toast.success("Please Verify Your email.", {});
             navigate("/verify-email");
-            return;
-        }
+        },
+        onError: error => {
+            const status = error?.response?.status;
 
-        if (error) {
-            if (error.type === ErrorType.server) {
-                if (error.status === HttpStatusCode.Conflict) {
-                    setError("email", {
-                        type: "manual",
-                        message: "User with email Exists."
-                    }, {shouldFocus: true});
-                    return;
-                }
-
-                toast.error("Server Error");
-            } else if (error.type === ErrorType.network) {
-                toast.error("Server Not Responding");
-            } else {
-                toast.error("Something went wrong");
+            if (status === HttpStatusCode.Conflict) {
+                setError("email", {
+                    type: "manual",
+                    message: "User with email Exists."
+                }, {shouldFocus: true});
             }
         }
+    });
+
+    async function onSubmit(data) {
+        mutate(data);
     }
 
     return (
@@ -113,7 +106,9 @@ function SignupForm() {
                     autoComplete="confirm-password"
                 />
 
-                <Button type="submit" text="Sign Up" isSubmitting={isSubmitting}/>
+                <Button type="submit" isSubmitting={isPending}>
+                    Sign up
+                </Button>
             </form>
         </AuthForm>
     );
