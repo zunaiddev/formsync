@@ -15,7 +15,7 @@ async function login(data) {
     let passwordReg = /^(?!.*\\s)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$&*]).{8,20}$/;
 
     if (!emailReg.test(email) || !passwordReg.test(password)) {
-        throw new Unauthorized("Invalid Email or password",);
+        throw new Unauthorized("Invalid Email or password");
     }
 
     return (await API.post("/auth/login", {email, password})).data;
@@ -42,7 +42,7 @@ async function verifyToken(token) {
             Authorization: `Bearer ${token}`,
         },
     });
-    return response?.data;
+    return response.data;
 }
 
 export {login, signup, refreshToken, forgetPassword, logout, verifyToken};

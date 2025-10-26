@@ -1,4 +1,4 @@
-import {Navigate, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import PropTypes from "prop-types";
 import {useEffect, useState} from "react";
 import {getToken} from "../services/tokenService.js";
@@ -24,7 +24,8 @@ const AuthRedirect = ({children}) => {
         return null;
     }
 
-    return authStatus ? <Navigate to="/dashboard" replace state={{redirected: true}}/> : children;
+    return children;
+    // return authStatus ? <Navigate to="/dashboard" replace state={{redirected: true}}/> : children;
 };
 
 AuthRedirect.propTypes = {

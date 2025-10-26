@@ -10,7 +10,7 @@ import TopLoader from "../components/TopLoader/TopLoader.jsx";
 const PublicLayout = lazy(() => import("../layout/PublicLayout.jsx"));
 const Docs = lazy(() => import("../pages/Docs.jsx"));
 const Contact = lazy(() => import("../pages/Contact.jsx"));
-const Login = lazy(() => import("../pages/Login.jsx"));
+const Login = lazy(() => import("../pages/./SignIn.jsx"));
 const Signup = lazy(() => import("../pages/Signup.jsx"));
 const VerifyEmail = lazy(() => import("../pages/./CheckEmail"));
 const Verify = lazy(() => import("../pages/Verify.jsx"));

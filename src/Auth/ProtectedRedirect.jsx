@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import {Navigate, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getToken} from "../services/tokenService.js";
 
@@ -22,7 +22,8 @@ const ProtectedRoute = ({children}) => {
         return null;
     }
 
-    return authStatus ? children : <Navigate to="/auth/login" replace state={{redirected: true}}/>;
+    return children;
+    // return authStatus ? children : <Navigate to="/auth/login" replace state={{redirected: true}}/>;
 };
 
 ProtectedRoute.propTypes = {

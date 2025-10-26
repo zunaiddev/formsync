@@ -1,20 +1,20 @@
 import {useForm} from 'react-hook-form';
-import InputField from "../Inputs/InputsField.jsx";
-import Button from "../Button/Button.jsx";
-import {login} from "../../services/authService.js";
 import {Link, useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
 import {HttpStatusCode} from "axios";
-import AuthForm from "../AuthForm/AuthForm.jsx";
 import {useMutation} from "@tanstack/react-query";
+import {login} from "../services/authService.js";
+import AuthForm from "../components/AuthForm/AuthForm.jsx";
+import InputField from "../components/Inputs/InputsField.jsx";
+import Button from "../components/Button/Button.jsx";
 
-function Login() {
+function SignIn() {
     const navigate = useNavigate();
 
     const {
         register,
         handleSubmit,
-        formState: {errors, isSubmitting},
+        formState: {errors},
         resetField
     } = useForm();
 
@@ -25,11 +25,17 @@ function Login() {
             navigate("/dashboard");
         },
         onError: error => {
-            let status = error.response.status;
+            const status = error.response.status;
 
             if (status === HttpStatusCode.Unauthorized) {
                 resetField("password");
                 toast.error("Invalid Email or Password");
+            } else if (status === HttpStatusCode.Locked) {
+                toast("Your account is locked. connect with us", {
+                    duration: 10000
+                });
+            } else if (status === HttpStatusCode.BadRequest) {
+                toast("Please Verify Your Email address first. or signup again")
             } else {
                 toast.error("Something went wrong");
             }
@@ -81,4 +87,4 @@ function Login() {
     </AuthForm>);
 }
 
-export default Login;
+export default SignIn;
