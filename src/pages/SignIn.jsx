@@ -21,7 +21,7 @@ function SignIn() {
     const {mutate, isPending} = useMutation({
         mutationFn: login,
         onSuccess: (data) => {
-            localStorage.setItem("accessToken", data.token);
+            localStorage.setItem("token", data.token);
             navigate("/dashboard");
         },
         onError: error => {
@@ -72,7 +72,6 @@ function SignIn() {
                     error={errors.password}
                     autoComplete="password"
                 />
-
 
                 <span className="text-blue-600 text-sm cursor-pointer hover:underline">
                                 <Link to="/forget-password">Forget Password</Link>
