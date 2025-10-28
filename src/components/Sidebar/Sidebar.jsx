@@ -1,15 +1,20 @@
 import PropTypes from "prop-types";
+import MenuItem from "./MenuItem.jsx";
+import {CardSim, LayoutDashboard, LogOut, User} from "lucide-react";
 
 function Sidebar({show, onClose}) {
     let isMobile = window.innerWidth <= 768;
 
     return (
-        <div className={`flex items-center h-screen bg-[var(bg-secondary)] sm:border-r-1 fixed left-0
-         top-0 z-10 text-white transition duration-75 ${show ? "translate-x-0" : "translate-x-[-100%]"} ${isMobile && show && "w-screen"}`}>
-
-            {show && isMobile && <div className="w-full h-full bg-none" onClick={onClose}/>}
+        <div className="w-full max-w-54 h-full border-r-1">
+            <div className="pt-4 px-2 space-y-4">
+                <MenuItem to="" text="Dashboard" icon={<LayoutDashboard className="size-5"/>}/>
+                <MenuItem to="" text="Forms" icon={<CardSim className="size-5"/>}/>
+                <MenuItem to="" text="Profile" icon={<User className="size-5"/>}/>
+                <MenuItem to="" text="Logout" icon={<LogOut className="size-5 transform translate-y-full"/>}/>
+            </div>
         </div>
-    )
+    );
 }
 
 Sidebar.propTypes = {

@@ -1,34 +1,46 @@
 import {useSearchParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {extractClaims} from "../services/jwtService.js";
 import ErrorPopup from "../components/Popup/ErrorPopup.jsx";
+import ResetPasswordForm from "../components/Forms/ResetPasswordForm.jsx";
+import Authentication from "../components/Authentiction.jsx";
 
 function Verification() {
     const [searchParams] = useSearchParams();
     const [purpose, setPurpose] = useState(null);
+    const [token, setToken] = useState(null);
     const [error, setError] = useState(null);
+    const purposes = useMemo(() =>
+        new Set(["VERIFY_USER", "RESET_PASSWORD",
+            "REACTIVATE", "UPDATE_EMAIL"]), []);
+
+    function setInvalidToken() {
+        setError({
+            type: "error",
+            title: "Invalid or Missing Token",
+            message: "The verification link is not valid. Please check the link and try again."
+        });
+    }
 
     useEffect(() => {
-        const token = searchParams.get("token");
+        const accessToken = searchParams.get("token");
 
-        if (!token) {
-            setError({
-                type: "error",
-                title: "Invalid or Missing Token",
-                message: "The verification link is not valid. Please check the link and try again."
-            });
+        if (!accessToken) {
+            setInvalidToken();
             return;
         }
 
-        const claims = extractClaims(token);
+        const claims = extractClaims(accessToken);
+
+        if (!claims) {
+            setInvalidToken();
+            return;
+        }
+
         const purpose = claims?.purpose;
 
-        if (!(purpose && purpose.substring(0, 2) === "VR")) {
-            setError({
-                type: "error",
-                title: "Invalid or Missing Token",
-                message: "The verification link is not valid. Please check the link and try again."
-            });
+        if (!(purpose && purposes.has(purpose))) {
+            setInvalidToken()
             return;
         }
 
@@ -42,6 +54,7 @@ function Verification() {
         }
 
         setPurpose(purpose);
+        setToken(accessToken);
     }, [searchParams]);
 
     if (error) {
@@ -53,15 +66,21 @@ function Verification() {
         );
     }
 
-    return (
-        <div className="w-full h-screen flex items-center justify-center bg-gray-950">
+    if (!purpose) {
+        return <h1>Loading</h1>;
+    }
 
-        </div>
+    return (
+        <Container>
+            {purpose === "RESET_PASSWORD"
+                ? <ResetPasswordForm token={token}/>
+                : <Authentication token={token}/>}
+        </Container>
     );
 }
 
 function Container({children}) {
-    return <div className="w-full h-screen flex items-center justify-center bg-gray-950">
+    return <div className="w-full h-screen flex items-center justify-center bg-gray-800">
         {children}
     </div>
 }

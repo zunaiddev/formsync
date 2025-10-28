@@ -1,12 +1,12 @@
 import toast from "react-hot-toast";
-import ResetPasswordForm from "../components/Forms/ResetPasswordForm.jsx";
+import SomethingWentWrong from "../components/SomethingWentWrong.jsx";
 
 function Test() {
     function handleOnClick() {
         toast("Hello World!");
     }
 
-    return <ResetPasswordForm/>;
+    return <SomethingWentWrong/>;
 }
 
 export default Test;

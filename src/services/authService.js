@@ -36,11 +36,11 @@ async function logout() {
     return response.data;
 }
 
-async function verifyToken(token) {
-    let response = await API.get(`/verify`, {
+async function verifyToken(token, data) {
+    let response = await API.post(`/verify`, data, {
         headers: {
-            Authorization: `Bearer ${token}`,
-        },
+            Authorization: "Bearer " + token,
+        }
     });
     return response.data;
 }

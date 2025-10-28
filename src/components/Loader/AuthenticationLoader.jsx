@@ -13,7 +13,7 @@ function AuthenticationLoader() {
     }, []);
 
     return (
-        <div className="bg-gray-900 rounded-lg border border-gray-800 p-8 shadow-2xl">
+        <div className="w-full max-w-md bg-gray-900 rounded-lg border border-gray-800 p-8 shadow-2xl">
             <div className="flex flex-col items-center text-center space-y-4">
                 <div className="relative">
                     <Loader2 className="w-16 h-16 text-blue-500 animate-spin"/>

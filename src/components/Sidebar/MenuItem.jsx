@@ -1,18 +1,14 @@
-import {ListItem, ListItemPrefix} from "@material-tailwind/react";
 import {NavLink} from "react-router-dom";
 import PropTypes from "prop-types";
 
-function MenuItem({to, text, icon: Icon, onClick}) {
+function MenuItem({to, text, icon, onClick}) {
     return (
         <NavLink to={to} onClick={onClick}>
             {({isActive}) => (
-                <ListItem
-                    className={`gap-2 cursor-pointer hover:bg-[var(--bg-secondary)] ${isActive && "bg-blue-600 hover:bg-blue-600"}`}>
-                    <ListItemPrefix>
-                        <Icon className="h-5 w-5"/>
-                    </ListItemPrefix>
-                    {text}
-                </ListItem>
+                <div className="flex gap-2 w-full hover:bg-blue-500  rounded-md px-2 py-2 mb-3">
+                    {icon}
+                    <span>{text}</span>
+                </div>
             )}
         </NavLink>
     );

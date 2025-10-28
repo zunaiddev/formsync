@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
-import {AlertTriangle, XCircle} from "lucide-react";
+import {AlertTriangle, Repeat2, XCircle} from "lucide-react";
+import Button from "../Button/Button.jsx";
 
-function ErrorPopup({type, title, message}) {
+function ErrorPopup({type, title, message, retry}) {
     return (
         <div
-            className={`bg-gray-900 rounded-lg border ${type === "warning" ?
+            className={`w-full max-w-md bg-gray-900 rounded-lg border ${type === "warning" ?
                 "border-yellow-900/50" : "border-red-900/50"} p-8 shadow-2xl`}>
             <div className="flex flex-col items-center text-center space-y-4">
                 <div className="relative">
@@ -28,6 +29,13 @@ function ErrorPopup({type, title, message}) {
                     </p>
                 </div>
             </div>
+            {retry && <div className="w-full flex justify-center mt-5">
+                <Button className="w-fit bg-transparent hover:bg-gray-500/40" icon={Repeat2} onClick={retry}>
+                    Try Again
+                </Button>
+            </div>}
+
+
         </div>
     );
 }
@@ -36,6 +44,7 @@ ErrorPopup.propTypes = {
     type: PropTypes.oneOf(['warning']),
     title: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
+    retry: PropTypes.func,
 }
 
 export default ErrorPopup;
