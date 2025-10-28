@@ -2,7 +2,7 @@ import Button from "../Button/Button.jsx";
 import PropTypes from "prop-types";
 import {useEffect, useState} from "react";
 import {deleteForm} from "../../services/userService.js";
-import {getToken} from "../../services/tokenService.js";
+import {getToken} from "../../services/jwtService.js";
 import useConfirm from "../../hooks/useConfirm.jsx";
 import toast from "react-hot-toast";
 

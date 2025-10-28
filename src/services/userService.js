@@ -1,5 +1,5 @@
 import API from "../api.js";
-import {getToken} from "./tokenService.js";
+import {getToken} from "./jwtService.js";
 
 async function request(type, uri = "", body) {
     let token = await getToken();

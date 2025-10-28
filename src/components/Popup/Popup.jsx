@@ -1,5 +1,5 @@
 import {useForm} from "react-hook-form";
-import {XMarkIcon} from "@heroicons/react/24/solid/index.js";
+import {X} from "lucide-react";
 import PropTypes from "prop-types";
 import ButtonLoader from "../Loader/ButtonLoader.jsx";
 
@@ -32,7 +32,7 @@ const Popup = ({topLabel, name, label, placeholder, btnText, validation, isOpen,
                         </h3>}
                         <button onClick={onClose}
                                 className="end-2.5 text-gray-400 bg-transparent rounded-md text-sm w-6 h-6 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white cursor-pointer">
-                            <XMarkIcon
+                            <X
                                 className="size-5"/>
                         </button>
                     </div>

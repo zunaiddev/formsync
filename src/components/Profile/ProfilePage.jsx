@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {fetchData} from "../../services/userService.js";
-import {getToken} from "../../services/tokenService.js";
+import {getToken} from "../../services/jwtService.js";
 import MainLoader from "../Loader/MainLoader.jsx";
 
 function ProfilePage() {

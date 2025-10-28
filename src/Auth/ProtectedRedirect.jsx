@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {getToken} from "../services/tokenService.js";
+import {getToken} from "../services/jwtService.js";
 
 const ProtectedRoute = ({children}) => {
     const [authStatus, setAuthStatus] = useState(true);

@@ -3,7 +3,7 @@ import Popup from "../Popup/Popup.jsx";
 import {useState} from "react";
 import toast from "react-hot-toast";
 import {deleteUser} from "../../services/userService.js";
-import {getToken} from "../../services/tokenService.js";
+import {getToken} from "../../services/jwtService.js";
 import {HttpStatusCode} from "axios";
 
 function SettingsPage() {

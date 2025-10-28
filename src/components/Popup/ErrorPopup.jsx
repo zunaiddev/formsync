@@ -2,12 +2,10 @@ import PropTypes from "prop-types";
 import {AlertTriangle, XCircle} from "lucide-react";
 
 function ErrorPopup({type, title, message}) {
-    console.log("title", title);
-    console.log("message", message);
-
     return (
         <div
-            className={`bg-gray-900 rounded-lg border border-${type === "warning" ? "yellow" : "red"}-900/50 p-8 shadow-2xl`}>
+            className={`bg-gray-900 rounded-lg border ${type === "warning" ?
+                "border-yellow-900/50" : "border-red-900/50"} p-8 shadow-2xl`}>
             <div className="flex flex-col items-center text-center space-y-4">
                 <div className="relative">
                     {type === 'warning' ? (

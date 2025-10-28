@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import copyToClipboard from "../../util/copyToClipboard.js";
-import {getToken} from "../../services/tokenService.js";
+import {getToken} from "../../services/jwtService.js";
 import {HttpStatusCode} from "axios";
 import toast from "react-hot-toast";
 import {deleteDomain} from "../../services/userService.js";

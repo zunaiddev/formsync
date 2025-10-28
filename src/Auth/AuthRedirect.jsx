@@ -1,7 +1,7 @@
 import {useLocation} from "react-router-dom";
 import PropTypes from "prop-types";
 import {useEffect, useState} from "react";
-import {getToken} from "../services/tokenService.js";
+import {getToken} from "../services/jwtService.js";
 
 const AuthRedirect = ({children}) => {
     const [authStatus, setAuthStatus] = useState(null);

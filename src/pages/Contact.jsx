@@ -1,89 +1,115 @@
 import {useForm} from "react-hook-form";
+import axios from "axios";
+import {useState} from "react";
 import InputField from "../components/Inputs/InputsField.jsx";
-import Select from "../components/Select/Select.jsx";
-import Button from "../components/Button/Button.jsx";
-import toast from "react-hot-toast";
-import axios, {HttpStatusCode} from "axios";
 
-function Contact() {
+
+export default function ContactPage() {
     const {
         register,
         handleSubmit,
-        formState: {errors, isSubmitting},
-        reset
+        formState: {errors},
+        reset,
     } = useForm();
 
-    async function onSubmit(data) {
-        let response = await axios.post("https://intact-roanna-api-v9-6a640f42.koyeb.app/api/public/submit", data, {
-            headers: {
-                "X-API-Key": import.meta.env.VITE_API_KEY,
-                "content-type": "application/json"
-            },
-        })
+    const [loading, setLoading] = useState(false);
+    const [responseMessage, setResponseMessage] = useState(null);
 
-        if (response.status === HttpStatusCode.Ok) {
-            toast.success("We'll Connect to you shortly");
+    const onSubmit = async (data) => {
+        try {
+            setLoading(true);
+            setResponseMessage(null);
+            const response = await axios.post("/api/contact", data);
+            setResponseMessage({type: "success", text: "Message sent successfully!"});
             reset();
-            return;
+        } catch (error) {
+            setResponseMessage({type: "error", text: "Failed to send message. Try again."});
+        } finally {
+            setLoading(false);
         }
-
-        toast.error("Something went wrong")
-    }
+    };
 
     return (
-        <div
-            className="w-full flex justify-center flex-col items-center mx-auto p-6 text-white rounded-lg shadow-lg ">
-            <h1 className="text-3xl font-bold mb-4 text-blue-400">Contact Me</h1>
-            <p className="mb-4">Feel free to reach out to me using the form below.</p>
-            <div className="w-full bg-gray-800 max-w-2xl p-6 rounded-lg shadow-md">
-                <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-                    <InputField label="Full Name"
-                                placeholder="Full Name"
-                                register={register("name", {
-                                    required: "Please enter your full name",
-                                    pattern: {value: /^[a-zA-Z\s'-]+$/, message: "Please enter valid name"},
-                                    minLength: {value: 3, message: "Please enter at least 3 characters"},
-                                    maxLength: {value: 50, message: "Name is too long"},
-                                    validate: (value) => value.toString().trim().length > 3 || "Name can't be blank",
-                                })}
-                                error={errors.name}/>
-                    <InputField label="Email"
-                                placeholder="Email"
-                                register={register("email", {
-                                    required: "Please enter your email",
-                                    pattern: {
-                                        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                        message: "Please enter valid email address"
-                                    },
-                                })}
-                                error={errors.email}/>
+        <div className="min-h-screen bg-gray-900 text-white flex justify-center items-center p-6">
+            <div className="w-full max-w-xl bg-gray-800 p-6 rounded-md shadow-lg">
+                <h1 className="text-2xl font-semibold text-center mb-6 text-blue-400">Contact Us</h1>
 
-                    <Select label="Subject"
-                            values={["Support", "Feedback", "Billing", "Other"]}
-                            register={register("subject", {required: "Please Select Subject"})}
-                            error={errors.subject}/>
+                {responseMessage && (
+                    <div
+                        className={`mb-4 p-3 text-sm rounded-sm text-center ${
+                            responseMessage.type === "success" ? "bg-green-700" : "bg-red-700"
+                        }`}
+                    >
+                        {responseMessage.text}
+                    </div>
+                )}
 
-                    <div className="w-full text-white flex flex-col">
-                        <small>Message</small>
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <InputField
+                        label="Full Name"
+                        placeholder="Enter your full name"
+                        register={register("name", {
+                            required: "Please enter your full name",
+                            pattern: {value: /^[a-zA-Z\s'-]+$/, message: "Please enter valid name"},
+                            minLength: {value: 3, message: "Please enter at least 3 characters"},
+                            maxLength: {value: 50, message: "Name is too long"},
+                            validate: (value) => value.trim().length > 3 || "Name can't be blank",
+                        })}
+                        error={errors.name}
+                    />
+
+                    <InputField
+                        label="Email Address"
+                        placeholder="Enter your email"
+                        type="email"
+                        register={register("email", {
+                            required: "Please enter your email",
+                            pattern: {value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Invalid email format"},
+                        })}
+                        error={errors.email}
+                    />
+
+                    <div className="w-full flex flex-col">
+                        <label className="block mb-1 text-sm font-medium text-gray-300">Select Topic</label>
+                        <select
+                            className="shadow-xs border border-gray-700 text-sm rounded-sm focus:border-blue-500 outline-none block w-full p-2.5 bg-gray-700 text-white"
+                            {...register("topic", {required: "Please select a topic"})}
+                        >
+                            <option value="">-- Select an option --</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Support</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="partnership">Partnership</option>
+                        </select>
+                        {errors.topic?.message && (
+                            <span className="text-[12px] ml-1 text-red-600 mt-1">{errors.topic.message}</span>
+                        )}
+                    </div>
+
+                    <div className="w-full flex flex-col">
+                        <label className="block mb-1 text-sm font-medium text-gray-300">Message</label>
                         <textarea
-                            className={`border rounded-sm text-sm pl-1 pt-2 min-h-28 max-h-40 ${errors.message && "border-red-600"}`}
-                            maxLength={150}
-                            placeholder="Message"
-
+                            className="shadow-xs border border-gray-700 text-sm rounded-sm focus:border-blue-500 outline-none block w-full p-2.5 bg-gray-700 placeholder-gray-400 text-white min-h-[120px]"
+                            placeholder="Write your message..."
                             {...register("message", {
                                 required: "Please enter your message",
-                                minLength: {value: 15, message: "Please enter at least 15 characters"},
-                                maxLength: {value: 200, message: "Message can only be less than 200 characters"},
-                                validate: (value) => value.toString().trim().length > 15 || "message can't be blank",
+                                minLength: {value: 10, message: "Message must be at least 10 characters"},
                             })}
-                        />
-                        {errors.message && <small className="text-red-600">{errors.message.message}</small>}
+                        ></textarea>
+                        {errors.message?.message && (
+                            <span className="text-[12px] ml-1 text-red-600 mt-1">{errors.message.message}</span>
+                        )}
                     </div>
-                    <Button type="submit" text="Submit" isSubmitting={isSubmitting}/>
+
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-600 hover:bg-blue-700 transition-all text-white py-2 rounded-sm"
+                        disabled={loading}
+                    >
+                        {loading ? "Sending..." : "Send Message"}
+                    </button>
                 </form>
             </div>
         </div>
     );
 }
-
-export default Contact;

@@ -13,7 +13,7 @@ const Contact = lazy(() => import("../pages/Contact.jsx"));
 const Login = lazy(() => import("../pages/./SignIn.jsx"));
 const Signup = lazy(() => import("../pages/Signup.jsx"));
 const VerifyEmail = lazy(() => import("../pages/./CheckEmail"));
-const Verify = lazy(() => import("../pages/Verify.jsx"));
+const Verify = lazy(() => import("../pages/./Verification"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword.jsx"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword.jsx"));
 const Dashboard = lazy(() => import("../pages/Dashboard.jsx"));
