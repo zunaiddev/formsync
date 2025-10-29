@@ -32,7 +32,7 @@ async function forgetPassword(email) {
 }
 
 async function logout() {
-    let response = await API.post("/auth/logout");
+    let response = await API.get("/auth/logout");
     return response.data;
 }
 

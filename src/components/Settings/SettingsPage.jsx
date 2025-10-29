@@ -1,5 +1,4 @@
 import useConfirm from "../../hooks/useConfirm.jsx";
-import Popup from "../Popup/Popup.jsx";
 import {useState} from "react";
 import toast from "react-hot-toast";
 import {deleteUser} from "../../services/userService.js";
@@ -45,12 +44,6 @@ function SettingsPage() {
                     className="bg-red-500 hover:bg-red-600 cursor-pointer text-white px-3 py-1.5 rounded-lg font-semibold">
                 Delete Account
             </button>
-            <Popup name="password" topLabel="Delete Your Account" label="Enter Your Password"
-                   isOpen={showPopup} validation={{
-                required: "Password is required"
-            }}
-                   onClose={() => setShowPopup(false)}
-                   onSubmit={handleDeleteUser}/>
             {Confirmation}
         </div>
     );

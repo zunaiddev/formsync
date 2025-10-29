@@ -4,27 +4,43 @@ import Button from "../Button/Button.jsx";
 import {useMutation} from "@tanstack/react-query";
 import API from "../../api.js";
 import SuccessPopup from "../Popup/SuccessPopup.jsx";
+import ErrorPopup from "../Popup/ErrorPopup.jsx";
+import {useEffect} from "react";
 
 function ResetPasswordForm({token}) {
     const {register, watch, formState: {errors}, handleSubmit} = useForm();
 
-    const {isPending, isSuccess, isError} = useMutation({
-        mutationFn: () => {
-            const response = API.post(`/verify?${token}`);
-            return response.data;
-        },
-        onError: error => {
+    async function handleResetPassword(password) {
+        const response = await API.post(`/verify`, {password}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
 
-        }
+        return response.data;
+    }
+
+    const {mutate, isPending, error, isSuccess} = useMutation({
+        mutationFn: handleResetPassword
     });
 
+    useEffect(() => {
+        console.log("error", error);
+        console.log("status", isSuccess);
+    }, [error, isSuccess]);
+
     function onSubmit(data) {
-        console.log("data", data);
+        mutate(data.password);
     }
 
     if (isSuccess) {
         return <SuccessPopup title="Password Changed Successfully"
                              message="Your password has been updated. You can now log in using your new password."/>
+    }
+
+    if (error) {
+        const {tile: title, message} = error?.response?.data;
+        return <ErrorPopup title={title} message={message}/>
     }
 
     return (
@@ -44,6 +60,5 @@ function ResetPasswordForm({token}) {
         </form>
     );
 }
-
 
 export default ResetPasswordForm;

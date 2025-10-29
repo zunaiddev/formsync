@@ -6,6 +6,7 @@ import {forgetPassword} from "../../services/authService.js";
 import LinkField from "../LinkField/LinkField.jsx";
 import {useMutation} from "@tanstack/react-query";
 import {useNavigate} from "react-router-dom";
+import extractInfo from "../../util/extractInfo.js";
 
 function ForgetPasswordForm() {
     const navigate = useNavigate();
@@ -13,18 +14,29 @@ function ForgetPasswordForm() {
     const {
         register,
         handleSubmit,
-        reset,
-        formState: {errors, isSubmitting},
+        setError,
+        formState: {errors},
     } = useForm();
 
     const {mutate, isPending} = useMutation({
         mutationFn: forgetPassword,
-        onSuccess: data => {
-            toast.success("Password reset successfully.");
+        onSuccess: _ => {
+            toast.success("Password reset Email sent.");
             navigate("/check-email?from=forgetPassword", {replace: true});
         },
         onError: error => {
-            
+            const {status, code} = extractInfo(error);
+            console.log("status:", status);
+            console.log("code:", code);
+
+            if (code === "USER_NOT_FOUND") {
+                setError("email", {
+                    message: "Cound Not Found User With email"
+                }, {shouldFocus: true});
+            } else if (code === "DISABLED") {
+                toast("Please verify Your Email first.");
+                navigate("/auth/signup", {replace: true});
+            }
         }
     })
 
@@ -60,7 +72,7 @@ function ForgetPasswordForm() {
                     autoComplete="email"
                 />
 
-                <Button type="submit" isSubmitting={isSubmitting}>
+                <Button type="submit" isSubmitting={isPending}>
                     Submit
                 </Button>
                 <LinkField label="Remembered your password" linkText="Sign in" to="/auth/login"/>

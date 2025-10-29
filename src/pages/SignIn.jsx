@@ -15,21 +15,31 @@ function SignIn() {
         register,
         handleSubmit,
         formState: {errors},
-        resetField
-    } = useForm();
+        resetField,
+        setFocus
+    } = useForm({
+        defaultValues: {
+            email: "john@example.com",
+            password: "John@123",
+        }
+    });
 
     const {mutate, isPending} = useMutation({
         mutationFn: login,
         onSuccess: (data) => {
-            localStorage.setItem("token", data.token);
-            navigate("/dashboard");
+            const result = data.data;
+            localStorage.setItem("token", result.token);
+            navigate("/dashboard", {replace: true});
         },
         onError: error => {
-            const status = error.response.status;
+            const status = error?.response.status;
 
             if (status === HttpStatusCode.Unauthorized) {
                 resetField("password");
-                toast.error("Invalid Email or Password");
+                setFocus("password");
+                toast.error("Invalid Email or Password", {
+                    duration: 2000,
+                });
             } else if (status === HttpStatusCode.Locked) {
                 toast("Your account is locked. connect with us", {
                     duration: 10000

@@ -1,12 +1,15 @@
-import toast from "react-hot-toast";
-import SomethingWentWrong from "../components/SomethingWentWrong.jsx";
+import {useEffect} from "react";
+import {confirmReactivate} from "../util/popup.jsx";
 
 function Test() {
-    function handleOnClick() {
-        toast("Hello World!");
-    }
+    useEffect(() => {
+        (async () => {
+            let response = await confirmReactivate();
+            console.log(response);
+        })();
+    }, [])
 
-    return <SomethingWentWrong/>;
+    return null;
 }
 
 export default Test;
