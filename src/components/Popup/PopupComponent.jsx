@@ -63,9 +63,9 @@ const PopupComponent = () => {
                     <h2 className="text-lg font-semibold">{popup.title}</h2>
                 </div>
 
-                <p className="text-sm text-zinc-400 mb-6">{popup.body}</p>
-
-                <div className="flex justify-end gap-3">
+                {popup.body}
+                
+                <div className="flex justify-end gap-3 mt-6">
                     <button
                         type="button"
                         className="h-9 px-4 rounded-md bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700 transition-all"

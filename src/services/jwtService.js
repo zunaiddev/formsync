@@ -1,23 +1,5 @@
-import {refreshToken} from "./authService.js";
-
 async function getToken() {
-    let token = localStorage.getItem("token");
-
-    if (!token) {
-        return null;
-    }
-
-    if (isExpired(token)) {
-        token = await refreshToken();
-
-        if (!token) {
-            return null;
-        }
-    }
-
-    localStorage.setItem("token", token);
-
-    return token;
+    return localStorage.getItem("token");
 }
 
 function extractClaims(token) {

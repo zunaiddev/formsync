@@ -48,8 +48,8 @@ async function getApiKey() {
     return await request("GET", "/api-key");
 }
 
-async function generateApiKey(data) {
-    return await request("POST", "/api-key", data);
+async function generateApiKey() {
+    return await request("POST", "/api-key");
 }
 
 async function reGenerateApiKey() {

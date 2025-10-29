@@ -1,25 +1,33 @@
 import PropTypes from "prop-types";
 import copyToClipboard from "../../util/copyToClipboard.js";
-import {getToken} from "../../services/jwtService.js";
-import {HttpStatusCode} from "axios";
-import toast from "react-hot-toast";
-import {deleteDomain} from "../../services/userService.js";
-import {useState} from "react";
 import {Copy} from "lucide-react";
+import {useMutation} from "@tanstack/react-query";
+import {reGenerateApiKey} from "../../services/userService.js";
+import toast from "react-hot-toast";
+import {confirmAddDomain, confirmDeactivateApiKey, confirmRegenerateApiKey} from "../../util/popup.jsx";
 
-function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain, remove}) {
-    const [deleting, setDeleting] = useState(null);
+function KeyCard({apiKey}) {
+    const {role, requests, domains, active} = apiKey;
 
-    async function handleDeleteDomain(id) {
-        setDeleting(id);
-        let status = await deleteDomain(id, await getToken());
-        setDeleting(null);
+    const {mutate: regenerate, isPending: regenerating} = useMutation({
+        mutationFn: reGenerateApiKey,
+        onSuccess: _ => toast.success("Regenerate Apikey"),
+        onError: _ => toast.error("Something went wrong"),
+    });
 
-        if (status === HttpStatusCode.NoContent) {
-            remove(id);
-            toast.success("Deleted");
-        } else {
-            toast.error("Something Went Wrong!");
+    async function handleRegenerate() {
+        if (await confirmRegenerateApiKey()) regenerate();
+    }
+
+    async function handleDeactivate() {
+        if (await confirmDeactivateApiKey()) {
+            console.log("Deactivate ApiKey");
+        }
+    }
+
+    async function handleAddDomain() {
+        if (await confirmAddDomain()) {
+
         }
     }
 
@@ -42,11 +50,11 @@ function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain
                 <p className="font-medium">API Key:</p>
                 <div className="flex items-center overflow-x-auto w-60 sm:w-fit">
                 <span className="text-[var(--text-secondary)]">
-                  {apiKey}
+                  {apiKey.apiKey}
                 </span>
                     <button
                         className="ml-2 text-blue-500 hover:text-blue-600 cursor-pointer"
-                        onClick={() => copyToClipboard(apiKey)}
+                        onClick={() => copyToClipboard(apiKey.apiKey)}
                     >
                         <Copy className="h-5 w-5"/>
                     </button>
@@ -80,7 +88,8 @@ function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain
                                 <span>{domain.domain}</span>
                                 <button
                                     className="hover:text-red-400 transition-colors cursor-pointer disabled:cursor-not-allowed"
-                                    onClick={() => handleDeleteDomain(domain.id)}
+                                    onClick={() => {
+                                    }}
                                     title="Delete Domain"
                                     disabled={deleting === domain.id}
                                 >
@@ -107,20 +116,18 @@ function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain
             </div>
 
             <div className="flex flex-col gap-3 flex-wrap md:flex-row">
-                <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer text-nowrap"
-                    onClick={regenerate}
+                <button onClick={handleRegenerate}
+                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer text-nowrap"
                 >
                     Regenerate Key
                 </button>
-                <button
-                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 cursor-pointer text-nowrap"
-                    onClick={addDomain}
+                <button onClick={confirmAddDomain}
+                        className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 cursor-pointer text-nowrap"
                 >
                     Add Domain
                 </button>
-                <button
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 cursor-pointer text-nowrap">
+                <button onClick={handleDeactivate}
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 cursor-pointer text-nowrap">
                     Deactivate Key
                 </button>
             </div>
@@ -129,13 +136,7 @@ function KeyCard({apiKey, role, active, requests, domains, regenerate, addDomain
 }
 
 KeyCard.propTypes = {
-    apiKey: PropTypes.string.isRequired,
-    role: PropTypes.string.isRequired,
-    requests: PropTypes.number.isRequired,
-    domains: PropTypes.array.isRequired,
-    regenerate: PropTypes.func.isRequired,
-    addDomain: PropTypes.func.isRequired,
-    remove: PropTypes.func.isRequired,
+    apikey: PropTypes.object.isRequired,
 }
 
 export default KeyCard;
