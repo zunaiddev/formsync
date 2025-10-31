@@ -1,7 +1,24 @@
 import formatDate from "../../util/formatDate.js";
+import {useQuery} from "@tanstack/react-query";
+import {getUser} from "../../services/userService.js";
+import {Loader2} from "lucide-react";
+import SomethingWentWrong from "../SomethingWentWrong.jsx";
 
-function UserProfile({user}) {
-    const {name, email, role, createdAt} = user;
+function UserProfile() {
+    const {data, isPending, isError} = useQuery({
+        queryKey: ["users"],
+        queryFn: getUser,
+    });
+
+    if (isPending) {
+        return <Loader2/>;
+    }
+
+    if (isError) {
+        return <SomethingWentWrong/>;
+    }
+
+    const {name, email, role, createdAt} = data?.data;
 
     return (
         <div className="max-w-4xl space-y-8">

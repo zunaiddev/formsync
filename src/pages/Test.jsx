@@ -1,11 +1,11 @@
 import {useEffect} from "react";
-import {confirmReactivate} from "../util/popup.jsx";
+import {getToken} from "../services/jwtService.js";
 
 function Test() {
     useEffect(() => {
         (async () => {
-            let response = await confirmReactivate();
-            console.log(response);
+            const data = getToken();
+            console.log("token", data);
         })();
     }, [])
 

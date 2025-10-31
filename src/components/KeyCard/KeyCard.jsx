@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import copyToClipboard from "../../util/copyToClipboard.js";
 import {Copy} from "lucide-react";
-import {useMutation} from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {reGenerateApiKey} from "../../services/userService.js";
 import toast from "react-hot-toast";
 import {confirmAddDomain, confirmDeactivateApiKey, confirmRegenerateApiKey} from "../../util/popup.jsx";
@@ -9,9 +9,14 @@ import {confirmAddDomain, confirmDeactivateApiKey, confirmRegenerateApiKey} from
 function KeyCard({apiKey}) {
     const {role, requests, domains, active} = apiKey;
 
+    const client = useQueryClient();
+
     const {mutate: regenerate, isPending: regenerating} = useMutation({
         mutationFn: reGenerateApiKey,
-        onSuccess: _ => toast.success("Regenerate Apikey"),
+        onSuccess: data => {
+            client.setQueryData(["api-key"], data)
+            toast.success("Regenerate Apikey");
+        },
         onError: _ => toast.error("Something went wrong"),
     });
 
@@ -136,7 +141,7 @@ function KeyCard({apiKey}) {
 }
 
 KeyCard.propTypes = {
-    apikey: PropTypes.object.isRequired,
+    apiKey: PropTypes.object.isRequired,
 }
 
 export default KeyCard;

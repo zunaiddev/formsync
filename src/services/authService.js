@@ -18,11 +18,13 @@ async function login(data) {
         throw new Unauthorized("Invalid Email or password");
     }
 
-    return (await API.post("/auth/login", {email, password})).data;
+    return (await API.post("/auth/login", {email, password}, {
+        withCredentials: true
+    })).data;
 }
 
 async function refreshToken() {
-    let response = await API.post("/auth/refresh");
+    let response = await API.get("/auth/refresh", {withCredentials: true});
     return response.data;
 }
 

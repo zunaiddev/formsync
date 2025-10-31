@@ -29,7 +29,7 @@ function SignIn() {
         onSuccess: (data) => {
             const result = data.data;
             localStorage.setItem("token", result.token);
-            navigate("/dashboard", {replace: true});
+            // navigate("/dashboard", {replace: true});
         },
         onError: error => {
             const status = error?.response.status;

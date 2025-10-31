@@ -2,7 +2,7 @@ import API from "../api.js";
 import {getToken} from "./jwtService.js";
 
 async function request(type, uri = "", body) {
-    let token = await getToken();
+    let {token} = await getToken();
 
     if (!token) {
         throw new Error("Token not found.");
@@ -53,7 +53,7 @@ async function generateApiKey() {
 }
 
 async function reGenerateApiKey() {
-    return await request("PUT", "/api-key");
+    return await request("PATCH", "/api-key/regenerate");
 }
 
 async function addDomain(data) {
