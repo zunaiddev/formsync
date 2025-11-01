@@ -7,7 +7,7 @@ async function postReq(uri, data) {
         return {data: response?.data, error: null};
     } catch (err) {
         if (err.response) {
-            return {error: {type: ErrorType.server, status: err.status}};
+            return {error: {type: ErrorType.server, active: err.active}};
         }
 
         if (err.request) {

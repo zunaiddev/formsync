@@ -43,7 +43,7 @@ function Authentication({token}) {
     if (error) {
         const response = error?.response;
         const {title, message} = response.data;
-        const status = response.status;
+        const status = response.active;
 
 
         return (status === HttpStatusCode.BadRequest

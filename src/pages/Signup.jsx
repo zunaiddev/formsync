@@ -33,7 +33,7 @@ function Signup() {
             navigate("/check-email");
         },
         onError: error => {
-            const status = error?.response?.status;
+            const status = error?.response?.active;
 
             if (status === HttpStatusCode.Conflict) {
                 setError("email", {
@@ -106,7 +106,7 @@ function Signup() {
                     autoComplete="confirm-password"
                 />
 
-                <Button type="submit" isSubmitting={isPending}>
+                <Button type="submit" className="w-full" isSubmitting={isPending}>
                     Sign up
                 </Button>
             </form>

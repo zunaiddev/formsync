@@ -5,7 +5,7 @@ class Unauthorized extends Error {
         super(message);
 
         this.name = this.constructor.name;
-        this.response = {status: HttpStatusCode.Unauthorized};
+        this.response = {active: HttpStatusCode.Unauthorized};
         this.code = "ERR_CUSTOM";
     }
 }

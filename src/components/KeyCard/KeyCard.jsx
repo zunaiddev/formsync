@@ -1,39 +1,37 @@
 import PropTypes from "prop-types";
 import copyToClipboard from "../../util/copyToClipboard.js";
 import {Copy} from "lucide-react";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {reGenerateApiKey} from "../../services/userService.js";
-import toast from "react-hot-toast";
-import {confirmAddDomain, confirmDeactivateApiKey, confirmRegenerateApiKey} from "../../util/popup.jsx";
+import {useQueryClient} from "@tanstack/react-query";
+import {confirmAddDomain} from "../../util/popup.jsx";
+import RegenerateKey from "../Dashboard/RegenerateKey.jsx";
+import DeactivateKey from "../Dashboard/DeactivateKey.jsx";
 
 function KeyCard({apiKey}) {
-    const {role, requests, domains, active} = apiKey;
+    const {key, role, requests, domains, active} = apiKey;
 
     const client = useQueryClient();
 
-    const {mutate: regenerate, isPending: regenerating} = useMutation({
-        mutationFn: reGenerateApiKey,
-        onSuccess: data => {
-            client.setQueryData(["api-key"], data)
-            toast.success("Regenerate Apikey");
-        },
-        onError: _ => toast.error("Something went wrong"),
-    });
-
-    async function handleRegenerate() {
-        if (await confirmRegenerateApiKey()) regenerate();
+    function setActive(newActive) {
+        client.setQueryData(["api-key"], prev => {
+            console.log(prev)
+            return {
+                ...prev,
+                data: {
+                    ...prev.data,
+                    active: newActive
+                }
+            };
+        });
     }
 
-    async function handleDeactivate() {
-        if (await confirmDeactivateApiKey()) {
-            console.log("Deactivate ApiKey");
-        }
-    }
-
-    async function handleAddDomain() {
-        if (await confirmAddDomain()) {
-
-        }
+    function setKey(newKey) {
+        console.log("New key", newKey);
+        client.setQueryData(["api-key"], prev => {
+            return {
+                ...prev,
+                data: {...prev.data, key: newKey}
+            };
+        });
     }
 
     return (
@@ -55,11 +53,11 @@ function KeyCard({apiKey}) {
                 <p className="font-medium">API Key:</p>
                 <div className="flex items-center overflow-x-auto w-60 sm:w-fit">
                 <span className="text-[var(--text-secondary)]">
-                  {apiKey.apiKey}
+                  {key}
                 </span>
                     <button
                         className="ml-2 text-blue-500 hover:text-blue-600 cursor-pointer"
-                        onClick={() => copyToClipboard(apiKey.apiKey)}
+                        onClick={() => copyToClipboard(key)}
                     >
                         <Copy className="h-5 w-5"/>
                     </button>
@@ -121,20 +119,13 @@ function KeyCard({apiKey}) {
             </div>
 
             <div className="flex flex-col gap-3 flex-wrap md:flex-row">
-                <button onClick={handleRegenerate}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer text-nowrap"
-                >
-                    Regenerate Key
-                </button>
+                <RegenerateKey setKey={setKey}/>
                 <button onClick={confirmAddDomain}
                         className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 cursor-pointer text-nowrap"
                 >
                     Add Domain
                 </button>
-                <button onClick={handleDeactivate}
-                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 cursor-pointer text-nowrap">
-                    Deactivate Key
-                </button>
+                <DeactivateKey active={active} setActive={setActive}/>
             </div>
         </div>
     );

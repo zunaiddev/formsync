@@ -56,6 +56,18 @@ async function reGenerateApiKey() {
     return await request("PATCH", "/api-key/regenerate");
 }
 
+async function updateStatus(status) {
+    return await request("PATCH", "/api-key/status", {active: status});
+}
+
+async function updatePassword({password, newPassword}) {
+    return await request("PATCH", "/change-password", {password, newPassword});
+}
+
+async function updateEmail({password, email}) {
+    return await request("PATCH", "/change-email", {password, email});
+}
+
 async function addDomain(data) {
     return await request("POST", "/api-key/domain", data);
 }
@@ -75,5 +87,6 @@ async function deleteForms(ids) {
 export {
     getUser, updateUser, deleteUser, getApiKey,
     generateApiKey, reGenerateApiKey, addDomain,
-    deleteDomain, getForms, deleteForms
+    deleteDomain, getForms, deleteForms, updateStatus,
+    updatePassword, updateEmail
 };

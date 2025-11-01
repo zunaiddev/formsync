@@ -39,7 +39,7 @@ async function logout() {
 }
 
 async function verifyToken(token, data) {
-    let response = await API.post(`/verify`, data, {
+    let response = await API.patch(`/verify`, data, {
         headers: {
             Authorization: "Bearer " + token,
         }

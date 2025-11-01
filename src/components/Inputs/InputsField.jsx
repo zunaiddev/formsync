@@ -34,7 +34,8 @@ function InputField({
 
             </div>
 
-            {error?.message && <span className="text-[12px] ml-1 text-red-600 mt-1">{error.message}</span>}
+            {error?.message &&
+                <span className="bottom-0 text-[12px] ml-1 text-red-600 mt-1">{error.message}</span>}
         </div>
     );
 }

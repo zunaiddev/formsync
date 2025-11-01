@@ -2,20 +2,16 @@ import {useForm} from "react-hook-form";
 import InputField from "../Inputs/InputsField.jsx";
 import Button from "../Button/Button.jsx";
 import {useMutation} from "@tanstack/react-query";
-import API from "../../api.js";
 import SuccessPopup from "../Popup/SuccessPopup.jsx";
 import ErrorPopup from "../Popup/ErrorPopup.jsx";
 import {useEffect} from "react";
+import {verifyToken} from "../../services/authService.js";
 
 function ResetPasswordForm({token}) {
     const {register, watch, formState: {errors}, handleSubmit} = useForm();
 
     async function handleResetPassword(password) {
-        const response = await API.post(`/verify`, {password}, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        });
+        const response = verifyToken(token, {password});
 
         return response.data;
     }
