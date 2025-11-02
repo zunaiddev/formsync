@@ -9,18 +9,12 @@ import {HttpStatusCode} from "axios";
 
 function UpdatePasswordForm() {
     const {register, handleSubmit, formState: {errors}, watch, reset, setError}
-        = useForm({
-        defaultValues: {
-            password: "John@123",
-            newPassword: "John@123",
-            confirmNewPassword: "John@123",
-        }
-    });
+        = useForm();
 
     const {mutate, isPending} = useMutation({
         mutationFn: updatePassword,
         onSuccess: () => {
-            // reset();
+            reset();
             toast.success("Password updated successfully.");
         },
         onError: err => {

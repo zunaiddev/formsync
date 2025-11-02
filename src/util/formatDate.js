@@ -1,20 +1,19 @@
-function formatDate(dateString) {
-    const date = new Date(dateString);
-
+function formatDate(date) {
     const options = {
+        month: "long",      // Full month name (e.g., November)
         day: "numeric",
-        month: "short",
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
-        hour12: true,
+        hour12: true
     };
 
     return date
-        .toLocaleString("en-GB", options)
-        .replace(",", "")
-        .replace(" am", "am")
-        .replace(" pm", "pm");
+        .toLocaleString("en-US", options)
+        .replace(",", "")         // remove comma after day
+        .replace(" AM", "am")     // lowercase am
+        .replace(" PM", "pm")
+        .replace(" at", "");    // lowercase pm
 }
 
 export default formatDate;

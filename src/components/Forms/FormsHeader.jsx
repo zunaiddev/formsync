@@ -3,20 +3,18 @@ import PropTypes from "prop-types";
 import {LucideRefreshCw, Trash} from "lucide-react";
 import Checkbox from "../CheckBox/CheckBox.jsx";
 
-function FormsHeader({checked, onSelectAll, showDelete, deleteOne, deleting, onRefresh, refreshing}) {
+function FormsHeader({checked, onSelectAll, refetch, isPending}) {
 
     return (
         <header className="flex gap-3 w-full text-white p-3 min-h-14 ">
-
             <Checkbox text="Select All" onChange={onSelectAll} checked={checked}/>
-            {showDelete &&
-                <Button icon={Trash} isSubmitting={deleting}
+            {checked &&
+                <Button icon={Trash}
                         className="bg-red-500 hover:bg-red-600 !px-4 !w-fit"
                         onClick={deleteOne}/>
             }
 
-            <Button icon={LucideRefreshCw} onClick={onRefresh} isSubmitting={refreshing}
-                    className="w-fit justify-self-end"/>
+            <Button icon={LucideRefreshCw} onClick={refetch} className="justify-self-end"/>
         </header>
     );
 }

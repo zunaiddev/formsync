@@ -18,7 +18,7 @@ function Button({children, className, type = "button", icon: Icon, isSubmitting,
 Button.propTypes = {
     children: PropTypes.node,
     className: PropTypes.string,
-    type: PropTypes.string,
+    type: PropTypes.oneOf(["button", "submit"]),
     icon: PropTypes.node,
     onClick: PropTypes.func,
     isSubmitting: PropTypes.bool,

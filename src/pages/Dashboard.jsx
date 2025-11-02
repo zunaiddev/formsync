@@ -9,7 +9,6 @@ function Dashboard() {
     const {data, isPending, isError, refetch} = useQuery({
         queryKey: ["api-key"],
         queryFn: getApiKey,
-        select: data => data?.data
     });
 
     if (isPending) {

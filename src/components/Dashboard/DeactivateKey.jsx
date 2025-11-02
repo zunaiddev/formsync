@@ -1,4 +1,4 @@
-import {confirmDeactivateApiKey} from "../../util/popup.jsx";
+import {confirmDeactivateApiKey} from "../Popup/Popups.jsx";
 import {useMutation} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import {updateStatus} from "../../services/userService.js";
@@ -9,7 +9,7 @@ function DeactivateKey({active, setActive}) {
     const {mutate, isPending} = useMutation({
         mutationFn: updateStatus,
         onSuccess: data => {
-            setActive(data?.data.active);
+            setActive(data?.active);
         },
         onError: err => err.response && toast.error("Something went wrong!"),
     });

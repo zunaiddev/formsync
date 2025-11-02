@@ -1,15 +1,7 @@
-import {useEffect} from "react";
-import {getToken} from "../services/jwtService.js";
+import AddDomainPopup from "../components/Popup/AddDomainPopup.jsx";
 
 function Test() {
-    useEffect(() => {
-        (async () => {
-            const data = getToken();
-            console.log("token", data);
-        })();
-    }, [])
-
-    return null;
+    return <AddDomainPopup/>;
 }
 
 export default Test;

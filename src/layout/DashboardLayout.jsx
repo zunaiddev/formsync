@@ -8,13 +8,13 @@ function DashboardLayout() {
     const [show, setShow] = useState(isDesktop);
 
     return <main className="relative">
-        <Sidebar show={show} onClose={() => setShow(false)}/>
+        <Sidebar show={show} close={() => setShow(false)}/>
         <div className={`h-screen max-h-screen relative ${isDesktop ? "ml-44" : "pt-6"}`}>
             <Outlet/>
         </div>
-        <Menu
-            className={`absolute w-7 h-7 left-1 top-1 text-white cursor-pointer ${show ? "hidden" : "visible"}`}
-            onClick={() => setShow(true)}/>
+        {!show && <button onClick={() => setShow(true)}>
+            <Menu className="fixed top-3 left-2 text-white"/>
+        </button>}
     </main>;
 }
 

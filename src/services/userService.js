@@ -1,7 +1,7 @@
 import API from "../api.js";
 import {getToken} from "./jwtService.js";
 
-async function request(type, uri = "", body) {
+async function request(type, uri = "", body, credentials) {
     let {token} = await getToken();
 
     if (!token) {
@@ -24,7 +24,7 @@ async function request(type, uri = "", body) {
     } else if (type === "PUT") {
         response = await API.put(URL, body, {headers});
     } else if (type === "DELETE") {
-        response = await API.delete(URL, {headers, data: body});
+        response = await API.delete(URL, {headers, data: body, withCredentials: credentials});
     } else {
         throw new Error("Unknown type for " + type);
     }
@@ -40,8 +40,8 @@ async function updateUser(data) {
     return await request("PATCH", "", data);
 }
 
-async function deleteUser(id) {
-    return await request("DELETE", id);
+async function deleteUser(password) {
+    return await request("DELETE", "", {password}, true);
 }
 
 async function getApiKey() {

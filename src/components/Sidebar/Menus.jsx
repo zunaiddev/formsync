@@ -12,12 +12,12 @@ function NavMenuItem({to, text, icon, onClick}) {
 }
 
 function MenuItem({icon, text, isActive = false, onClick}) {
-    return <div role="button" tabIndex="0" onClick={onClick}
-                className={`flex items-center w-full p-3 mb-3 rounded-lg 
-                     text-start leading-tight transition-all 
-                     hover:bg-opacity-80 focus:bg-blue-gray-50 
-                     focus:bg-opacity-80 active:bg-blue-gray-50 active:bg-opacity-80 
-                     hover:text-blue-gray-900 focus:text-blue-gray-900 active:text-blue-gray-900 
+    return <div role="button" onClick={onClick}
+                className={`flex items-center w-full p-3 mb-3 rounded-lg
+                     text-start transition-all
+                     hover:bg-opacity-80 focus:bg-blue-gray-50
+                     focus:bg-opacity-80 active:bg-blue-gray-50 active:bg-opacity-80
+                     hover:text-blue-gray-900 focus:text-blue-gray-900 active:text-blue-gray-900
                      outline-none gap-2 cursor-pointer ${isActive && "bg-blue-600 hover:bg-blue-600"} `}>
         <div className="grid place-items-center">
             {icon}

@@ -2,13 +2,13 @@ import {useMutation} from "@tanstack/react-query";
 import {reGenerateApiKey} from "../../services/userService.js";
 import toast from "react-hot-toast";
 import Button from "../Button/Button.jsx";
-import {confirmRegenerateApiKey} from "../../util/popup.jsx";
+import {confirmRegenerateApiKey} from "../Popup/Popups.jsx";
 
 function RegenerateKey({setKey}) {
     const {mutate, isPending} = useMutation({
         mutationFn: reGenerateApiKey,
         onSuccess: data => {
-            setKey(data?.data.key);
+            setKey(data.key);
             toast.success("Regenerate");
         },
         onError: _ => toast.error("Could not regenerate api key"),

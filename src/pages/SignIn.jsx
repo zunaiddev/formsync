@@ -3,13 +3,17 @@ import {Link, useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
 import {HttpStatusCode} from "axios";
 import {useMutation} from "@tanstack/react-query";
-import {login} from "../services/authService.js";
+import {login, verifyToken} from "../services/authService.js";
 import AuthForm from "../components/AuthForm/AuthForm.jsx";
 import InputField from "../components/Inputs/InputsField.jsx";
 import Button from "../components/Button/Button.jsx";
+import extractErrorInfo from "../util/extractErrorInfo.js";
+import {useEffect, useState} from "react";
+import {confirmReactivate, showAccountLockedPopup, showAccountNotVerifiedPopup} from "../components/Popup/Popups.jsx";
 
 function SignIn() {
     const navigate = useNavigate();
+    const [popup, setPopup] = useState(null);
 
     const {
         register,
@@ -27,12 +31,18 @@ function SignIn() {
     const {mutate, isPending} = useMutation({
         mutationFn: login,
         onSuccess: (data) => {
-            const result = data.data;
-            localStorage.setItem("token", result.token);
-            navigate("/dashboard", {replace: true});
+            const {status, token, deleteAt} = data;
+
+            if (status === "ACTIVE") {
+                localStorage.setItem("token", token);
+                navigate("/dashboard", {replace: true});
+                return;
+            }
+
+            setPopup(data);
         },
-        onError: error => {
-            const status = error?.response.status;
+        onError: err => {
+            const {status} = extractErrorInfo(err);
 
             if (status === HttpStatusCode.Unauthorized) {
                 resetField("password");
@@ -40,17 +50,47 @@ function SignIn() {
                 toast.error("Invalid Email or Password", {
                     duration: 2000,
                 });
-            } else if (status === HttpStatusCode.Locked) {
-                toast("Your account is locked. connect with us", {
-                    duration: 10000
+            } else if (status === HttpStatusCode.Locked || status === HttpStatusCode.BadRequest) {
+                setPopup({
+                    status: "LOCKED",
                 });
             } else if (status === HttpStatusCode.BadRequest) {
-                toast("Please Verify Your Email address first. or signup again")
-            } else {
-                toast.error("Something went wrong");
+                setPopup({
+                    status: "NOT_VERIFIED",
+                });
             }
         }
     });
+    const {mutate: reactivate, isPending: reactivating} = useMutation({
+        mutationFn: verifyToken,
+        onSuccess: (data) => {
+            const {token} = data.extra;
+            localStorage.setItem("token", token);
+            navigate("/dashboard", {replace: true});
+        },
+    });
+
+    useEffect(() => {
+        if (!popup) return;
+
+        const {status, token, deleteAt} = popup;
+
+        console.log("token: ", token);
+
+        (async () => {
+            if (status === "LOCKED") {
+                await showAccountLockedPopup();
+            } else if (status === "NOT_VERIFIED") {
+                await showAccountNotVerifiedPopup();
+            } else {
+                let result = await confirmReactivate(deleteAt);
+                if (result) {
+                    reactivate(token);
+                }
+            }
+        })();
+
+    }, [popup]);
 
     async function onSubmit(data) {
         mutate(data);

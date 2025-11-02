@@ -1,6 +1,7 @@
 import Checkbox from "../CheckBox/CheckBox.jsx";
+import {showFormSubmissionDetailsPopup} from "../Popup/Popups.jsx";
 
-function Form({form, idx, setViewData, addForm, removeForm, checked}) {
+function Form({form, idx, addForm, removeForm, checked}) {
 
     function handleOnChange(e) {
         if (e.target.checked) {
@@ -10,13 +11,16 @@ function Form({form, idx, setViewData, addForm, removeForm, checked}) {
         }
     }
 
-    function handleView() {
-        setViewData(form);
+    async function handleView() {
+        let result = await showFormSubmissionDetailsPopup(form);
+
+        if (result) {
+            console.log("Delete");
+        }
     }
 
     return <div
-        key={form.id}
-        className="flex flex-wrap gap-2 items-center bg-[#1b263b] w-full min-h-12 rounded-lg relative group border border-transparent hover:border-blue-400 hover:bg-[#1b263c] p-2"
+        className="flex flex-wrap gap-2 items-center bg-[#1b263b] w-full min-h-12 rounded-lg relative group border border-transparent hover:border-blue-400 mb-3 hover:bg-[#1b263c] p-2"
     >
         <div
             className={`flex justify-center items-center cursor-pointer h-full rounded-r-lg px-2 min-w-9 group-hover:visible ${

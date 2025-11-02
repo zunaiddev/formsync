@@ -3,28 +3,38 @@ import {useMutation} from "@tanstack/react-query";
 import {Trash2} from "lucide-react";
 import InputField from "../Inputs/InputsField.jsx";
 import Button from "../Button/Button.jsx";
+import {deleteUser} from "../../services/userService.js";
+import {useNavigate} from "react-router-dom";
+import {HttpStatusCode} from "axios";
+import toast from "react-hot-toast";
+import {showAccountDeletionInfo} from "../Popup/Popups.jsx";
+import extractErrorInfo from "../../util/extractErrorInfo.js";
 
 function DeleteAccount() {
-    const {register, handleSubmit, formState: {errors}, reset} = useForm();
+    const {register, handleSubmit, formState: {errors}, setError} = useForm();
+    const navigate = useNavigate();
 
     const {mutate, isPending} = useMutation({
-        mutationFn: async (data) => {
-            const res = await fetch("/api/user/delete-account", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(data),
-            });
-            if (!res.ok) throw new Error("Failed to delete account");
-            return res.json();
-        },
+        mutationFn: deleteUser,
         onSuccess: () => {
-            reset();
-            alert("Your account is scheduled for permanent deletion.");
-            // optionally redirect: window.location.href = "/logout";
+            localStorage.removeItem("token");
+            navigate("/auth/login", {replace: true});
+            showAccountDeletionInfo();
         },
+        onError: err => {
+            const {status} = extractErrorInfo(err);
+            if (status === HttpStatusCode.Unauthorized) {
+                setError("password", {message: "Incorrect Password"});
+            } else if (status) {
+                toast.error("Something went wrong, please try again.");
+            }
+        }
     });
 
-    const onSubmit = (data) => mutate(data);
+    function onSubmit(data) {
+        mutate(data.password);
+    }
+
 
     return (
         <div className="w-full p-6 rounded-xl border border-red-600/30 bg-red-600/10 space-y-5">
@@ -47,7 +57,6 @@ function DeleteAccount() {
                     type="password"
                     register={register("password", {
                         required: "Password is required",
-                        minLength: {value: 6, message: "Minimum 6 characters"}
                     })}
                     error={errors.password}
                     autoComplete="current-password"
@@ -56,9 +65,9 @@ function DeleteAccount() {
                 <Button
                     type="submit"
                     isSubmitting={isPending}
-                    className="!bg-red-600 hover:!bg-red-700 text-white"
+                    className="bg-red-600 hover:bg-red-700 text-white"
                 >
-                    Permanently Delete Account
+                    Delete Account
                 </Button>
             </form>
         </div>

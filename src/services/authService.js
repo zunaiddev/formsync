@@ -34,17 +34,34 @@ async function forgetPassword(email) {
 }
 
 async function logout() {
-    let response = await API.get("/auth/logout");
-    return response.data;
-}
-
-async function verifyToken(token, data) {
-    let response = await API.patch(`/verify`, data, {
-        headers: {
-            Authorization: "Bearer " + token,
-        }
+    let response = await API.get("/auth/logout", {
+        withCredentials: true
     });
     return response.data;
 }
 
-export {login, signup, refreshToken, forgetPassword, logout, verifyToken};
+async function verifyToken(token, withCredentials) {
+    let response = await API.patch(`/verify`, undefined, {
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+        withCredentials: withCredentials
+    });
+
+    return response.data;
+}
+
+async function resetPassword(token, data) {
+    let response = await API.patch(`/verify`, data, {
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+    });
+
+    return response.data;
+}
+
+export {
+    login, signup, refreshToken, forgetPassword, logout, verifyToken,
+    resetPassword
+};

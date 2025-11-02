@@ -9,13 +9,13 @@ const API = axios.create({
     },
 });
 
-API.interceptors.request.use(config => {
-    if (!navigator.onLine) {
-        return Promise.reject(new Error("Network Error"));
-    }
-
-    return config;
-});
+// API.interceptors.request.use(config => {
+//     if (!navigator.onLine) {
+//         return Promise.reject(new Error("Network Error"));
+//     }
+//
+//     return config;
+// });
 
 API.interceptors.response.use(res => res, error => {
     if (error.code === "ECONNABORTED") {

@@ -7,10 +7,9 @@ import {useQuery} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 const ProtectedRoute = ({children}) => {
-    const {data: token, isPending, error, refetch} = useQuery({
+    const {data, isPending, error, refetch} = useQuery({
         queryKey: ["get_token"],
         queryFn: getToken,
-        select: data => data.token,
         retry: false
     });
 
@@ -31,7 +30,7 @@ const ProtectedRoute = ({children}) => {
     }
 
 
-    return token ? children : <Navigate to="/auth/login" replace state={{redirected: true}}/>;
+    return data.token ? children : <Navigate to="/auth/login" replace state={{redirected: true}}/>;
 };
 
 ProtectedRoute.propTypes = {

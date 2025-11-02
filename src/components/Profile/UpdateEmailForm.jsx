@@ -2,28 +2,36 @@ import {useForm} from "react-hook-form";
 import {useMutation} from "@tanstack/react-query";
 import InputField from "../Inputs/InputsField.jsx";
 import Button from "../Button/Button.jsx";
+import {updateEmail} from "../../services/userService.js";
+import toast from "react-hot-toast";
+import {HttpStatusCode} from "axios";
+import {showEmailUpdateVerificationPopup} from "../Popup/Popups.jsx";
 
-function UpdateEmailForm() {
-    const {register, handleSubmit, formState: {errors}, reset} = useForm();
+function UpdateEmailForm({email}) {
+    const {register, handleSubmit, formState: {errors}, reset, setError} = useForm();
 
     const {mutate, isPending} = useMutation({
-        mutationFn: async (data) => {
-            const res = await fetch("/api/user/update-email", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(data),
-            });
-            if (!res.ok) throw new Error("Failed to update email");
-            return res.json();
-        },
-        onSuccess: () => {
-            // After success, reset form fields
+        mutationFn: updateEmail,
+        onSuccess: data => {
             reset();
-            alert("A verification email has been sent to your new email address.");
+            showEmailUpdateVerificationPopup(data.email);
         },
+        onError: err => {
+            let status = err?.response?.status;
+
+            if (status === HttpStatusCode.Unauthorized) {
+                setError("password", {message: "Password is Incorrect"});
+            } else if (status === HttpStatusCode.Conflict) {
+                setError("email", {message: "This Email is Required"});
+            } else if (status) {
+                toast.error("Something Went Wrong");
+            }
+        }
     });
 
-    const onSubmit = (data) => mutate(data);
+    function onSubmit(data) {
+        mutate({password: data.password.trim(), email: data.email.trim()});
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 border-white/10 bg-white/5 p-6 rounded-lg border">
@@ -34,7 +42,8 @@ function UpdateEmailForm() {
                 placeholder="example@mail.com"
                 register={register("email", {
                     required: "Email is required",
-                    pattern: {value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Invalid email"}
+                    pattern: {value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Invalid email"},
+                    validate: value => value.toString() !== email || "Please use a different email address.",
                 })}
                 error={errors.email}
                 autoComplete="email"

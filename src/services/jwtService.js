@@ -7,12 +7,9 @@ async function getToken() {
     const claims = extractClaims(token);
 
     if (claims?.exp * 1000 <= Date.now()) {
-        let response = await refreshToken();
-        console.log("Fetched From the Server.")
-        token = response.data.token;
+        let data = await refreshToken();
+        token = data.token;
         localStorage.setItem("token", token);
-    } else {
-        console.log("Not Fetched From the Server.");
     }
 
     return {token};

@@ -8,9 +8,8 @@ import SomethingWentWrong from "../components/SomethingWentWrong.jsx";
 
 const AuthRedirect = ({children}) => {
     const {data: token, isPending, error, refetch} = useQuery({
-        queryKey: ["get_token"],
+        queryKey: ["get-token"],
         queryFn: getToken,
-        select: data => data.token,
         retry: false
     });
 

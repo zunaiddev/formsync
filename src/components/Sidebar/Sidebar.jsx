@@ -1,57 +1,49 @@
 import PropTypes from "prop-types";
-import {MenuItem, NavMenuItem} from "./Menus.jsx";
+import {NavMenuItem} from "./Menus.jsx";
 import DashboardIcon from "../Icon/DashboardIcon.jsx";
 import InboxIcon from "../Icon/InboxIcon.jsx";
 import ProfileIcon from "../Icon/ProfileIcon.jsx";
-import LogoutIcon from "../Icon/LogoutIcon.jsx";
-import {useMutation} from "@tanstack/react-query";
-import {logout} from "../../services/authService.js";
-import toast from "react-hot-toast";
-import {confirmLogout} from "../../util/popup.jsx";
-import {useNavigate} from "react-router-dom";
+import LogoutComponent from "./LogoutComponent.jsx";
 
 
-function Sidebar({show, onClose}) {
+function Sidebar({show, close}) {
     let isMobile = window.innerWidth <= 768;
-    const navigate = useNavigate();
 
-    const {mutate} = useMutation({
-        mutationFn: logout,
-        onSuccess: _ => {
-            localStorage.clear();
-            navigate("/auth/login", {
-                replace: true,
-            });
-            toast.success("Logged out");
+    function handleClose() {
+        console.log("close");
+        if (isMobile) {
+            console.log("Close Called")
+            close();
         }
-    });
-
-    async function handleLogout() {
-        if (await confirmLogout()) mutate();
     }
 
     return (
-        <div className="fixed left-0 top-0 w-full p-4 max-w-44 h-full border-r-1 text-white">
-            <div className="mb-2 p-4">
-                <h5
-                    className="block antialiased tracking-normal font-sans text-xl font-semibold leading-snug text-blue-gray-900">
-                    Form
-                    Sync</h5>
+        <div className={`flex z-50 fixed left-0 top-0 w-screen transform duration-500
+        max-w-44 h-full text-white ${show ? "-translate-x-0" : "-translate-x-full"} 
+        ${isMobile ? "max-w-none " : "border-r-1"}`}>
+            <div className="p-4 bg-gray-800 w-full">
+                <div className="mb-2 p-4">
+                    <h5
+                        className="block antialiased tracking-normal font-sans text-xl font-semibold leading-snug text-blue-gray-900">
+                        Form
+                        Sync</h5>
+                </div>
+                <div className="">
+                    <NavMenuItem to="dashboard" text="Dashboard" icon={<DashboardIcon/>} onClick={handleClose}/>
+                    <NavMenuItem to="forms" text="Forms" icon={<InboxIcon/>} onClick={handleClose}/>
+                    <NavMenuItem to="profile" text="Profile" icon={<ProfileIcon/>} onClick={handleClose}/>
+                    <LogoutComponent/>
+                </div>
             </div>
-            <div className="">
-                <NavMenuItem to="dashboard" text="Dashboard" icon={<DashboardIcon/>}/>
-                <NavMenuItem to="forms" text="Forms" icon={<InboxIcon/>}/>
-                <NavMenuItem to="profile" text="Profile" icon={<ProfileIcon/>}/>
-                <MenuItem text="Logout"
-                          icon={<LogoutIcon/>} onClick={handleLogout}/>
-            </div>
+
+            {isMobile && <div className="h-full w-full" onClick={close}/>}
         </div>
     );
 }
 
 Sidebar.propTypes = {
     show: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired
+    close: PropTypes.func.isRequired
 }
 
 export default Sidebar;
