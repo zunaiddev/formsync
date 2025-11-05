@@ -5,15 +5,13 @@ import {useMutation} from "@tanstack/react-query";
 import SuccessPopup from "../Popup/SuccessPopup.jsx";
 import ErrorPopup from "../Popup/ErrorPopup.jsx";
 import {useEffect} from "react";
-import {verifyToken} from "../../services/authService.js";
+import {resetPassword} from "../../services/authService.js";
 
 function ResetPasswordForm({token}) {
     const {register, watch, formState: {errors}, handleSubmit} = useForm();
 
     async function handleResetPassword(password) {
-        const response = verifyToken(token, {password});
-
-        return response.data;
+        return resetPassword(token, {password});
     }
 
     const {mutate, isPending, error, isSuccess} = useMutation({

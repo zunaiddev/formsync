@@ -1,8 +1,10 @@
 import {useForm} from "react-hook-form";
-import axios from "axios";
 import {useState} from "react";
 import InputField from "../components/Inputs/InputsField.jsx";
-
+import {useMutation} from "@tanstack/react-query";
+import Api from "../api.js";
+import Button from "../components/Button/Button.jsx";
+import toast from "react-hot-toast";
 
 export default function ContactPage() {
     const {
@@ -10,24 +12,42 @@ export default function ContactPage() {
         handleSubmit,
         formState: {errors},
         reset,
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            name: "Zunaid",
+            email: "john@gmail.com",
+            message: "This is a testing message from fromsync",
+        }
+    });
 
-    const [loading, setLoading] = useState(false);
+    const {mutate, isPending} = useMutation({
+        mutationFn: async (data) => {
+            let response = await Api.post("/public/submit", data, {
+                headers: {
+                    "Content-Type": "application/json",
+                    'X-API-KEY': import.meta.env.VITE_API_KEY,
+                },
+            });
+            return response.data;
+        },
+        onSuccess: _ => {
+            setResponseMessage({type: "success", text: "Message sent successfully!"});
+            setTimeout(() => setResponseMessage(undefined), 5000);
+            reset();
+        },
+        onError: error => {
+            if (error.response) {
+                toast.error("Something Went Wrong!");
+            }
+        }
+    });
+
     const [responseMessage, setResponseMessage] = useState(null);
 
-    const onSubmit = async (data) => {
-        try {
-            setLoading(true);
-            setResponseMessage(null);
-            const response = await axios.post("/api/contact", data);
-            setResponseMessage({type: "success", text: "Message sent successfully!"});
-            reset();
-        } catch (error) {
-            setResponseMessage({type: "error", text: "Failed to send message. Try again."});
-        } finally {
-            setLoading(false);
-        }
-    };
+    function onSubmit(data) {
+        console.log("submit", data);
+        mutate(data);
+    }
 
     return (
         <div className="min-h-screen bg-gray-900 text-white flex justify-center items-center p-6">
@@ -73,7 +93,7 @@ export default function ContactPage() {
                         <label className="block mb-1 text-sm font-medium text-gray-300">Select Topic</label>
                         <select
                             className="shadow-xs border border-gray-700 text-sm rounded-sm focus:border-blue-500 outline-none block w-full p-2.5 bg-gray-700 text-white"
-                            {...register("topic", {required: "Please select a topic"})}
+                            {...register("subject", {required: "Please select a topic"})}
                         >
                             <option value="">-- Select an option --</option>
                             <option value="general">General Inquiry</option>
@@ -101,13 +121,12 @@ export default function ContactPage() {
                         )}
                     </div>
 
-                    <button
+                    <Button
                         type="submit"
                         className="w-full bg-blue-600 hover:bg-blue-700 transition-all text-white py-2 rounded-sm"
-                        disabled={loading}
-                    >
-                        {loading ? "Sending..." : "Send Message"}
-                    </button>
+                        isSubmitting={isPending}>
+                        Send Message
+                    </Button>
                 </form>
             </div>
         </div>

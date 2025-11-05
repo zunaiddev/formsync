@@ -26,11 +26,11 @@ function InputField({
                        type={type === "password" ? (show ? "text" : "password") : type}
                        {...register}/>
                 {type === "password" && (
-                    <button type="button"
-                            className="absolute top-[50%] bottom-[50%] translate-y-[-50%] right-2 text-gray-400 size-5 cursor-pointer"
-                            onClick={handleShow}>
+                    <span role="button"
+                          className="absolute top-[50%] bottom-[50%] translate-y-[-50%] right-2 text-gray-400 size-5 cursor-pointer"
+                          onClick={handleShow}>
                         {show ? <Eye size={19}/> : <EyeOff size={19}/>}
-                    </button>
+                    </span>
                 )}
 
             </div>

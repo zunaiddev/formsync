@@ -1,5 +1,5 @@
 import axios, {HttpStatusCode} from "axios";
-import notify from "./components/notify.js";
+import toast from "react-hot-toast";
 
 const API = axios.create({
     baseURL: `${location.hostname === "localhost" ?
@@ -9,23 +9,23 @@ const API = axios.create({
     },
 });
 
-// API.interceptors.request.use(config => {
-//     if (!navigator.onLine) {
-//         return Promise.reject(new Error("Network Error"));
-//     }
-//
-//     return config;
-// });
+API.interceptors.request.use(config => {
+    if (!navigator.onLine) {
+        return Promise.reject(new Error("Network Error"));
+    }
+
+    return config;
+});
 
 API.interceptors.response.use(res => res, error => {
     if (error.code === "ECONNABORTED") {
-        notify.error("Request timed out");
+        toast.error("Request timed out");
     } else if (!error.request) {
-        notify.error("No Internet Connection");
+        toast.error("No Internet Connection");
     } else if (!error.response) {
-        notify.error("Server Not Responding.");
+        toast.error("Server Not Responding.");
     } else if (error.response.status === HttpStatusCode.InternalServerError) {
-        notify.error("Internal Server Error");
+        toast.error("Internal Server Error");
     }
 
     return Promise.reject(error);

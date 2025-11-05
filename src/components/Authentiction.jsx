@@ -4,18 +4,16 @@ import SuccessPopup from "./Popup/SuccessPopup.jsx";
 import AuthenticationLoader from "./Loader/AuthenticationLoader.jsx";
 import ErrorPopup from "./Popup/ErrorPopup.jsx";
 import PropTypes from "prop-types";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {HttpStatusCode} from "axios";
 import SomethingWentWrongPage from "./SomethingWentWrong.jsx";
 import toast from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
 
-
 function Authentication({token}) {
     const navigate = useNavigate();
-    const [{title, message}, setResult] = useState({});
 
-    const {data, isPending, isSuccess, error, refetch} = useQuery({
+    const {data, isPending, error, refetch} = useQuery({
         queryKey: ["verify"],
         queryFn: () => verifyToken(token),
         retry: false,
@@ -25,11 +23,11 @@ function Authentication({token}) {
 
     useEffect(() => {
         if (data) {
-            setResult(data.data);
+            localStorage.setItem("token", data?.extra?.token);
             let id = toast.loading("Redirecting...");
 
             setTimeout(() => {
-                navigate("/auth/login", {replace: true});
+                navigate("/dashboard", {replace: true});
                 toast.remove(id);
             }, 3000);
         }
@@ -53,7 +51,7 @@ function Authentication({token}) {
             <SomethingWentWrongPage/>
     }
 
-    return <SuccessPopup title={data.data.title} message={data.data.message}/>;
+    return <SuccessPopup title={data.title} message={data.message}/>;
 }
 
 Authentication.propTypes = {

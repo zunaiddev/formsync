@@ -5,7 +5,7 @@ import ButtonLoader from "../Loader/ButtonLoader.jsx";
 function Button({children, className, type = "button", icon: Icon, isSubmitting, onClick, disabled}) {
     return (
         <button type={type}
-                className={twMerge("relative h-10 flex justify-center items-center text-md text-white bg-[var(--button-background)] hover:bg-[var(--button-hover)] rounded-md cursor-pointer px-2.5 disabled:cursor-not-allowed disabled:opacity-40", className, isSubmitting && "text-transparent")}
+                className={twMerge("relative h-10 flex justify-center gap-1 items-center text-md text-white bg-[var(--button-background)] hover:bg-[var(--button-hover)] rounded-md cursor-pointer px-2.5 disabled:cursor-not-allowed disabled:opacity-40", className, isSubmitting && "text-transparent")}
                 disabled={isSubmitting || disabled}
                 onClick={onClick}>
             {Icon && <Icon className="size-4"/>}

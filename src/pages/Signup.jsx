@@ -28,9 +28,9 @@ function Signup() {
 
     const {mutate, isPending} = useMutation({
         mutationFn: signup,
-        onSuccess: () => {
+        onSuccess: (data) => {
             toast.success("Verification Email sent.", {});
-            navigate("/check-email");
+            navigate(`/check-email?email=${data.email}`);
         },
         onError: error => {
             const status = error?.response?.active;

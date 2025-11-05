@@ -1,47 +1,67 @@
-import {useQuery} from "@tanstack/react-query";
-import {getForms} from "../services/userService.js";
-import {useEffect, useState} from "react";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {deleteForms, getForms} from "../services/userService.js";
 import FormsHeader from "../components/Forms/FormsHeader.jsx";
 import Form from "../components/Forms/Form.jsx";
+import MainLoader from "../components/Loader/MainLoader.jsx";
+import toast from "react-hot-toast";
+import Button from "../components/Button/Button.jsx";
+import {LucideRefreshCw} from "lucide-react";
 
 function Forms() {
-    const [formsToDelete, setFormsToDelete] = useState(new Set());
+    const client = useQueryClient();
 
-    const {data, isPending} = useQuery({
+    const {data, isPending, refetch} = useQuery({
         queryKey: ["forms"],
         queryFn: getForms
     });
 
-    useEffect(() => {
-        console.log("forms top delete", formsToDelete);
-    }, [formsToDelete]);
+    const {mutate} = useMutation({
+        mutationFn: deleteForms,
+        onSuccess: (data, ids) => {
+            if (ids.length === 1) {
+                client.setQueryData(["forms"], prev => prev.filter(f => f.id !== ids[0]));
+            } else {
+                client.setQueryData(["forms"], []);
+            }
+            toast.success("Deleted");
+        },
+        onError: error => {
+            if (error.response) toast.error("Could not delete form");
+        },
+        onSettled: (data, error, id) => {
+            toast.remove(id[0]);
+        }
+    });
 
-    function add(id) {
-        setFormsToDelete(new Set([...formsToDelete, id]));
+    function handleRemoveAll() {
+        mutate(data.map(f => f.id));
     }
 
-    function remove(id) {
-        setFormsToDelete(prev => {
-            let newSet = new Set([...prev]);
-            newSet.delete(id);
-            return newSet;
-        })
+    function removeForm(id) {
+        toast.loading("Deleting...", {
+            id: id
+        });
+        mutate([id]);
     }
-
-    function selectAll() {
-
-    }
-
 
     if (isPending) {
-        return <p>Loading..</p>;
+        return <MainLoader/>;
+    }
+
+    if (data.length === 0) {
+        return <div className="flex justify-center gap-6 flex-col items-center h-full">
+            <h1 className="text-white font-bold text-2xl">There are no forms yet.</h1>
+            <Button icon={LucideRefreshCw} onClick={refetch}>
+                Refresh
+            </Button>
+        </div>
     }
 
     return <div className="px-5">
-        <FormsHeader onSelectAll={selectAll}/>
+        <FormsHeader refetch={refetch} removeAll={handleRemoveAll}/>
 
         {data.map((item, index) => (
-            <Form key={index} form={item} idx={index} addForm={add} removeForm={remove}/>
+            <Form key={index} form={item} idx={index} removeForm={removeForm}/>
         ))}
     </div>;
 }

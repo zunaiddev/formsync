@@ -1,5 +1,5 @@
 import {showPopup} from "./PopupComponent.jsx";
-import {CalendarCheck, Lock, LogOut, Mail, MailOpen, MailWarning, RotateCcwKeyIcon} from "lucide-react";
+import {CalendarCheck, Lock, LogOut, Mail, MailOpen, MailWarning, RotateCcwKeyIcon, Trash2} from "lucide-react";
 import formatDate from "../../util/formatDate.js";
 
 async function confirmReactivate(date) {
@@ -264,9 +264,42 @@ async function showFormSubmissionDetailsPopup(form) {
     );
 }
 
+async function showDeleteAllFormsPopup() {
+    return await showPopup(
+        "Delete All Forms",
+        <div className="text-sm text-zinc-400 space-y-4 select-text">
+            <p className="text-white font-medium">
+                Are you sure you want to delete <span className="text-red-400">all forms</span>?
+            </p>
+            <p className="text-zinc-500 text-xs">
+                This action cannot be undone.
+            </p>
+        </div>,
+        {
+            icon: {
+                icon: <Trash2 className="text-red-400"/>,
+                className: "bg-red-500/20",
+            },
+            btn1: {
+                show: true,
+                text: "Cancel",
+                className: "bg-zinc-700 hover:bg-zinc-600",
+            },
+            btn2: {
+                show: true,
+                text: "Delete All",
+                className: "bg-red-500 hover:bg-red-600",
+            },
+            closeOnBgClick: true,
+        }
+    );
+}
+
+
 export {
     confirmReactivate, confirmLogout, confirmRegenerateApiKey,
     confirmDeactivateApiKey, showAccountLockedPopup,
     showAccountNotVerifiedPopup, showAccountDeletionInfo,
-    showEmailUpdateVerificationPopup, showFormSubmissionDetailsPopup
+    showEmailUpdateVerificationPopup, showFormSubmissionDetailsPopup,
+    showDeleteAllFormsPopup
 };

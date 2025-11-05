@@ -15,7 +15,7 @@ const Signup = lazy(() => import("../pages/Signup.jsx"));
 const VerifyEmail = lazy(() => import("../pages/./CheckEmail"));
 const Verify = lazy(() => import("../pages/./Verification"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword.jsx"));
-const ResetPassword = lazy(() => import("../pages/ResetPassword.jsx"));
+
 const Dashboard = lazy(() => import("../pages/Dashboard.jsx"));
 const Forms = lazy(() => import("../pages/Forms.jsx"));
 const Profile = lazy(() => import("../pages/Profile.jsx"));
@@ -94,14 +94,6 @@ const router = createBrowserRouter([
         element: (
             <Suspense fallback={<TopLoader/>}>
                 <ForgetPassword/>
-            </Suspense>
-        ),
-    },
-    {
-        path: "/reset-password",
-        element: (
-            <Suspense fallback={<TopLoader/>}>
-                <ResetPassword/>
             </Suspense>
         ),
     },
