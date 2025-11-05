@@ -26,7 +26,7 @@ function SignIn() {
     const {mutate, isPending} = useMutation({
         mutationFn: login,
         onSuccess: (data) => {
-            const {status, token, deleteAt} = data;
+            const {status, token} = data;
 
             if (status === "ACTIVE") {
                 localStorage.setItem("token", token);
@@ -45,7 +45,7 @@ function SignIn() {
                 toast.error("Invalid Email or Password", {
                     duration: 2000,
                 });
-            } else if (status === HttpStatusCode.Locked || status === HttpStatusCode.BadRequest) {
+            } else if (status === HttpStatusCode.Locked) {
                 setPopup({
                     status: "LOCKED",
                 });
