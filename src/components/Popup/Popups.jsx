@@ -1,6 +1,5 @@
 import {showPopup} from "./PopupComponent.jsx";
-import {CalendarCheck, Earth, Lock, LogOut, Mail, MailOpen, MailWarning, RotateCcwKeyIcon} from "lucide-react";
-import InputField from "../Inputs/InputsField.jsx";
+import {CalendarCheck, Lock, LogOut, Mail, MailOpen, MailWarning, RotateCcwKeyIcon} from "lucide-react";
 import formatDate from "../../util/formatDate.js";
 
 async function confirmReactivate(date) {
@@ -91,32 +90,6 @@ async function confirmDeactivateApiKey() {
             }
         }
     );
-}
-
-async function confirmAddDomain(ref, error, setError) {
-
-    const result = await showPopup(
-        "Add Custom Domain",
-        <InputField
-            label="Enter Domain"
-            placeholder="formsync.netlify.app"
-            className="bg-blue-200/10"
-            ref={ref}
-        />
-        ,
-        {
-            icon: {
-                icon: <Earth className="text-blue-500"/>,
-                className: "bg-blue-500/20"
-            },
-            btn2: {
-                show: true,
-                text: "Add",
-            },
-        }
-    );
-
-    return ref.current.value ?? null;
 }
 
 async function showAccountLockedPopup() {
@@ -293,7 +266,7 @@ async function showFormSubmissionDetailsPopup(form) {
 
 export {
     confirmReactivate, confirmLogout, confirmRegenerateApiKey,
-    confirmDeactivateApiKey, confirmAddDomain, showAccountLockedPopup,
+    confirmDeactivateApiKey, showAccountLockedPopup,
     showAccountNotVerifiedPopup, showAccountDeletionInfo,
     showEmailUpdateVerificationPopup, showFormSubmissionDetailsPopup
 };

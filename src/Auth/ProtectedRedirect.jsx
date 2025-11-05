@@ -10,7 +10,6 @@ const ProtectedRoute = ({children}) => {
     const {data, isPending, error, refetch} = useQuery({
         queryKey: ["get_token"],
         queryFn: getToken,
-        retry: false
     });
 
     if (isPending) {

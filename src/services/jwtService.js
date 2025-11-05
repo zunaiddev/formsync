@@ -2,7 +2,7 @@ import {refreshToken} from "./authService.js";
 
 async function getToken() {
     let token = localStorage.getItem("token");
-    if (!token) return {};
+    if (!token) return {token: null};
 
     const claims = extractClaims(token);
 

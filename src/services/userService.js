@@ -68,8 +68,8 @@ async function updateEmail({password, email}) {
     return await request("PATCH", "/change-email", {password, email});
 }
 
-async function addDomain(data) {
-    return await request("POST", "/api-key/domain", data);
+async function addDomain(domain) {
+    return await request("POST", "/api-key/domain", {domain});
 }
 
 async function deleteDomain(id) {

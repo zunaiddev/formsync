@@ -1,17 +1,18 @@
 import PropTypes from "prop-types";
 import {useQuery} from "@tanstack/react-query";
 import {getToken} from "../services/jwtService.js";
-import AuthenticationLoader from "../components/Loader/AuthenticationLoader.jsx";
 import {Navigate} from "react-router-dom";
+import AuthenticationLoader from "../components/Loader/AuthenticationLoader.jsx";
 import toast from "react-hot-toast";
 import SomethingWentWrong from "../components/SomethingWentWrong.jsx";
 
 const AuthRedirect = ({children}) => {
-    const {data: token, isPending, error, refetch} = useQuery({
+    const {data, isPending, error, refetch} = useQuery({
         queryKey: ["get-token"],
         queryFn: getToken,
         retry: false
     });
+
 
     if (isPending) {
         return <div className="w-full h-screen flex justify-center items-center">
@@ -22,7 +23,7 @@ const AuthRedirect = ({children}) => {
     if (error) {
         if (error.response) {
             localStorage.clear();
-            toast.success("Logged out");
+            toast.success("Session out");
             return children;
         }
 
@@ -30,7 +31,7 @@ const AuthRedirect = ({children}) => {
     }
 
 
-    return token ? <Navigate to="/dashboard" replace state={{redirected: true}}/> : children;
+    return data?.token ? <Navigate to="/dashboard" replace state={{redirected: true}}/> : children;
 };
 
 AuthRedirect.propTypes = {
