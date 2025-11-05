@@ -5,6 +5,7 @@ import "nprogress/nprogress.css";
 import PopupComponent from "./components/Popup/PopupComponent.jsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
+import VisitorLog from "./components/VisitorLog.jsx";
 
 const queryClient = new QueryClient();
 queryClient.defaultQueryOptions({
@@ -14,11 +15,13 @@ queryClient.defaultQueryOptions({
 
 function App() {
 
+
     return <QueryClientProvider client={queryClient}>
         <Toaster/>
         <PopupComponent/>
         <RouterProvider router={router}/>
         <ReactQueryDevtools/>
+        <VisitorLog/>
     </QueryClientProvider>;
 }
 
