@@ -17,14 +17,7 @@ function Signup() {
         watch,
         formState: {errors},
         setError,
-    } = useForm({
-        defaultValues: {
-            name: "John Doe",
-            email: "john@example.com",
-            password: "John@123",
-            confirmPassword: "John@123",
-        }
-    });
+    } = useForm();
 
     const {mutate, isPending} = useMutation({
         mutationFn: signup,

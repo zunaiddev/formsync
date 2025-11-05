@@ -21,12 +21,7 @@ function SignIn() {
         formState: {errors},
         resetField,
         setFocus
-    } = useForm({
-        defaultValues: {
-            email: "john@example.com",
-            password: "John@123",
-        }
-    });
+    } = useForm();
 
     const {mutate, isPending} = useMutation({
         mutationFn: login,
