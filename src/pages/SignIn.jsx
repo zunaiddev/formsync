@@ -37,7 +37,7 @@ function SignIn() {
             setPopup(data);
         },
         onError: err => {
-            const {status} = extractErrorInfo(err);
+            const {status, code} = extractErrorInfo(err);
 
             if (status === HttpStatusCode.Unauthorized) {
                 resetField("password");
@@ -49,7 +49,7 @@ function SignIn() {
                 setPopup({
                     status: "LOCKED",
                 });
-            } else if (status === HttpStatusCode.BadRequest) {
+            } else if (status === HttpStatusCode.BadRequest || code === "DISABLED") {
                 setPopup({
                     status: "NOT_VERIFIED",
                 });
