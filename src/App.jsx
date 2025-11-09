@@ -7,15 +7,21 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import VisitorLog from "./components/VisitorLog.jsx";
 
-const queryClient = new QueryClient();
-queryClient.defaultQueryOptions({
-    retry: false,
-    refetchOnWindowFocus: false,
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: false,
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
+            refetchOnMount: false,
+        },
+        mutations: {
+            retry: false,
+        },
+    },
 });
 
 function App() {
-
-
     return <QueryClientProvider client={queryClient}>
         <Toaster/>
         <PopupComponent/>
