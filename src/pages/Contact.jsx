@@ -12,13 +12,7 @@ export default function ContactPage() {
         handleSubmit,
         formState: {errors},
         reset,
-    } = useForm({
-        defaultValues: {
-            name: "Zunaid",
-            email: "john@gmail.com",
-            message: "This is a testing message from fromsync",
-        }
-    });
+    } = useForm();
 
     const {mutate, isPending} = useMutation({
         mutationFn: async (data) => {
