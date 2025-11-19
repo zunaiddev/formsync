@@ -2,15 +2,17 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {deleteForms, getForms} from "../services/userService.js";
 import FormsHeader from "../components/Forms/FormsHeader.jsx";
 import Form from "../components/Forms/Form.jsx";
-import MainLoader from "../components/Loader/MainLoader.jsx";
 import toast from "react-hot-toast";
 import Button from "../components/Button/Button.jsx";
 import {LucideRefreshCw} from "lucide-react";
+import SomethingWentWrong from "../components/SomethingWentWrong.jsx";
+import FormHeaderSkeleton from "../components/Skaletons/FormHeaderSkaleton.jsx";
+import FormSkeleton from "../components/Skaletons/FormSkeleton.jsx";
 
 function Forms() {
     const client = useQueryClient();
 
-    const {data, isPending, refetch} = useQuery({
+    const {data, isPending, isError, refetch} = useQuery({
         queryKey: ["forms"],
         queryFn: getForms
     });
@@ -45,13 +47,27 @@ function Forms() {
     }
 
     if (isPending) {
-        return <MainLoader/>;
+        return <div className="px-5">
+            <FormHeaderSkeleton/>
+            <div className="space-y-3">
+                <FormSkeleton/>
+                <FormSkeleton/>
+                <FormSkeleton/>
+                <FormSkeleton/>
+                <FormSkeleton/>
+                <FormSkeleton/>
+            </div>
+        </div>;
+    }
+
+    if (isError) {
+        return <SomethingWentWrong retry={refetch}/>
     }
 
     if (data.length === 0) {
         return <div className="flex justify-center gap-6 flex-col items-center h-full">
             <h1 className="text-white font-bold text-2xl">There are no forms yet.</h1>
-            <Button icon={LucideRefreshCw} onClick={refetch}>
+            <Button icon={LucideRefreshCw} onClick={refetch} isSubmitting={isPending}>
                 Refresh
             </Button>
         </div>
